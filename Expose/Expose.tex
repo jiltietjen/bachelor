@@ -1,0 +1,151 @@
+\documentclass[a4,abstract=on]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{placeins}
+\usepackage{graphicx}
+\usepackage[hypcap]{caption}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nochapters]{classicthesis} % nochapters, wenn du section als oberste ebene nimmst
+\usepackage{array}
+\PassOptionsToPackage{big}{titlesec}
+
+\floatname{algorithm}{Algorithmus}
+% Mathe
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+% Verlinkungen
+\usepackage[ngerman]{varioref} % Siehe http://en.wikibooks.org/wiki/LaTeX/Labels_and_Cross-referencing#The_varioref_package
+%\usepackage[hidelinks]{hyperref}
+
+% Spracheinstellungen sowie Umlaute etc.
+\usepackage[ngerman]{babel}
+\usepackage{ngerman}
+
+% Bilder
+\usepackage{graphicx}
+
+% Tabellen-Abstand
+\renewcommand{\arraystretch}{1.5}
+
+% Quellcode
+\usepackage{listings}
+\lstset{%
+	breaklines=true,
+	frame=single,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	tabsize=2
+}
+
+% Literatur
+\usepackage{bibgerm}
+\usepackage{natbib}
+
+% Lässt sections immer auf der ungeraden (rechten) Seite anfangen.
+   % \newcommand*\stdsection{}
+    %\let\stdsection\section
+    %\renewcommand*\section{%
+    %\clearpage\ifodd\value{page}\else\mbox{}\clearpage\fi
+    %\stdsection}
+
+% neuer Typ von Tabellenspalte (so wie c, l, etc.). Ist zentriert mit fester Breite.
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+% \usepackage{setspace}
+% \onehalfspacing
+\title{Untersuchung verschiedener Kodierungen von speziellen Cardinality Constraints für SAT}
+\date{~}
+
+\begin{document}
+	\maketitle
+\thispagestyle{empty}
+\begin{center}
+\begin{Large}
+Exposé\\Universität Bremen\\Fachbereich $3$\\
+~\\~\\
+\textbf{Jil Tietjen}\\<jiltietj@informatik.uni-bremen.de>\\
+~\\~\\
+Erstgutachter: Prof. Dr. Rolf Drechsler\\
+Zweitgutachter: \\~\\
+\mbox{Betreuung: Prof. Dr. Rolf Drechsler \&~Oliver Keszöcze}\\~\\~\\~\\~\\~\\~\\~\\~\\
+Bremen, $30$. November $2015$
+\end{Large}
+\end{center}
+
+
+
+	\tableofcontents
+	\clearpage
+
+\section{Problemstellung}
+Im Zuge dieser Arbeit soll untersucht werden, inwiefern verschiedene Kodierungen die Cardinality Contraints in eine Klauselmenge hinsichtlich ihrer Laufzeit und ihres Speicherverbrauchs effizient verkleinern beziehungsweise vereinfachen. Hierbei wird ebenfalls der Sonderfall $\leq 1$ betrachtet. Dafür kann eine CNF angegeben werden, deren Korrektheit einfach zu beweisen ist. \\
+Es werden alle unten genannten Kodierungen miteinander verglichen. Die vereinfachte Klauselmenge wird in den $z3-$Solver gegeben, mit dessen Hilfe herausgefunden werden kann, ob für die Kauselmenge eine erfüllende Belegung existiert oder nicht.\\
+
+\section{Ziel und Fragestellung der Arbeit}
+Es soll festgestellt werden, ob es mit Hilfe der Kodierungen wirklich einfacher geworden ist, herauzufinden, ob die Klauselmenge erfüllbar ist oder nicht. Ist mit den Kodierungen keine Verbesserung festzustellen, könnte es eventuell helfen die bestehenden Kodierungen abzuwandeln und zu verbessern. 
+Durch diese Untersuchung kann die effizienteste Kodierung gefunden werden, mit der Cardinality Constraints als Klauselmenge dargestellt werden können. Zusätzlich soll betrachtet werden, wie sich der Spezialfall $\leq 1$  im Allgemeinen für $n$ Variablen und für $4, 5, 8$ und $9$ Variablen im Speziellen verhält, da sich hier Anwendungsfälle für Biochips ergeben.
+
+\noindent
+\section{Die Vorgehensweisen und Methoden}
+Folgende Kodierungen sollen für Pseudo Boolsche Constraints untersucht werden:\\
+\begin{itemize}
+\item naiv für $\leq 1$ mit Aufzählungen und Ausschluss aller Paarungen
+\item Sinz \cite[][]{sinz}
+	\begin{itemize}
+	\item sequentieller Counter
+	\item paralleler Counter
+	\end{itemize}
+\item Bailleux \cite[][]{bailleux}
+	\begin{itemize}
+	\item sequentieller Counter (anhand von Knuth \cite[][]{knuth})
+	\item paralleler Counter 
+	\end{itemize}
+\item Sorting Networks
+	\begin{itemize}
+	\item naiv
+	\item Niklas Eén und Niklas Sörensson \cite[][]{niklasse}
+	\end{itemize}
+\end{itemize}
+Diese Kodierungen werden in Java implementiert, so dass deren Effizienz getestet werden kann. Für die Verfahren von Sinz und Bailleux wird bei der Programmierung das Vorgehen von Knuth angewendet.
+Als Testbench wird das k-Damen-Problem (Knuth) umgesetzt, da dies für das Finden einer möglichen Belegung der Klauseln adaptiert werden kann und es ein anerkanntes Problem in der Informatik ist. Eventuell werden weitere Beispiele von Knuth zum Testen benutzt.
+
+\section{verwendete Quellen und Materialien}
+Folgende Quellen bilden die Grundlage für diese Arbeit:
+
+\begingroup
+			\renewcommand{\section}[2]{}
+			\bibliographystyle{natdin}
+			\bibliography{referenzen}
+		\endgroup
+
+\clearpage
+\section{Zeitplan der Bachelorarbeit}
+\noindent
+\begin{table}[h]
+  \begin{tabular}{|l|l|}
+	\hline
+   \textbf{Zeitraum} & \textbf{Tätigkeit}\\
+	\hline
+   bis $25.1.2016$ & Exposé, Literaturarbeit, Lösungsansätze finden/definieren \\
+	\hline
+  $25.1.2016$ & Anmeldung Bachelorarbeit\\
+	\hline
+  $25.1.2016 - 25.3.2016$ & Programmierung\\
+	\hline
+  $25.3.2016 - 9.5.2016$ & Bachelorarbeit schreiben\\
+	\hline
+   $9.5.2016 - 23.5.2016$ & Korrektur und Drucken/Binden \\
+	\hline
+   $25.5.2016$ & Abgabe Bachelorarbeit\\
+	\hline
+  \end{tabular}
+  \caption{Zeitplan}
+  \end{table}
+
+\end{document}
