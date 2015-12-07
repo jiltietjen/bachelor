@@ -1,13 +1,15 @@
 package org;
 
 
+import java.util.ArrayList;
+
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Model;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
-import com.microsoft.z3.Symbol;
 import com.microsoft.z3.Z3Exception;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class Knuth {
 
@@ -20,7 +22,11 @@ public class Knuth {
 	static int n = 4;
 	static int r = 1;
 	
-	/*Erstellt den Baum für n und r nur zur Überprüfung -> wird später gelöscht*/
+	
+	
+
+	
+	/*Erstellt den Baum fÃ¼r n und r nur zur ÃœberprÃ¼fung -> wird spÃ¤ter gelÃ¶scht*/
 	public static void createTree() {
 		int root = 1;
 		int k1;
@@ -35,33 +41,45 @@ public class Knuth {
 		}
 	}
 	
-	/*Zählt die Blätter unter den jeweiligen Knoten t*/
+	/*Zï¿½hlt die Blï¿½tter unter den jeweiligen Knoten t*/
 	public static int calcT(int t){
 		if(t >= n){
 			return 1;
 		}
-		/*Überschreitet die Anzahl der möglichen Knoten*/
+		/*ï¿½berschreitet die Anzahl der mï¿½glichen Knoten*/
 		if(t > 2 * n - 1){
 			return 0;
 		}
-		/*berechnet die Anzahl der Blätter rekursiv für Knoten t*/
+		/*berechnet die Anzahl der Blï¿½tter rekursiv fï¿½r Knoten t*/
 		return calcT(2 * t) + calcT(2 * t + 1);
 	}
 	
-	/*erste Formel wird erstellt*/
+	/*zweite Formel wird erstellt*/
 	public static void createFormulaSecond(Context ctx, Solver solver) throws Z3Exception{
+		ArrayList variablesSecond = new ArrayList();
 		for(int i=0; i <= calcT(2); i++){
 			int j = r+1-i;
 			if(j >=0 && j <= calcT(3)){
 				//makeLiteral(not b^2_i or not b^3_j)
 				//wird in x, bzw b umgewandelt in makeVariable
-				solver.add(ctx.mkOr(ctx.mkNot(makeVariable(2, i, ctx)), ctx.mkNot(makeVariable(3, j, ctx))));
+				BoolExpr formularSecondFVariable = (makeVariable(2, i, ctx, solver));
+				BoolExpr formularSecondSVariable = ctx.mkNot(makeVariable(3, j, ctx, solver));
+				if(formularSecondFVariable != null){
+						variablesSecond.add(formularSecondFVariable);
+				}
+				if(formularSecondSVariable != null){
+					variablesSecond.add(formularSecondSVariable);
+			}
+				variablesSecond.toArray(new BoolExpr[variablesSecond.size()]);
+				solver.add(ctx.mkOr(variablesSecond));
+				
 			}
 		}
 	}
 	
-	/*zweite Formel wird erstellt*/
+	/*erste Formel wird erstellt*/
 	public static void createFormulaFirst(Context ctx, Solver solver) throws Z3Exception{
+		static ArrayList variablesFirst= new ArrayList();
 		for(int k=2; k<n; k++){
 			//t2k in echtzeit berechnen
 			for(int i = 0; i <= calcT(2*k); i++){
@@ -70,22 +88,34 @@ public class Knuth {
 						//not b^2k_i or not b^2k+1_j or b^k_i+j
 						//in x, bzw b umwandeln in makeVariable
 						//TODO mkNot raus
-						solver.add(ctx.mkOr(ctx.mkNot(makeVariable(2 * k, i, ctx)), ctx.mkNot(makeVariable(2*k+1, j, ctx)), makeVariable(k, i+j, ctx)));
+						BoolExpr formularFirstFVariable = ctx.mkNot(makeVariable(2 * k, i, ctx, solver));
+						BoolExpr formularFirstSVariable = ctx.mkNot(makeVariable(2*k+1, j, ctx, solver));
+						BoolExpr formularFirstTVariable = makeVariable(k, i+j, ctx, solver);
+						if(formularFirstFVariable != null){
+							variablesFirst.add(formularFirstFVariable);
+						}
+						if(formularFirstSVariable != null){
+							variablesFirst.add(formularFirstSVariable);
+						}
+						if(formularFirstTVariable != null){
+							variablesFirst.add(formularFirstTVariable);
+						}
+						solver.add(ctx.mkOr(variablesFirst));
 					}
 				}
 			}
 		}
 	}
 	
-	/*Esetzt Ausdrücke bei Erfüllung der Bedingungen durch x */
-	private static BoolExpr makeVariable(int upperIndex, int lowerIndex, Context ctx) throws Z3Exception{
-	//TODO mkNot hier rein und darauf auch überprüfen. Ausdruck dann herauslöschen.
+	/*Esetzt AusdrÃ¼cke bei ErfÃ¼llung der Bedingungen durch x */
+	private static BoolExpr makeVariable(int upperIndex, int lowerIndex, Context ctx, Solver solver) throws Z3Exception{
+	//TODO mkNot hier rein und darauf auch Ã¼berprÃ¼fen. Ausdruck dann herauslÃ¶schen.
 			//ist lowerIndex 0 oder r+1 soll der Ausdruck entfernt werden
 			if(lowerIndex == 0){
-				return ctx.mkFalse();
+				return null;
 			}
 					if(lowerIndex == r + 1){
-				return  ctx.mkFalse();
+				return null;
 			}
 			// ersetzt b mit upperindex k > n durch x mit upperindex -n+1
 			if(lowerIndex == 1 && upperIndex >=n){
@@ -93,7 +123,7 @@ public class Knuth {
 				return ctx.mkBoolConst("x" + (upperIndex - n + 1));
 			}else{
 				//b^upperIndex_lowerIndex
-				//ansonsten wird b nicht verändert
+				//ansonsten wird b nicht verï¿½ndert
 				return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex);
 			}
 		}
