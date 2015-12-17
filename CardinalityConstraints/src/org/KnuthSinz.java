@@ -10,6 +10,8 @@ import com.microsoft.z3.Z3Exception;
 public class KnuthSinz extends Encoding {
   /* Beginn Sinz nach Knuth ----------------------------------------------------------- */
 
+  static int counter = 0;
+
   public static void createFormulaFirst(Context ctx, Solver solver, int n, int r,
       ArrayList<String> variableNames) throws Z3Exception {
     ArrayList<BoolExpr> variablesFirst = new ArrayList<BoolExpr>();
@@ -67,9 +69,6 @@ public class KnuthSinz extends Encoding {
   private static BoolExpr makeVariableSinz(int upperIndex, int lowerIndex, Context ctx,
       Solver solver, boolean not, int n, int r, ArrayList<String> variableNames, boolean x)
       throws Z3Exception {
-    int counter = 0;
-    String difference = "Bailleux";
-
     if (upperIndex == 0 && not) {
       return null;
     }
@@ -85,11 +84,10 @@ public class KnuthSinz extends Encoding {
     } else {
       if (not) {
         counter++;
-        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference
-            + counter));
+        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_Sinz_" + counter));
       }
       counter++;
-      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference + counter);
+      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_Sinz_" + counter);
     }
   }
 
@@ -99,6 +97,7 @@ public class KnuthSinz extends Encoding {
       throws Z3Exception {
     createFormulaFirst(ctx, solver, variableNames.size(), r, variableNames);
     createFormulaSecond(ctx, solver, variableNames.size(), r, variableNames);
+    counter++;
 
   }
 

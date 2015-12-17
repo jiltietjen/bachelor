@@ -14,6 +14,7 @@ public class KnuthBailleux extends Encoding {
   /* Beginn Bailleux nach Knuth --------------------------------------------------------- */
   // static int n = 4;
   // static int r = 1;
+  static int counter = 0;
 
 
   /*
@@ -58,7 +59,6 @@ public class KnuthBailleux extends Encoding {
         }
         solver.add(ctx.mkOr((BoolExpr[]) variablesSecond.toArray(new BoolExpr[variablesSecond
             .size()])));
-
       }
     }
   }
@@ -103,10 +103,9 @@ public class KnuthBailleux extends Encoding {
   /* Esetzt Ausdrücke bei Erfüllung der Bedingungen durch x */
   private static BoolExpr makeVariable(int upperIndex, int lowerIndex, Context ctx, Solver solver,
       boolean not, int n, int r, ArrayList<String> variableNames) throws Z3Exception {
-    int counter = 0;
-    String difference = "Bailleux";
     // ist lowerIndex 0 oder r+1 soll der Ausdruck entfernt werden
     // ersetzt b mit upperindex k > n durch x mit upperindex -n+1
+
     if (lowerIndex == 0 && not) {
       return null;
     }
@@ -124,12 +123,10 @@ public class KnuthBailleux extends Encoding {
       // b^upperIndex_lowerIndex
       // ansonsten wird b nicht verändert
       if (not) {
-        counter++;
-        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference
+        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_Bailleux_"
             + counter));
       }
-      counter++;
-      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference + counter);
+      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_Bailleux_" + counter);
     }
   }
 
@@ -149,6 +146,6 @@ public class KnuthBailleux extends Encoding {
       throws Z3Exception {
     createFormulaFirst(ctx, solver, variableNames.size(), r, variableNames);
     createFormulaSecond(ctx, solver, variableNames.size(), r, variableNames);
-
+    counter++;
   }
 }
