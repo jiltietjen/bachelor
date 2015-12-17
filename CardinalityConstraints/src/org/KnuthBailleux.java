@@ -103,6 +103,7 @@ public class KnuthBailleux extends Encoding {
   /* Esetzt Ausdrücke bei Erfüllung der Bedingungen durch x */
   private static BoolExpr makeVariable(int upperIndex, int lowerIndex, Context ctx, Solver solver,
       boolean not, int n, int r, ArrayList<String> variableNames) throws Z3Exception {
+    String difference = "Bailleux";
     // ist lowerIndex 0 oder r+1 soll der Ausdruck entfernt werden
     // ersetzt b mit upperindex k > n durch x mit upperindex -n+1
     if (lowerIndex == 0 && not) {
@@ -122,9 +123,9 @@ public class KnuthBailleux extends Encoding {
       // b^upperIndex_lowerIndex
       // ansonsten wird b nicht verändert
       if (not) {
-        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex));
+        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference));
       }
-      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex);
+      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference);
     }
   }
 

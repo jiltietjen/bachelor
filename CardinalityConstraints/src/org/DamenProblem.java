@@ -28,6 +28,8 @@ public class DamenProblem {
     Solver solver = ctx.mkSolver("QF_LIA");
     Encoding encoding = new KnuthBailleux(); // TODO Einstellungsmöglichkeit für verschiedene
                                              // Encodings
+    Encoding encodingSinz = new KnuthSinz();
+
     for (int row = 0; row < k; row++) {
       ArrayList<String> variableNames = new ArrayList<>();
       for (int column = 0; column < k; column++) {
@@ -55,6 +57,7 @@ public class DamenProblem {
     }
     encoding.encode(variableNames, 1, solver, ctx);
 
+    // wird in den Solver gegeben
     System.out.println(solver);
     if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
       System.out.println("UNSAT");
