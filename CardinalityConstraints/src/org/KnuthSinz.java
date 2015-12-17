@@ -67,7 +67,7 @@ public class KnuthSinz extends Encoding {
   private static BoolExpr makeVariableSinz(int upperIndex, int lowerIndex, Context ctx,
       Solver solver, boolean not, int n, int r, ArrayList<String> variableNames, boolean x)
       throws Z3Exception {
-
+    int counter = 0;
     String difference = "Bailleux";
 
     if (upperIndex == 0 && not) {
@@ -84,9 +84,12 @@ public class KnuthSinz extends Encoding {
       throw new NullPointerException();
     } else {
       if (not) {
-        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference));
+        counter++;
+        return ctx.mkNot(ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference
+            + counter));
       }
-      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference);
+      counter++;
+      return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_" + difference + counter);
     }
   }
 
@@ -94,7 +97,8 @@ public class KnuthSinz extends Encoding {
   @Override
   public void encode(ArrayList<String> variableNames, int r, Solver solver, Context ctx)
       throws Z3Exception {
-    // TODO Auto-generated method stub
+    createFormulaFirst(ctx, solver, variableNames.size(), r, variableNames);
+    createFormulaSecond(ctx, solver, variableNames.size(), r, variableNames);
 
   }
 
