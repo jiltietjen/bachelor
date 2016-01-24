@@ -11,7 +11,7 @@ import com.microsoft.z3.Z3Exception;
 public class KnuthBailleux extends Encoding {
 
 
-  /* Beginn Bailleux nach Knuth --------------------------------------------------------- */
+  /* Beginn Bailleux nach Knuth (sequentiell)---------------------------------------------- */
   // static int n = 4;
   // static int r = 1;
   static int counter = 0;

@@ -8,7 +8,7 @@ import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
 public class KnuthSinz extends Encoding {
-  /* Beginn Sinz nach Knuth ----------------------------------------------------------- */
+  /* Beginn Sinz nach Knuth (sequentiell)------------------------------------------------ */
 
   static int counter = 0;
 

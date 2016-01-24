@@ -10,6 +10,7 @@ import com.microsoft.z3.Z3Exception;
 
 public class DamenProblem {
 
+
   public static void main(String[] args) {
     try {
       solve(8);
@@ -30,6 +31,8 @@ public class DamenProblem {
                                              // Encodings
     Encoding encodingSinz = new KnuthSinz();
 
+    // Erstellt das Spielfeld
+    // Reihen
     for (int row = 0; row < k; row++) {
       ArrayList<String> variableNames = new ArrayList<>();
       for (int column = 0; column < k; column++) {
@@ -37,6 +40,7 @@ public class DamenProblem {
       }
       encoding.encode(variableNames, 1, solver, ctx);
     }
+    // Spalten
     for (int column = 0; column < k; column++) {
       ArrayList<String> variableNames = new ArrayList<>();
       for (int row = 0; row < k; row++) {
@@ -44,18 +48,39 @@ public class DamenProblem {
       }
       encoding.encode(variableNames, 1, solver, ctx);
     }
-    // Diagonale
-    int row = 0;
+    // Diagonale 1
     int column = 0;
-    ArrayList<String> variableNames = new ArrayList<>();
-    for (int i = 1; ((row + i) < k) && ((column + i) < k); i++) {
-      variableNames.add("x_" + row + "_" + column);
+    int row = 0;
+    for (int j = 0; j < k - 1; j++) {
+      ArrayList<String> variableNames = new ArrayList<>();
+
+      for (int i = 0; ((row + j + i) < k) && ((column + i) < k); i++) {
+        variableNames.add("x_" + (row + j + i) + "_" + (column + i));
+      }
+      encoding.encode(variableNames, 1, solver, ctx);
+      variableNames = new ArrayList<>();
+      for (int i = 0; ((column + j + i) < k) && ((row + i) < k); i++) {
+        variableNames.add("x_" + (row + i) + "_" + (column + j + i));
+      }
+      encoding.encode(variableNames, 1, solver, ctx);
     }
-    encoding.encode(variableNames, 1, solver, ctx);
-    for (int i = 1; ((column + i) < k) && ((row + i) < k); i++) {
-      variableNames.add("x_" + row + "_" + column);
+
+    // Diagonale 2 (andere Richtung)
+    column = k - 1;
+    for (int j = 0; j < k - 1; j++) {
+      ArrayList<String> variableNames = new ArrayList<>();
+
+      for (int i = 0; ((row + j + i) < k) && ((column - i) < k); i++) {
+        variableNames.add("x_" + (row + j + i) + "_" + (column - i));
+      }
+      encoding.encode(variableNames, 1, solver, ctx);
+      variableNames = new ArrayList<>();
+      for (int i = 0; ((column - j - i) < k) && ((row + i) < k); i++) {
+        variableNames.add("x_" + (row + i) + "_" + (column - j - i));
+      }
+      encoding.encode(variableNames, 1, solver, ctx);
     }
-    encoding.encode(variableNames, 1, solver, ctx);
+
 
     // wird in den Solver gegeben
     System.out.println(solver);
