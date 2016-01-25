@@ -7,19 +7,21 @@ public class Constraint {
     EQUALS, SMALLEREQUALS, GREATEREQUALS
   }
 
-  private ArrayList<Variable> variables = new ArrayList<>();
+  private ArrayList<Literal> variables = new ArrayList<>();
   private Type type;
+  private int limitR;
 
-  public Constraint(Type type, ArrayList<Variable> variables) {
+  public Constraint(Type type, ArrayList<Literal> variables, int limitR) {
     this.type = type;
     this.variables = variables;
+    this.setLimitR(limitR);
   }
 
-  public ArrayList<Variable> getVariables() {
+  public ArrayList<Literal> getVariables() {
     return variables;
   }
 
-  public void setVariables(ArrayList<Variable> variables) {
+  public void setVariables(ArrayList<Literal> variables) {
     this.variables = variables;
   }
 
@@ -29,6 +31,14 @@ public class Constraint {
 
   public void setType(Type type) {
     this.type = type;
+  }
+
+  public int getLimitR() {
+    return limitR;
+  }
+
+  public void setLimitR(int limitR) {
+    this.limitR = limitR;
   }
 
 

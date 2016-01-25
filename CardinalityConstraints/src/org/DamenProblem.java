@@ -2,10 +2,6 @@ package org;
 
 import java.util.ArrayList;
 
-import com.microsoft.z3.Context;
-import com.microsoft.z3.Model;
-import com.microsoft.z3.Solver;
-import com.microsoft.z3.Status;
 import com.microsoft.z3.Z3Exception;
 
 public class DamenProblem {
@@ -25,73 +21,66 @@ public class DamenProblem {
    * übergeben
    */
   public static void solve(int k) throws Z3Exception {
-    Context ctx = new Context();
-    Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new KnuthBailleux(); // TODO Einstellungsmöglichkeit für verschiedene
-                                             // Encodings
-    Encoding encodingSinz = new KnuthSinz();
-
     // Erstellt das Spielfeld
+    ArrayList<Constraint> constraints = new ArrayList<>();
     // Reihen
     for (int row = 0; row < k; row++) {
-      ArrayList<String> variableNames = new ArrayList<>();
+      ArrayList<Literal> literals = new ArrayList<>();
       for (int column = 0; column < k; column++) {
-        variableNames.add("x_" + row + "_" + column);
+        literals.add(new Literal(k * row + column, true));
       }
-      encoding.encode(variableNames, 1, solver, ctx);
+      constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literals, 1));
     }
     // Spalten
     for (int column = 0; column < k; column++) {
-      ArrayList<String> variableNames = new ArrayList<>();
+      ArrayList<Literal> literals = new ArrayList<>();
       for (int row = 0; row < k; row++) {
-        variableNames.add("x_" + row + "_" + column);
+        literals.add(new Literal(k * row + column, true));
       }
-      encoding.encode(variableNames, 1, solver, ctx);
+      constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literals, 1));
     }
     // Diagonale 1
     int column = 0;
     int row = 0;
     for (int j = 0; j < k - 1; j++) {
-      ArrayList<String> variableNames = new ArrayList<>();
+      ArrayList<Literal> literals = new ArrayList<>();
 
       for (int i = 0; ((row + j + i) < k) && ((column + i) < k); i++) {
-        variableNames.add("x_" + (row + j + i) + "_" + (column + i));
+        literals.add(new Literal(k * (row + j + i) + (column + i), true));
       }
-      encoding.encode(variableNames, 1, solver, ctx);
-      variableNames = new ArrayList<>();
+      constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literals, 1));
+      ArrayList<Literal> literalsNew = new ArrayList<>();
       for (int i = 0; ((column + j + i) < k) && ((row + i) < k); i++) {
-        variableNames.add("x_" + (row + i) + "_" + (column + j + i));
+        literalsNew.add(new Literal(k * (row + i) + (column + j + i), true));
       }
-      encoding.encode(variableNames, 1, solver, ctx);
+      constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literalsNew, 1));
     }
 
     // Diagonale 2 (andere Richtung)
     column = k - 1;
     for (int j = 0; j < k - 1; j++) {
-      ArrayList<String> variableNames = new ArrayList<>();
+      ArrayList<Literal> literals = new ArrayList<>();
 
       for (int i = 0; ((row + j + i) < k) && ((column - i) < k); i++) {
-        variableNames.add("x_" + (row + j + i) + "_" + (column - i));
+        literals.add(new Literal(k * (row + j + i) + (column - i), true));
       }
-      encoding.encode(variableNames, 1, solver, ctx);
-      variableNames = new ArrayList<>();
+      constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literals, 1));
+      ArrayList<Literal> literalsNew = new ArrayList<>();
       for (int i = 0; ((column - j - i) < k) && ((row + i) < k); i++) {
-        variableNames.add("x_" + (row + i) + "_" + (column - j - i));
+        literalsNew.add(new Literal(k * (row + i) + (column - j - i), true));
       }
-      encoding.encode(variableNames, 1, solver, ctx);
+      constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literalsNew, 1));
     }
 
-
-    // wird in den Solver gegeben
-    System.out.println(solver);
-    if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
-      System.out.println("UNSAT");
-    } else {
-      System.out.println("SAT");
-      Model m = solver.getModel();
-      System.out.println("Model is" + m); // TODO Model zurückübersetzen in k Damen Problem
+    // equals
+    ArrayList<Literal> literals = new ArrayList<Literal>();
+    for (int i = 0; i < k * k; i++) { // k^2 für gesamtes Feld
+      literals.add(new Literal(i, true));
     }
-    solver.dispose();
+    constraints.add(new Constraint(Constraint.Type.EQUALS, literals, k));
+
+    Builder builder = new Builder();
+    builder.solve(constraints, k * k); // TODO zurückübersetzen für die Belegung des Damenfeldes
   }
 
 }

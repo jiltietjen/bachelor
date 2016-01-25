@@ -14,7 +14,6 @@ public class KnuthBailleux extends Encoding {
   /* Beginn Bailleux nach Knuth (sequentiell)---------------------------------------------- */
   // static int n = 4;
   // static int r = 1;
-  static int counter = 0;
 
 
   /*
@@ -38,8 +37,8 @@ public class KnuthBailleux extends Encoding {
   }
 
   /* zweite Formel wird erstellt */
-  public static void createFormulaSecond(Context ctx, Solver solver, int n, int r,
-      ArrayList<String> variableNames) throws Z3Exception {
+  public static void createFormulaSecond(Context ctx, Solver solver, int n, int r, int counter,
+      ArrayList<Literal> literals) throws Z3Exception {
     ArrayList<BoolExpr> variablesSecond = new ArrayList<BoolExpr>();
     for (int i = 0; i <= calcT(2, n); i++) {
       int j = r + 1 - i;
@@ -48,9 +47,9 @@ public class KnuthBailleux extends Encoding {
         // wird in x, bzw b umgewandelt in makeVariable
         variablesSecond = new ArrayList<>();
         BoolExpr formularSecondFVariable =
-            makeVariable(2, i, ctx, solver, true, n, r, variableNames);
+            makeVariable(2, i, ctx, solver, true, n, r, counter, literals);
         BoolExpr formularSecondSVariable =
-            makeVariable(3, j, ctx, solver, true, n, r, variableNames);
+            makeVariable(3, j, ctx, solver, true, n, r, counter, literals);
         if (formularSecondFVariable != null) {
           variablesSecond.add(formularSecondFVariable);
         }
@@ -64,8 +63,8 @@ public class KnuthBailleux extends Encoding {
   }
 
   /* erste Formel wird erstellt */
-  public static void createFormulaFirst(Context ctx, Solver solver, int n, int r,
-      ArrayList<String> variableNames) throws Z3Exception {
+  public static void createFormulaFirst(Context ctx, Solver solver, int n, int r, int counter,
+      ArrayList<Literal> literals) throws Z3Exception {
     ArrayList<BoolExpr> variablesFirst = new ArrayList<BoolExpr>();
     for (int k = 2; k < n; k++) {
       // t2k in echtzeit berechnen
@@ -76,11 +75,11 @@ public class KnuthBailleux extends Encoding {
             // in x, bzw b umwandeln in makeVariable
             variablesFirst = new ArrayList<>();
             BoolExpr formularFirstFVariable =
-                makeVariable(2 * k, i, ctx, solver, true, n, r, variableNames);
+                makeVariable(2 * k, i, ctx, solver, true, n, r, counter, literals);
             BoolExpr formularFirstSVariable =
-                makeVariable(2 * k + 1, j, ctx, solver, true, n, r, variableNames);
+                makeVariable(2 * k + 1, j, ctx, solver, true, n, r, counter, literals);
             BoolExpr formularFirstTVariable =
-                makeVariable(k, i + j, ctx, solver, false, n, r, variableNames);
+                makeVariable(k, i + j, ctx, solver, false, n, r, counter, literals);
             if (formularFirstFVariable != null) {
               variablesFirst.add(formularFirstFVariable);
             }
@@ -102,7 +101,7 @@ public class KnuthBailleux extends Encoding {
 
   /* Esetzt Ausdrücke bei Erfüllung der Bedingungen durch x */
   private static BoolExpr makeVariable(int upperIndex, int lowerIndex, Context ctx, Solver solver,
-      boolean not, int n, int r, ArrayList<String> variableNames) throws Z3Exception {
+      boolean not, int n, int r, int counter, ArrayList<Literal> literals) throws Z3Exception {
     // ist lowerIndex 0 oder r+1 soll der Ausdruck entfernt werden
     // ersetzt b mit upperindex k > n durch x mit upperindex -n+1
 
@@ -116,9 +115,9 @@ public class KnuthBailleux extends Encoding {
       // x_upperIndex-n+1
       if (not) {
         // +1 entfällt durch die 0. Stelle in der Liste
-        return ctx.mkNot(ctx.mkBoolConst(variableNames.get(upperIndex - n)));
+        return ctx.mkNot(literals.get(upperIndex - n).toZ3(ctx));
       }
-      return ctx.mkBoolConst(variableNames.get(upperIndex - n));
+      return literals.get(upperIndex - n).toZ3(ctx);
     } else {
       // b^upperIndex_lowerIndex
       // ansonsten wird b nicht verändert
@@ -142,10 +141,9 @@ public class KnuthBailleux extends Encoding {
    * (Z3Exception ex) { ex.printStackTrace(); } finally { ctx.dispose(); } }
    */
   @Override
-  public void encode(ArrayList<String> variableNames, int r, Solver solver, Context ctx)
+  public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
-    createFormulaFirst(ctx, solver, variableNames.size(), r, variableNames);
-    createFormulaSecond(ctx, solver, variableNames.size(), r, variableNames);
-    counter++;
+    createFormulaFirst(ctx, solver, literals.size(), r, counter, literals);
+    createFormulaSecond(ctx, solver, literals.size(), r, counter, literals);
   }
 }
