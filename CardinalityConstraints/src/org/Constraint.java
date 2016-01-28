@@ -41,5 +41,11 @@ public class Constraint {
     this.limitR = limitR;
   }
 
+  public String toString() {
+    String result = type == Type.SMALLEREQUALS ? "<=" : type == Type.EQUALS ? "==" : ">=";
+    result = result + limitR + variables;
+    return result;
+  }
+
 
 }

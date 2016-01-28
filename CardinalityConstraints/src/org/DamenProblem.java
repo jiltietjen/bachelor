@@ -9,7 +9,7 @@ public class DamenProblem {
 
   public static void main(String[] args) {
     try {
-      solve(8);
+      solve(4);
     } catch (Z3Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -66,7 +66,7 @@ public class DamenProblem {
       }
       constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literals, 1));
       ArrayList<Literal> literalsNew = new ArrayList<>();
-      for (int i = 0; ((column - j - i) < k) && ((row + i) < k); i++) {
+      for (int i = 0; ((column - j - i) >= 0) && ((row + i) < k); i++) {
         literalsNew.add(new Literal(k * (row + i) + (column - j - i), true));
       }
       constraints.add(new Constraint(Constraint.Type.SMALLEREQUALS, literalsNew, 1));

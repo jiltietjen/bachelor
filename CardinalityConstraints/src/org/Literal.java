@@ -14,6 +14,12 @@ public class Literal {
     this.positive = positive;
   }
 
+  // copy constructor
+  public Literal(Literal other) {
+    this.index = other.index;
+    this.positive = other.positive;
+  }
+
   public int getIndex() {
     return index;
   }
@@ -35,6 +41,12 @@ public class Literal {
     if (!positive) {
       result = ctx.mkNot(result);
     }
+    return result;
+  }
+
+  public String toString() {
+    String result = positive ? "" : "-";
+    result += "x_" + index;
     return result;
   }
 }

@@ -20,7 +20,7 @@ public class KnuthSinz extends Encoding {
         BoolExpr formularFirstFVariable =
             makeVariableSinz(k, j, ctx, solver, true, n, r, counter, literals, false);
         BoolExpr formularFirstSVariable =
-            makeVariableSinz(k, j + 1, ctx, solver, true, n, r, counter, literals, false);
+            makeVariableSinz(k, j + 1, ctx, solver, false, n, r, counter, literals, false);
         if (formularFirstFVariable != null) {
           variablesFirst.add(formularFirstFVariable);
         }
@@ -48,7 +48,7 @@ public class KnuthSinz extends Encoding {
         BoolExpr formularSecondSVariable =
             makeVariableSinz(k, j, ctx, solver, true, n, r, counter, literals, false);
         BoolExpr formularSecondTVariable =
-            makeVariableSinz(k + 1, j, ctx, solver, true, n, r, counter, literals, false);
+            makeVariableSinz(k + 1, j, ctx, solver, false, n, r, counter, literals, false);
         if (formularSecondFVariable != null) {
           variablesSecond.add(formularSecondFVariable);
         }
@@ -56,7 +56,7 @@ public class KnuthSinz extends Encoding {
           variablesSecond.add(formularSecondSVariable);
         }
         if (formularSecondTVariable != null) {
-          variablesSecond.add(formularSecondSVariable);
+          variablesSecond.add(formularSecondTVariable);
         }
         solver.add(ctx.mkOr((BoolExpr[]) variablesSecond.toArray(new BoolExpr[variablesSecond
             .size()])));

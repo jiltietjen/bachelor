@@ -19,8 +19,12 @@ public class Builder {
       Constraint constraint = constraints.get(i);
       switch (constraint.getType()) {
         case EQUALS:
+          ArrayList<Literal> literals = new ArrayList<>();
+          for (Literal l : constraint.getVariables()) {
+            literals.add(new Literal(l));
+          }
           Constraint newConstraint =
-              new Constraint(Type.SMALLEREQUALS, constraint.getVariables(), constraint.getLimitR());
+              new Constraint(Type.SMALLEREQUALS, literals, constraint.getLimitR());
           leqConstraints.add(newConstraint);
           // kein Break, da greaterequals und smallerequals benutzt werden sollen
         case GREATEREQUALS:
@@ -41,7 +45,10 @@ public class Builder {
     }
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new KnuthBailleux();
+    Encoding encoding = new KnuthSinz();
+    for (Constraint c : leqConstraints) {
+      System.out.println(c);
+    }
     for (int i = 0; i < leqConstraints.size(); i++) {
       encoding.encode(leqConstraints.get(i).getVariables(), leqConstraints.get(i).getLimitR(), i,
           solver, ctx);
