@@ -45,7 +45,7 @@ public class Builder {
     }
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new KnuthSinz();
+    Encoding encoding = new Naiv();
     for (Constraint c : leqConstraints) {
       System.out.println(c);
     }
