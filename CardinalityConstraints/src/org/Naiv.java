@@ -13,6 +13,7 @@ public class Naiv extends Encoding {
   public ArrayList<ArrayList<Literal>> createSubsets(ArrayList<Literal> set, int limit,
       ArrayList<Literal> toBeAdded) {
     ArrayList<ArrayList<Literal>> result = new ArrayList<>();
+    // fertig
     if (set.size() >= limit) {
       result.add(set);
       return result;
