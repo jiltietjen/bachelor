@@ -103,21 +103,21 @@ Jil Tietjen
 \section{Einleitung}
 \section{Grundlagen}
 \section{Kodierungen}
-In diesem Kapitel werden die unterschiedlichen Kodierungen beschrieben. Das Ziel ist es, dass die Cardinality Constraints über die Menge der Boolschen Variablen in eine Konjunktive Normalform (KNF) gebracht werden. %Innerhalb der KNF gibt es Einschränkungen, die verlangen, dass höchstens $r$ der Booleschen Variablen 1 sein kann. Rein in die Grundlagen
+In diesem Kapitel werden die unterschiedlichen Kodierungen beschrieben. Das Ziel ist es, dass die Cardinality Constraints über die Menge der Boolschen Variablen in eine Konjunktive Normalform (KNF) gebracht werden. %Innerhalb der KNF gibt es Einschränkungen, die verlangen, dass höchstens $r$ der Booleschen Variablen 1 sein können. Rein in die Grundlagen
 Das Cardinality Constraint ist nur erfüllt, wenn die Variablen unter der Berücksichtigung der Constraints mit $1$ belegt werden können. 
 
-%Die einfachste Möglichkeit ein Cardinality Constraint zu kodieren basiert auf einem Bit-Addierer, in den alle Variablen nach und nach reingegeben werden. Das Ergebnis ist eine binäre Repräsentation der Integer und es wird durch die Boolschen Variablen bestimmt, das innerhalb des durch die Constraints vorgeschriebenen Bereichs ist. Ein Vorteil ist, dass die Größe der KNF nicht ausufert, aber dennoch müssen alle Variablen einen Wert haben, um diesen mit dem Constraint in SAT vergleichen zu können. 
 %Evaluation Alle Kodierungen werden anhand des Damen-Problems auf ihre Praxistauglichkeit überprüft.
 
 	\subsection{naiver Ansatz}
 
 	\subsection{Kodierung nach Bailleux und Boufkhad}
-Im folgenden wird die Kodierung aus  \cite[][]{bailleux} vorgetellt.
+Im folgenden wird die Kodierung aus  \cite[][]{bailleux} vorgetellt. 
 %Diese Kodierung ist, laut Bailleux, effizient mit Berücksichtigung der Unit Propagation, die in den meisten Sat-Solvern verwendet wird. Es werden O(n log (n)) Variablen und O($\text{n}^2$) Klauseln gefordert, die aus mindestens 3 Literalen bestehen. Bei dieser Kodierung ist das Besondere, dass es eine einstellige Darstellung von Integer-Variablen gibt, die nicht nur den Wert an sich repräsentieren, sondern auch einem Intervall zugeordnet werden kann. Zum Beispiel gilt die Variable c nur, wenn das Intervall der Variablen ($a + b$) c erfüllt. Dadurch erhält man eine KNF. Die Kodierung muss korrekt sein, wenn es eine wahre Zuordnung gibt die unter der Berücksichtigung der Constraints erfüllbar ist.
 
 Bei dieser Kodierung können die Menge der Variablen (input, output und linking Variablen) als binärer Baum beschrieben werden.
 
 %n erklären in den Grundlagen
+Im weiteren Verlauf werden zusätzlich Formeln aus \cite[][]{knuth} hinzugezogen.
 Der Baum wird iterativ aufgebaut und beginnt mit einem Wurzelknoten, der mit 1 betitelt wird. Des Weiteren gibt es $n-1$ interne Knoten, sowie n Blätter, die von n bis $2n-1$ beschriftet werden. Die Kinder von Knoten k  für $1 \leq k \textless n$, sind die Knoten $2k$ und $2k +1$. Dies wird so lange wiederholt bis das letzte Blatt erreicht ist.
 Jedem Knoten wird eine Menge von Variablen zugeordnet. Dabei wird jedem Blatt eine Eingangsvariable und dem Wurzelknoten eine Menge von Ausgangsvariablen zugerodnet. Nun wurd die Kodierung so aufgebaut, dass die Variablen eines inneren Knotens die Summe der Variablen seiner Kindsknoten repräsentieren. Daraus ergibt sich ein Wurzelknoten dessen Variablen mit r verglichen werden können.\\
 
@@ -149,7 +149,7 @@ $\text{t}_1$ hat nach oben genannter Formel 4 Blätter, $\text{t}_2$ und $\text{
 Dadurch ergeben sich für das Beispiel von $n=4$ folgende Variablen:\\
 \textbf{Formel 1:}\\
 $k=2$ oder $k=3$, weil $1 \textless k \textless n$.\\
-$j=0$ oder $j=1$, weil $1 \leq j \leq \text{t}_k$. $\text{t}_k = 1$, da es das Minimum von r ist.\\
+$j=0$ oder $j=1$, weil $1 \leq j \leq \text{t}_k$ und $\text{t}_k = 1$.\\
 $i=0$ oder $i=1$, weil $1\leq i+j \leq \text{t}_{k}+1$.\\
 Somit wird in die folgenden Formeln $(i,j) = (1,0) \vee (0,1) \vee (1,1)$ eingesetzt.\\
 \textbf{k = 2:}\\
@@ -171,9 +171,9 @@ $\neg \text{b}_1^6 \vee \text{b}_1^3$\\
 $\neg \text{b}_1^7 \vee \text{b}_1^3$\\
 $\neg \text{b}_1^6 \vee \neg \text{b}_1^7 $\\
 
- Bildung der Literale:\\
+Folgende Literale können gebildet werden:\\
 $\neg \text{b}_1^4 = \neg \text{x}_1$, weil $\text{x}_{4-4+1}=\text{x}_1$ ist.\\
- Und alle anderen werden zu:\\
+ Alle anderen Variablen werden zu:\\
 $ \neg \text{x}_1 \vee \neg \text{x}_3$\\
 $\neg \text{x}_2 \vee \neg \text{x}_4$\\
 $\neg \text{x}_2 \vee \neg \text{x}_3$\\
@@ -189,7 +189,7 @@ $\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
 $\neg \text{b}_0^2 \vee \neg \text{b}_2^3$\\
 $\neg \text{b}_2^2 \vee \neg \text{b}_0^3$\\
 
-Alle trivialen Variablen werden gestrichen:\\
+Alle trivialen Variablen werden gestrichen. Diese Variablen bleiben bestehen:\\
 $\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
 $\neg \text{b}_2^3$\\
 $\neg \text{b}_2^2$ \\
@@ -199,9 +199,6 @@ $\neg \text{x}_3 \vee \neg \text{x}_0$\\
 $\neg \text{x}_0$\\
 $\neg \text{x}_3$\\
 
-
-
-%eigene Kodierung hervorheben am Ende
 		
 
 	\subsection{Kodierungen nach Sinz}
