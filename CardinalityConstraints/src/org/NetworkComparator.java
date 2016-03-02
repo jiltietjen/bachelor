@@ -62,7 +62,11 @@ public class NetworkComparator {
     solver.add(ctx.mkOr(input2, ctx.mkNot(output2)));
     solver.add(ctx.mkOr(input1, input2, ctx.mkNot(output1)));
     solver.add(ctx.mkOr(ctx.mkNot(input1), output1));
-    solver.add(ctx.mkOr(ctx.mkNot(input1), output1));
+    solver.add(ctx.mkOr(ctx.mkNot(input2), output1));
+  }
+
+  public String toString() {
+    return "inputs " + input1 + " " + input2 + " outputs " + output1 + " " + output2;
   }
 
 }

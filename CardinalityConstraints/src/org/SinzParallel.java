@@ -13,20 +13,24 @@ public class SinzParallel extends Encoding {
   private ArrayList<BoolExpr> makeCounter(Context ctx, Solver solver, int counter,
       int circuitCounter, ArrayList<BoolExpr> literals) throws Z3Exception {
     int size = literals.size();
-    // Sonderfall, wenn eine Hälfte 0 oder 1 Eingänge hat
+    // Sonderfall, wenn eine Hälfte 0 oder 1 Eingänge hat, gibt es keine Änderung
     if (size <= 1) {
       return literals;
     }
 
     // m aus dem Paper
+    // Paper [log n]
     int m = log2(size);
     // power2(m) = 2 ^m, Indizies 0 - m-1 wegen der Liste
     ArrayList<BoolExpr> firstHalf = new ArrayList<>(literals.subList(0, power2(m) - 1));
+    // 2. Hälfte 2^m - 1
     ArrayList<BoolExpr> secondHalf =
         new ArrayList<>(literals.subList(power2(m) - 1, literals.size() - 1));
     System.out.println(counter + " m " + m + " m^2 " + power2(m) + " firstHalf " + firstHalf
         + " SecondHalf " + secondHalf);
+    // Hälften in die Counter (rekursiv bis keine Subcounter mehr gebildet werden können)
     ArrayList<BoolExpr> firstOutputs =
+    // CircuitCounter ist Zähler für die circuits
         makeCounter(ctx, solver, counter, 2 * circuitCounter, firstHalf);
     ArrayList<BoolExpr> secondOutputs =
         makeCounter(ctx, solver, counter, 2 * circuitCounter + 1, secondHalf);
@@ -38,6 +42,7 @@ public class SinzParallel extends Encoding {
       BoolExpr sum = ctx.mkBoolConst("s_SinzPar_" + i + "_" + circuitCounter + "_" + counter);
       BoolExpr carry = ctx.mkBoolConst("c_SinzPar_" + i + "_" + circuitCounter + "_" + counter);
       result.add(sum);
+      // dann in die Voll-Addierer für 2. Hälfte
       makeFullAdder(solver, ctx, firstOutputs.get(i), secondOutputs.get(i), carryIn, carry, sum);
       carryIn = carry;
     }
@@ -45,6 +50,7 @@ public class SinzParallel extends Encoding {
       BoolExpr sum = ctx.mkBoolConst("s_SinzPar_" + i + "_" + circuitCounter + "_" + counter);
       BoolExpr carry = ctx.mkBoolConst("c_SinzPar_" + i + "_" + circuitCounter + "_" + counter);
       result.add(sum);
+      // Halbaddierer für erste Hälfte
       makeHalfAdder(solver, ctx, firstOutputs.get(i), carryIn, carry, sum);
       carryIn = carry;
     }
@@ -74,6 +80,7 @@ public class SinzParallel extends Encoding {
 
   }
 
+  // 2^m Linksshifter für die 2-er potenzen (bsp 2^0=1, 2^1=2...)
   private static int power2(int m) {
     return 1 << m;
   }
@@ -85,6 +92,7 @@ public class SinzParallel extends Encoding {
     return 31 - Integer.numberOfLeadingZeros(n);
   }
 
+  // Vergleich mit r
   private void makeComparator(Context ctx, Solver solver, int r, ArrayList<BoolExpr> expressions)
       throws Z3Exception {
     ArrayList<BoolExpr> result = new ArrayList<>();
