@@ -104,25 +104,24 @@ Jil Tietjen
 \section{Grundlagen}
 \section{Kodierungen}
 In diesem Kapitel werden die unterschiedlichen Kodierungen beschrieben. Das Ziel ist es, dass die Cardinality Constraints über die Menge der Boolschen Variablen in eine Konjunktive Normalform (KNF) gebracht werden. %Innerhalb der KNF gibt es Einschränkungen, die verlangen, dass höchstens $r$ der Booleschen Variablen 1 sein können. Rein in die Grundlagen
-Das Cardinality Constraint ist nur erfüllt, wenn die Variablen unter der Berücksichtigung der Constraints mit $1$ belegt werden können. 
+Das Cardinalitiy Constraint ist genau dann erfüllt, wenn die aus der Kodierung resultierende Formel erfüllt ist. Ein einzelnes Cardinality Constraint ist immer erfüllbar. Erst eine Kombination mehrerer Cardinality Constraints kann zu einer unerfüllbaren Formel führen.
 
 %Evaluation Alle Kodierungen werden anhand des Damen-Problems auf ihre Praxistauglichkeit überprüft.
 
 	\subsection{naiver Ansatz}
 
 	\subsection{Kodierung nach Bailleux und Boufkhad}
-Im folgenden wird die Kodierung aus  \cite[][]{bailleux} vorgetellt. 
+Im folgenden wird die Kodierung aus  \cite[][]{bailleux} vorgetellt. Im weiteren Verlauf werden zusätzlich Formeln aus \cite[][]{knuth} hinzugezogen.
 %Diese Kodierung ist, laut Bailleux, effizient mit Berücksichtigung der Unit Propagation, die in den meisten Sat-Solvern verwendet wird. Es werden O(n log (n)) Variablen und O($\text{n}^2$) Klauseln gefordert, die aus mindestens 3 Literalen bestehen. Bei dieser Kodierung ist das Besondere, dass es eine einstellige Darstellung von Integer-Variablen gibt, die nicht nur den Wert an sich repräsentieren, sondern auch einem Intervall zugeordnet werden kann. Zum Beispiel gilt die Variable c nur, wenn das Intervall der Variablen ($a + b$) c erfüllt. Dadurch erhält man eine KNF. Die Kodierung muss korrekt sein, wenn es eine wahre Zuordnung gibt die unter der Berücksichtigung der Constraints erfüllbar ist.
 
-Bei dieser Kodierung können die Menge der Variablen (input, output und linking Variablen) als binärer Baum beschrieben werden.
-
 %n erklären in den Grundlagen
-Im weiteren Verlauf werden zusätzlich Formeln aus \cite[][]{knuth} hinzugezogen.
-Der Baum wird iterativ aufgebaut und beginnt mit einem Wurzelknoten, der mit 1 betitelt wird. Des Weiteren gibt es $n-1$ interne Knoten, sowie n Blätter, die von n bis $2n-1$ beschriftet werden. Die Kinder von Knoten k  für $1 \leq k \textless n$, sind die Knoten $2k$ und $2k +1$. Dies wird so lange wiederholt bis das letzte Blatt erreicht ist.
-Jedem Knoten wird eine Menge von Variablen zugeordnet. Dabei wird jedem Blatt eine Eingangsvariable und dem Wurzelknoten eine Menge von Ausgangsvariablen zugerodnet. Nun wurd die Kodierung so aufgebaut, dass die Variablen eines inneren Knotens die Summe der Variablen seiner Kindsknoten repräsentieren. Daraus ergibt sich ein Wurzelknoten dessen Variablen mit r verglichen werden können.\\
+Bei dieser Kodierung soll ein binärer Baum aufgebaut werden. Aus dem binären Baum können anhand von Formeln Literale gebildet werden. Durch das Wegstreichen von trivialen Variablen bleiben am Ende einige Klauseln mit einem Literal übrig. Für diese Literale kann sehr schnell eine Belegung gefunden werden. Dies steigert die Effizienz der Kodierung.
 
-Als nächster Schritt werden neue Variablen der Form $\text{b}_j^k$ gebildet, für die gilt, dass $1 \textless k \textless n$ und  $1 \leq j \leq t_k$ ist. $t_k$ ist dabei das Minimum von r und die Anzahl der Blätter unter dem Knoten k. Jedem inneren Knoten k wird die Menge der Variablen $\text{b}_j^k$ zugeordnet.\\
-Mit den neuen Variablen können folgende Formeln gebildet werden:\\
+Der Baum wird iterativ aufgebaut und beginnt mit einem Wurzelknoten, der mit $1$ betitelt wird. Des Weiteren gibt es $n-1$ interne Knoten, sowie $n$ Blätter, die von $n$ bis $2n-1$ beschriftet werden. Die Kinder von Knoten $k$  für $1 \leq k \textless n$, sind die Knoten $2k$ und $2k +1$. Dies wird so lange wiederholt bis das letzte Blatt erreicht ist.
+Jedem Knoten wird eine Menge von Variablen zugeordnet. Dabei wird jedem Blatt eine Eingangsvariable und dem Wurzelknoten eine Menge von Ausgangsvariablen zugeordnet. Nun wurd die Kodierung so aufgebaut, dass die Variablen eines inneren Knotens die Summe der Variablen seiner Kindsknoten repräsentieren. Daraus ergibt sich ein Wurzelknoten dessen Variablen mit $r$ verglichen werden können, da sie die Summe aller Eingangsvariablen repräsentieren.\\
+
+Als nächster Schritt werden neue Variablen der Form $\text{b}_j^k$ gebildet, für $1 \textless k \textless n$ und  $1 \leq j \leq t_k$ werden Hilfesvariablen $ b_j^k$ erzeugt. Das Minimum von r und die Anzahl der Blätter unter dem Knoten k ist dabei $t_k$. Bei $n=2$ hat der Knoten $1$ zum Beispiel $2$ Blätter, daher ist $t_1=2$. Jedem inneren Knoten k wird die Menge der Variablen $\text{b}_j^k$ zugeordnet.\\
+Mit den neuen Variablen können folgende Klauseln gebildet werden:\\
 \textbf{1. Formel:}\\
 $ \neg \text{b}_i^{2k} \vee \neg \text{b}_j^{2k+1} \vee \neg \text{b}_{i+j}^{k}$ \\
 für $0\leq i \leq \text{t}_{2k}$, $0\leq j \leq \text{t}_{2k+1}$, $1\leq i+j \leq \text{t}_{k}+1$, $1\textless k \textless n$\\
@@ -130,28 +129,26 @@ für $0\leq i \leq \text{t}_{2k}$, $0\leq j \leq \text{t}_{2k+1}$, $1\leq i+j \l
 $ \neg \text{b}_i^2 \vee \neg \text{b}_j^3$ für $0\leq i \leq \text{t}_2$, $0\leq j \leq \text{t}_3$, $i+j = r+1$\\
 
 Dabei wird $\text{t}_k$ zu $1$ und $\text{b}_1^k = \text{x}_{k-n+1}$ für $n \leq k \textless 2n$. Dadurch können aus den Hilfsvariablen die entsprechenden Literale gebildet werden, die die KNF bilden.
-Alle neu entstandenen Literale mit $\neg \text{b}_0^k$ und $\text{b}_{r+1}^k$ werden gestrichen. Dies hat keine weiteren Auswirkungen, da es nur triviale Variablen sind, die gestrichen werden dürfen.
-
-
+Aufgrund des Aufbaus der Formel können Variablen der Form $\text{b}_(r+1)^k$ nur positiv und Variablen der Form $\text{b}_0^k$ nur negativ vorkommen. Daher können diese Variablen gestrichen werden.
 
 \subsubsection{Beispiel für die Kodierung}
 Für das Beispiel ist $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ interne Knoten, sowie 4 Blätter, die beschriftet sind mit 4 bis $2*4-1=7$. Die Kinder von Knoten $1$  für $1 \leq 1 \textless 4$, sind die Knoten 2 und $2*1 +1=3$. Daraus ergibt sich der binäre Baum, der in Abbildung \ref{fig:baum} zu sehen ist.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=6cm]{Bailleux_baum.png}
+\includegraphics[width=9cm]{bailleux.png}
 \caption{Binärer Baum nach Bailleux}
 \label{fig:baum}
 \end{figure}
 
-$\text{t}_1$ hat nach oben genannter Formel 4 Blätter, $\text{t}_2$ und $\text{t}_3$ jeweils 2 und $\text{t}_4$ bis $\text{t}_7$ keine Blätter
+Der Knoten $1$ hat die Blätter $4,5,6$ und $7$. Daher ist $\text{t}_1 = 4$. Die weiteren Variablen $\text{t}_2$ und $\text{t}_3$ sind jeweils $2$ und $\text{t}_4$ bis $\text{t}_7$ hat keine Blätter und sind somit $0$.
 
 Dadurch ergeben sich für das Beispiel von $n=4$ folgende Variablen:\\
 \textbf{Formel 1:}\\
 $k=2$ oder $k=3$, weil $1 \textless k \textless n$.\\
 $j=0$ oder $j=1$, weil $1 \leq j \leq \text{t}_k$ und $\text{t}_k = 1$.\\
 $i=0$ oder $i=1$, weil $1\leq i+j \leq \text{t}_{k}+1$.\\
-Somit wird in die folgenden Formeln $(i,j) = (1,0) \vee (0,1) \vee (1,1)$ eingesetzt.\\
+Somit ergeben sich für (i,j) die Möglichkeiten $(1,0)$, $(0,1)$ und $(1,1)$.\\
 \textbf{k = 2:}\\
 $\neg \text{b}_1^4 \vee \neg \text{b}_0^5 \vee \text{b}_1^2$\\
 $\neg \text{b}_0^4 \vee \neg \text{b}_1^5 \vee \text{b}_1^2$\\
@@ -184,7 +181,7 @@ $\neg \text{x}_3 \vee \neg \text{x}_4$\\
 \textbf{Formel 2:}\\
 $i=0$, $i=1$ oder $i=2$, weil $0\leq i \leq \text{t}_2$ für $\text{t}_2 = 2$.\\
 $j=0$, $j=1$ oder $j=2$, weil $0\leq j \leq \text{t}_3$ für $\text{t}_3=2$.\\
-Somit wird in die folgenden Formeln $(i,j) = (1,1) \vee (0,2) \vee (2,0)$ eingesetzt, damit $i+j = r+1$ gilt.\\
+Somit ergeben sich für (i,j) die Möglichkeiten $(1,1)$, $(0,2)$ und $(2,0)$, so dass $i+j = r+1$ gilt.\\
 $\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
 $\neg \text{b}_0^2 \vee \neg \text{b}_2^3$\\
 $\neg \text{b}_2^2 \vee \neg \text{b}_0^3$\\
@@ -195,11 +192,12 @@ $\neg \text{b}_2^3$\\
 $\neg \text{b}_2^2$ \\
 
 Daraus werden folgende Literale gebildet:\\
-$\neg \text{x}_3 \vee \neg \text{x}_0$\\
-$\neg \text{x}_0$\\
-$\neg \text{x}_3$\\
+$\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
+$\neg \text{b}_2^3$\\
+$\neg \text{b}_2^2$\\
 
-		
+Die vollständige KNF sieht folgendermaßen aus:\\
+($ \neg \text{x}_1 \vee \neg \text{x}_3$) $\wedge$ ($\neg \text{x}_2 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{x}_2 \vee \neg \text{x}_3$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_0$) $\wedge$ ($\neg \text{x}_4 \vee \neg \text{x}_0$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{b}_1^2 \vee \neg \text{b}_1^3$) $\wedge$ ($\neg \text{b}_2^3$) $\wedge$ ($\neg \text{b}_2^2$)\\
 
 	\subsection{Kodierungen nach Sinz}
 		\subsubsection{sequentiell}
