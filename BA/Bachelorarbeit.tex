@@ -171,11 +171,11 @@ $\neg \text{b}_1^6 \vee \neg \text{b}_1^7 $\\
 Folgende Literale können gebildet werden:\\
 $\neg \text{b}_1^4 = \neg \text{x}_1$, weil $\text{x}_{4-4+1}=\text{x}_1$ ist.\\
  Alle anderen Variablen werden zu:\\
-$ \neg \text{x}_1 \vee \neg \text{x}_3$\\
-$\neg \text{x}_2 \vee \neg \text{x}_4$\\
-$\neg \text{x}_2 \vee \neg \text{x}_3$\\
-$\neg \text{x}_3 \vee \neg \text{x}_0$\\
-$\neg \text{x}_4 \vee \neg \text{x}_0$\\
+$ \neg \text{x}_1 \vee \text{b}_1^2$\\
+$\neg \text{x}_2 \vee  \text{b}_1^2$\\
+$\neg \text{x}_1 \vee \neg \text{x}_2$\\
+$\neg \text{x}_3 \vee \text{b}_1^3$\\
+$\neg \text{x}_4 \vee \text{b}_1^3$\\
 $\neg \text{x}_3 \vee \neg \text{x}_4$\\
 
 \textbf{Formel 2:}\\
@@ -197,7 +197,7 @@ $\neg \text{b}_2^3$\\
 $\neg \text{b}_2^2$\\
 
 Die vollständige KNF sieht folgendermaßen aus:\\
-($ \neg \text{x}_1 \vee \neg \text{x}_3$) $\wedge$ ($\neg \text{x}_2 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{x}_2 \vee \neg \text{x}_3$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_0$) $\wedge$ ($\neg \text{x}_4 \vee \neg \text{x}_0$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{b}_1^2 \vee \neg \text{b}_1^3$) $\wedge$ ($\neg \text{b}_2^3$) $\wedge$ ($\neg \text{b}_2^2$)\\
+($ \neg \text{x}_1 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_2 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_1 \vee \neg \text{x}_2$) $\wedge$ ($\neg \text{x}_3 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_4 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{b}_1^2 \vee \neg \text{b}_1^3$) $\wedge$ ($\neg \text{b}_2^3$) $\wedge$ ($\neg \text{b}_2^2$)\\
 
 	\subsection{Kodierungen nach Sinz}
 		\subsubsection{sequentiell}

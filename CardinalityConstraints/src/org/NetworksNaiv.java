@@ -19,6 +19,7 @@ public class NetworksNaiv extends Encoding {
           .add(new NetworkComparator(inputs.get(0), outputs.get(0), inputs.get(1), outputs.get(1)));
       return result;
     }
+    // weitere Inputs und Outputs
     for (int i = 0; i < inputs.size() - 1; i++) {
       BoolExpr input1;
       if (i == 0) {
