@@ -9,7 +9,7 @@ public class DamenProblem {
 
   public static void main(String[] args) {
     try {
-      solve(4);
+      solve(2);
     } catch (Z3Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

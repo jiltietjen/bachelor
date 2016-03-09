@@ -45,7 +45,7 @@ public class Builder {
     }
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new NetworksNaiv();
+    Encoding encoding = new KnuthBailleux();
     for (Constraint c : leqConstraints) {
       System.out.println(c);
     }

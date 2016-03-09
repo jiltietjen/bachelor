@@ -101,7 +101,7 @@ public class KnuthBailleux extends Encoding {
   }
 
   /* Esetzt Ausdrücke bei Erfüllung der Bedingungen durch x */
-  private static BoolExpr makeVariable(int upperIndex, int lowerIndex, Context ctx, Solver solver,
+  public static BoolExpr makeVariable(int upperIndex, int lowerIndex, Context ctx, Solver solver,
       boolean not, int n, int r, int counter, ArrayList<Literal> literals) throws Z3Exception {
     // ist lowerIndex 0 oder r+1 soll der Ausdruck entfernt werden
     // ersetzt b mit upperindex k > n durch x mit upperindex -n+1

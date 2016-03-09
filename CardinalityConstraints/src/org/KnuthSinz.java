@@ -99,18 +99,5 @@ public class KnuthSinz extends Encoding {
 
 
   /* Ende Sinz nach Knuth ------------------------------------------------------------- */
-  /* Sinz parallel --------------------------------------------------------------------- */
-  public static void parallelCounter(Context ctx, Solver solver, int n, int r, int counter,
-      ArrayList<Literal> literals) throws Z3Exception {
-    ArrayList<Integer> inputs = new ArrayList<>();
-    inputs.add(n);
-    int size1 = inputs.size();
-    int size2 = inputs.size() / 2;
-    if (size1 > size2) {
-      System.out.println("ungleich");
-    }
-  }
-
-  /* Sinz parallel Ende ------------------------------------------------------------------ */
 
 }
