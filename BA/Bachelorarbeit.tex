@@ -111,7 +111,7 @@ Das Cardinalitiy Constraint ist genau dann erfüllt, wenn die aus der Kodierung 
 	\subsection{naiver Ansatz}
 
 	\subsection{Kodierung nach Bailleux und Boufkhad}
-Im folgenden wird die Kodierung aus  \cite[][]{bailleux} vorgetellt. Im weiteren Verlauf werden zusätzlich Formeln aus \cite[][]{knuth} hinzugezogen.
+Im folgenden wird die Kodierung aus \cite[][]{bailleux} vorgetellt. Im weiteren Verlauf werden zusätzlich Formeln aus \cite[][]{knuth} hinzugezogen.
 %Diese Kodierung ist, laut Bailleux, effizient mit Berücksichtigung der Unit Propagation, die in den meisten Sat-Solvern verwendet wird. Es werden O(n log (n)) Variablen und O($\text{n}^2$) Klauseln gefordert, die aus mindestens 3 Literalen bestehen. Bei dieser Kodierung ist das Besondere, dass es eine einstellige Darstellung von Integer-Variablen gibt, die nicht nur den Wert an sich repräsentieren, sondern auch einem Intervall zugeordnet werden kann. Zum Beispiel gilt die Variable c nur, wenn das Intervall der Variablen ($a + b$) c erfüllt. Dadurch erhält man eine KNF. Die Kodierung muss korrekt sein, wenn es eine wahre Zuordnung gibt die unter der Berücksichtigung der Constraints erfüllbar ist.
 
 %n erklären in den Grundlagen
@@ -200,7 +200,17 @@ Die vollständige KNF sieht folgendermaßen aus:\\
 ($ \neg \text{x}_1 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_2 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_1 \vee \neg \text{x}_2$) $\wedge$ ($\neg \text{x}_3 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_4 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{b}_1^2 \vee \neg \text{b}_1^3$) $\wedge$ ($\neg \text{b}_2^3$) $\wedge$ ($\neg \text{b}_2^2$)\\
 
 	\subsection{Kodierungen nach Sinz}
+Dieses Kapitel behandelt zwei Kodierungen nach Sinz, die auf einen sequentiellen Counter und einem parallelen Counter basieren \cite[][]{sinz}. Grundlegend besteht diese Kodierung aus einem Schaltkreis, der die Summe die Eingangsvariablen mit Hilfe eines ein- oder zweistelligen Counters bildet und das Ergebnis mit $r$ vergleicht. Die Unterschiede der Schaltkreise werden im weiteren Verlauf beschrieben.
 		\subsubsection{sequentiell}
+Bei dieser Variante werden erneut Formeln von \cite[][]{knuth} zur Hilfe genommen. Bei der sequentiellen Variante berechnet der Counter Teilsummen und vergleicht die Summe der Teilsummen mit $r$. Anhand von \cite[][]{knuth} werden neue Variablen eingeführt. Dafür müssen $n$ und $r$ wieder bekannt sein, wie bei Bailleux und Boufkhad. Es werden $(n-r)*r$ neue Variablen der Form $\text{s}_j^k$ für $1 \leq j \leq n - r$ und $1 \leq k \leq r$ gebildet. \\
+Mit den neuen Variablen können folgende Klauseln erstellt werden:\\
+\textbf{1. Formel:}\\
+$(\neg \text{s}_j^k \vee \text{s}_{j+1}^k)$ für $(1 \leq j \textless n - r)$ und $(1 \leq k \leq r)$\\
+\textbf{2. Formel:}\\
+$(\neg \text{x}_{j+k} \vee \neg \text{s}_j^k \vee \text{s}_j^{k+1})$ für $1 \leq j \leq n - r$ und $0 \leq k \leq r$\\
+
+Variablen der Form $\neg \text{s}_j^0$ und $\neg \text{s}_j^{r+1}$ dürfen gestrichen werden. %warum?
+
 		\subsubsection{parallel}
 
 	\subsection{Kodierungen basierend auf Sorting Networks}
@@ -210,7 +220,7 @@ Die vollständige KNF sieht folgendermaßen aus:\\
 	\subsection{Entwickelte Kodierung auf Grundlage von Bailleux und Boufkhad}
 
 \section{Umsetzung}
- Als Testproblem für die unterschiedlichen Kodierungen wird das n-Damen-Problem verwendet, da dieses Problem eine wichtige Rolle in der Informatik spielt und viele Constraints abgeleitet werden können. In jeder Reihe (vertikal, horizontal und diagonal) ist nur eine Dame erlaubt. Somit ergeben sich unterschiedliche Kombinationen, die für die Belegung der Literale nur erlaubt sind. Ziel ist es eine Belegung zu finden, die alle Bedingungen erfüllt.
+ Als Testproblem für die unterschiedlichen Kodierungen wird das n-Damen-Problem verwendet, da dieses Problem eine wichtige Rolle in der Informatik spielt und viele Constraints abgeleitet werden können. In jeder Reihe (vertikal, horizontal und diagonal) ist nur eine Dame erlaubt. Somit ergeben sich unterschiedliche Kombinationen, die für die Belegung der Literale nur erlaubt sind. Ziel ist es eine Belegung zu finden, die alle Bedingungen erfüllt. 
 
 \begin{figure}[H]
 \centering
