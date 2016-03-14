@@ -10,7 +10,7 @@ import com.microsoft.z3.Status;
 import com.microsoft.z3.Z3Exception;
 
 
-public class BailleuxTest {
+public class NetworksNaivTest {
   @Test
   public void testNumClausesVariables() throws Z3Exception {
     Context ctx = new Context();

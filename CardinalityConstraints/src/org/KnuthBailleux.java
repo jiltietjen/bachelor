@@ -23,6 +23,7 @@ public class KnuthBailleux extends Encoding {
    * 1; System.out.println("Kind links: " + k1); System.out.println("Kind rechts: " + k2); } }
    */
 
+  // TODO r
   /* Zählt die Blätter unter den jeweiligen Knoten t */
   public static int calcT(int t, int n) {
     if (t >= n) {
@@ -36,13 +37,17 @@ public class KnuthBailleux extends Encoding {
     return calcT(2 * t, n) + calcT(2 * t + 1, n);
   }
 
+  public static int calcT(int t, int n, int r) {
+    return Math.min(calcT(t, n), r);
+  }
+
   /* zweite Formel wird erstellt */
   public static void createFormulaSecond(Context ctx, Solver solver, int n, int r, int counter,
       ArrayList<Literal> literals) throws Z3Exception {
     ArrayList<BoolExpr> variablesSecond = new ArrayList<BoolExpr>();
-    for (int i = 0; i <= calcT(2, n); i++) {
+    for (int i = 0; i <= calcT(2, n, r); i++) {
       int j = r + 1 - i;
-      if (j >= 0 && j <= calcT(3, n)) {
+      if (j >= 0 && j <= calcT(3, n, r)) {
         // makeLiteral(not b^2_i or not b^3_j)
         // wird in x, bzw b umgewandelt in makeVariable
         variablesSecond = new ArrayList<>();
@@ -69,9 +74,9 @@ public class KnuthBailleux extends Encoding {
     ArrayList<BoolExpr> variablesFirst = new ArrayList<BoolExpr>();
     for (int k = 2; k < n; k++) {
       // t2k in echtzeit berechnen
-      for (int i = 0; i <= calcT(2 * k, n); i++) {
-        for (int j = 0; j <= calcT(2 * k + 1, n); j++) {
-          if (i + j <= calcT(k, n) + 1 && i + j >= 1) {
+      for (int i = 0; i <= calcT(2 * k, n, r); i++) {
+        for (int j = 0; j <= calcT(2 * k + 1, n, r); j++) {
+          if (i + j <= calcT(k, n, r) + 1 && i + j >= 1) {
             // not b^2k_i or not b^2k+1_j or b^k_i+j
             // in x, bzw b umwandeln in makeVariable
             variablesFirst = new ArrayList<>();
