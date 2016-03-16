@@ -12,23 +12,22 @@ import com.microsoft.z3.Z3Exception;
 
 public class KnuthSinzTest {
   @Test
-  // TODO Anpassen der Werte!
   public void testNumClausesVariables() throws Z3Exception {
     Context ctx = new Context();
     Solver solver = TestUtils.makeEncoding(2, 1, new KnuthSinz(), ctx);
-    assertEquals(solver.getNumAssertions(), 1);
-    assertEquals(TestUtils.numVars(solver), 2);
+    assertEquals(solver.getNumAssertions(), 2);
+    assertEquals(TestUtils.numVars(solver), 3);
     solver = TestUtils.makeEncoding(3, 1, new KnuthSinz(), ctx);
-    assertEquals(solver.getNumAssertions(), 4);
-    assertEquals(TestUtils.numVars(solver), 4);
+    assertEquals(solver.getNumAssertions(), 5);
+    assertEquals(TestUtils.numVars(solver), 5);
     solver = TestUtils.makeEncoding(4, 1, new KnuthSinz(), ctx);
-    assertEquals(solver.getNumAssertions(), 7);
-    assertEquals(TestUtils.numVars(solver), 6);
+    assertEquals(solver.getNumAssertions(), 8);
+    assertEquals(TestUtils.numVars(solver), 7);
     solver = TestUtils.makeEncoding(5, 1, new KnuthSinz(), ctx);
-    assertEquals(solver.getNumAssertions(), 10);
-    assertEquals(TestUtils.numVars(solver), 8);
+    assertEquals(solver.getNumAssertions(), 11);
+    assertEquals(TestUtils.numVars(solver), 9);
     solver = TestUtils.makeEncoding(3, 2, new KnuthSinz(), ctx);
-    assertEquals(solver.getNumAssertions(), 4);
+    assertEquals(solver.getNumAssertions(), 3);
     assertEquals(TestUtils.numVars(solver), 5);
     solver = TestUtils.makeEncoding(4, 2, new KnuthSinz(), ctx);
     assertEquals(solver.getNumAssertions(), 8);
@@ -37,11 +36,11 @@ public class KnuthSinzTest {
     assertEquals(solver.getNumAssertions(), 13);
     assertEquals(TestUtils.numVars(solver), 11);
     solver = TestUtils.makeEncoding(4, 3, new KnuthSinz(), ctx);
-    assertEquals(solver.getNumAssertions(), 7);
-    assertEquals(TestUtils.numVars(solver), 8);
+    assertEquals(solver.getNumAssertions(), 4);
+    assertEquals(TestUtils.numVars(solver), 7);
     solver = TestUtils.makeEncoding(5, 3, new KnuthSinz(), ctx);
-    assertEquals(solver.getNumAssertions(), 13);
-    assertEquals(TestUtils.numVars(solver), 12);
+    assertEquals(solver.getNumAssertions(), 11);
+    assertEquals(TestUtils.numVars(solver), 11);
   }
 
   @Test

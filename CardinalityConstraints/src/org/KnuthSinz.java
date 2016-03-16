@@ -15,7 +15,7 @@ public class KnuthSinz extends Encoding {
       ArrayList<Literal> literals) throws Z3Exception {
     ArrayList<BoolExpr> variablesFirst = new ArrayList<BoolExpr>();
     for (int k = 1; k <= r; k++) {
-      for (int j = 1; j <= n - r; j++) {
+      for (int j = 1; j < n - r; j++) {
         variablesFirst = new ArrayList<>();
         BoolExpr formularFirstFVariable =
             makeVariableSinz(k, j, ctx, solver, true, n, r, counter, literals, false);

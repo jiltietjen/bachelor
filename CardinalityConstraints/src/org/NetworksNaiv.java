@@ -66,7 +66,7 @@ public class NetworksNaiv extends Encoding {
           .add(ctx.mkBoolConst("b_" + (inputs.size() + 1) + "_" + i + "_NetworksNaiv_" + counter));
     }
     ArrayList<NetworkComparator> comparators = makeSortingNetwork(ctx, inputs, outputs, counter);
-    System.out.println(comparators);
+    // System.out.println(comparators);
     for (int i = 0; i < comparators.size(); i++) {
       comparators.get(i).toZ3(ctx, solver);
     }
