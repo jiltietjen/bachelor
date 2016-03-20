@@ -141,7 +141,7 @@ Für das Beispiel ist $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ interne K
 \label{fig:baum}
 \end{figure}
 
-Der Knoten $1$ hat die Blätter $4,5,6$ und $7$. Daher ist $\text{t}_1 = 4$. Die weiteren Variablen $\text{t}_2$ und $\text{t}_3$ sind jeweils $2$ und $\text{t}_4$ bis $\text{t}_7$ hat keine Blätter und sind somit $0$.
+Der Knoten $1$ hat die Blätter $4,5,6$ und $7$. Daher müsste $\text{t}_1 = 4$ sein, da es aber das Minimum von $r$ sein soll, ist $t_1=1$. Die weiteren Variablen $\text{t}_2$ und $\text{t}_3$ sind auch jeweils $1$ und $\text{t}_4$ bis $\text{t}_7$ hat keine Blätter und sind somit $0$.
 
 Dadurch ergeben sich für das Beispiel von $n=4$ folgende Variablen:\\
 \textbf{Formel 1:}\\
@@ -179,43 +179,77 @@ $\neg \text{x}_4 \vee \text{b}_1^3$\\
 $\neg \text{x}_3 \vee \neg \text{x}_4$\\
 
 \textbf{Formel 2:}\\
-$i=0$, $i=1$ oder $i=2$, weil $0\leq i \leq \text{t}_2$ für $\text{t}_2 = 2$.\\
-$j=0$, $j=1$ oder $j=2$, weil $0\leq j \leq \text{t}_3$ für $\text{t}_3=2$.\\
-Somit ergeben sich für (i,j) die Möglichkeiten $(1,1)$, $(0,2)$ und $(2,0)$, so dass $i+j = r+1$ gilt.\\
+$i=1$, weil $0\leq i \leq \text{t}_2$ für $\text{t}_2 = 1$.\\
+$j=1$, weil $0\leq j \leq \text{t}_3$ für $\text{t}_3=1$.\\
+Somit ergeben sich für (i,j) die Möglichkeiten $(1,1)$, so dass $i+j = r+1$ gilt.\\
 $\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
-$\neg \text{b}_0^2 \vee \neg \text{b}_2^3$\\
-$\neg \text{b}_2^2 \vee \neg \text{b}_0^3$\\
 
-Alle trivialen Variablen werden gestrichen. Diese Variablen bleiben bestehen:\\
-$\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
-$\neg \text{b}_2^3$\\
-$\neg \text{b}_2^2$ \\
-
-Daraus werden folgende Literale gebildet:\\
-$\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
-$\neg \text{b}_2^3$\\
-$\neg \text{b}_2^2$\\
+Es können keine Variablen gestrichen werden.\\
 
 Die vollständige KNF sieht folgendermaßen aus:\\
-($ \neg \text{x}_1 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_2 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_1 \vee \neg \text{x}_2$) $\wedge$ ($\neg \text{x}_3 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_4 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{b}_1^2 \vee \neg \text{b}_1^3$) $\wedge$ ($\neg \text{b}_2^3$) $\wedge$ ($\neg \text{b}_2^2$)\\
+($ \neg \text{x}_1 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_2 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_1 \vee \neg \text{x}_2$) $\wedge$ ($\neg \text{x}_3 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_4 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{b}_1^2 \vee \neg \text{b}_1^3$)\\
 
 	\subsection{Kodierungen nach Sinz}
 Dieses Kapitel behandelt zwei Kodierungen nach Sinz, die auf einen sequentiellen Counter und einem parallelen Counter basieren \cite[][]{sinz}. Grundlegend besteht diese Kodierung aus einem Schaltkreis, der die Summe die Eingangsvariablen mit Hilfe eines ein- oder zweistelligen Counters bildet und das Ergebnis mit $r$ vergleicht. Die Unterschiede der Schaltkreise werden im weiteren Verlauf beschrieben.
 		\subsubsection{sequentiell}
-Bei dieser Variante werden erneut Formeln von \cite[][]{knuth} zur Hilfe genommen. Bei der sequentiellen Variante berechnet der Counter Teilsummen und vergleicht die Summe der Teilsummen mit $r$. Anhand von \cite[][]{knuth} werden neue Variablen eingeführt. Dafür müssen $n$ und $r$ wieder bekannt sein, wie bei Bailleux und Boufkhad. Es werden $(n-r)*r$ neue Variablen der Form $\text{s}_j^k$ für $1 \leq j \leq n - r$ und $1 \leq k \leq r$ gebildet. \\
+Die sequentlielle Variante besteht aus zwei aufeinander folgende Stufen. In der ersten Stufe werden die Inputs gezählt, die auf true gesetzt werden. In der nächsten Stufe überprüft ein Comparator, ob das Zählerergebnis innerhalb von $r$ liegt (siehe Abbildung \ref{fig:sinz_counter}). Der Counter besteht aus mehreren Sub-Schaltkreisen und in jedem Sub-Schaltkreis wird die nächste Eingangsvariable addiert. Daher kann die komplette Summe erst im letzten Sub-Schaltkreis berechnet werden. \\
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Sinz_seq.png}
+\caption{Counter von Sinz}
+\label{fig:sinz_counter}
+\end{figure}
+
+Jeder Addierer erhält eine Eingangsvariable und $r$-viele Teilsummen als Eingänge. Es gibt $n$ Addierer und bei jedem geht ein Overflow-Bit heraus. Die entstehenden Überträge der einzelnen Addierer werden auf true gesetzt, wenn die Teilsumme größer als $r$ ist. Damit die Cardinality Constraints erfüllbar sein können, sind keine Überträge erlaubt, somit werden sie auf false gesetzt. Diese Aufgabe übernimmt schon der Comparator. Es wird ausgenutzt, dass $\neg \text{overflow}_i$ für $1 \leq i \leq n$ gelten muss, um den Schaltkreis zu vereinfachen. Daraus ergeben sich dann eine Menge von Klauseln.
+
+Bei dieser Variante werden erneut anhand von \cite[][]{knuth} neue Variablen eingeführt. Dafür müssen $n$ und $r$ wieder bekannt sein, wie bei Bailleux und Boufkhad. Es werden $(n-r)*r$ neue Variablen der Form $\text{s}_j^k$ für $1 \leq j \leq n - r$ und $1 \leq k \leq r$ gebildet. \\
 Mit den neuen Variablen können folgende Klauseln erstellt werden:\\
 \textbf{1. Formel:}\\
 $(\neg \text{s}_j^k \vee \text{s}_{j+1}^k)$ für $(1 \leq j \textless n - r)$ und $(1 \leq k \leq r)$\\
 \textbf{2. Formel:}\\
 $(\neg \text{x}_{j+k} \vee \neg \text{s}_j^k \vee \text{s}_j^{k+1})$ für $1 \leq j \leq n - r$ und $0 \leq k \leq r$\\
 
-Variablen der Form $\neg \text{s}_j^0$ und $\neg \text{s}_j^{r+1}$ dürfen gestrichen werden. %warum?
+Die Variablen der Form  $\neg s_j^0$ können gestrichen werden. Es bedetuet, dass die Teilsumme vom $j-ten$ Sub-Schaltkreis  $0$ ist. $0$ hätte keine Auswirkung auf den Vergleich mit $r$ und ist daher überflüssig. Des Weiteren dürfen Variablen der Form $\text{s}_j^{r+1}$ gestrichen werden, weil dies auf jeden Fall größer als $r$ wäre und somit niemals eine Belegung für gefunden werden könnte.
+
+	\subsubsection{Beispiel für eine sequentielle Kodierung}
+Es ergeben sich für das Beispiel von $n=4$ und $r=1$ folgende Variablen:\\
+\textbf{Formel 1:}\\
+Da $1 \leq j \textless 3$ ergeben sich $1$ oder $2$ für j.\\
+Für $k$ ergibt sich $1$, da $1 \leq k \leq 1$.\\
+$\neg \text{b}_1^1 \vee \text{b}_2^1$\\
+$\neg  \text{b}_2^1 \vee \text{b}_3^1$\\
+In diesem Fall können keine Variablen gestrichen werden.\\
+
+\textbf{Formel 2:}\\
+Bei dieser Formel kann j $1, 2$ oder $3$ sein, da $1 \leq j \leq 3$ . Die Variable $k$ kann $0$ oder $1$ sein, da $0 \leq k \leq 1$.\\
+\textbf{k = 0:}\\
+$\neg x_1 \vee \neg b_1^0 \vee b_1^1$\\
+$\neg x_2 \vee \neg b_2^0 \vee b_2^1$\\
+$\neg x_3 \vee \neg b_3^0 \vee b_3^1$\\
+\textbf{k =1:}\\
+$\neg x_2 \vee \neg b_1^1 \vee b_1^2$\\
+$\neg x_3 \vee \neg b_2^1 \vee b_2^2$\\
+$\neg x_4 \vee \neg b_3^1 \vee b_3^2$\\
+
+Alle trivialen Variablen werden gestrichen. Diese Klauseln bleiben bestehen:\\
+\textbf{k = 0:}\\
+$\neg x_1 \vee b_1^1$\\
+$\neg x_2 \vee b_2^1$\\
+$\neg x_3 \vee b_3^1$\\
+\textbf{k =1:}\\
+$\neg x_2 \vee \neg b_1^1 $\\
+$\neg x_3 \vee \neg b_2^1 $\\
+$\neg x_4 \vee \neg b_3^1 $\\
+
+Die vollständige KNF sieht folgendermaßen aus:\\
+$(\neg b_1^1 \vee b_2^1) \wedge (\neg b_2^1 \vee b_3^1) \wedge (\neg x_1 \vee b_1^1) \wedge (\neg x_2 \vee b_2^1) \wedge (\neg x_3 \vee b_3^1) \wedge (\neg x_2 \vee \neg b_1^1) \wedge (\neg x_3 \vee \neg b_2^1) \wedge (\neg x_4 \vee \neg b_3^1) $\\
 
 		\subsubsection{parallel}
 
-	\subsection{Kodierungen basierend auf Sorting Networks}
-		\subsubsection{naiv}
-		\subsubsection{Eén und Sörensson}
+	\subsection{naive Kodierung basierend auf Sorting Networks}
+	\subsection{Kodierung basierend auf BDDs}
 
 	\subsection{Entwickelte Kodierung auf Grundlage von Bailleux und Boufkhad}
 
