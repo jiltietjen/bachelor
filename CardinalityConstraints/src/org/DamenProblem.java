@@ -7,20 +7,16 @@ import com.microsoft.z3.Z3Exception;
 public class DamenProblem {
 
 
-  public static void main(String[] args) {
-    try {
-      solve(4);
-    } catch (Z3Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
+  /*
+   * public static void main(String[] args) { try { solve(4); } catch (Z3Exception e) { // TODO
+   * Auto-generated catch block e.printStackTrace(); } }
+   */
 
   /*
    * Feld wird durchlaufen und einzelne Variablen werden vergeben. Es wird dann an den Solver
    * übergeben
    */
-  public static void solve(int k) throws Z3Exception {
+  public static ArrayList<Literal> solve(int k) throws Z3Exception {
     // Erstellt das Spielfeld
     ArrayList<Constraint> constraints = new ArrayList<>();
     // Reihen
@@ -80,7 +76,8 @@ public class DamenProblem {
     constraints.add(new Constraint(Constraint.Type.EQUALS, literals, k));
 
     Builder builder = new Builder();
-    builder.solve(constraints, k * k); // TODO zurückübersetzen für die Belegung des Damenfeldes
+    return builder.solve(constraints, k * k); // TODO zurückübersetzen für die Belegung des
+                                              // Damenfeldes
   }
 
 }

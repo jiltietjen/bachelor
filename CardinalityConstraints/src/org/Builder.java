@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.Constraint.Type;
 
 import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
 import com.microsoft.z3.Model;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
@@ -45,7 +46,7 @@ public class Builder {
     }
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new KnuthSinz();
+    Encoding encoding = new NiklasseBDDs();
     for (Constraint c : leqConstraints) {
       System.out.println(c);
     }
@@ -55,15 +56,29 @@ public class Builder {
     }
 
     System.out.println(solver);
+
+    ArrayList<Literal> modelLiterals = null;
     if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
       System.out.println("UNSAT");
     } else {
       System.out.println("SAT");
       Model m = solver.getModel();
+      modelLiterals = new ArrayList<>();
       System.out.println("Model is" + m); // TODO Model zurückübersetzen in k Damen Problem
+      for (int i = 0; i < numVariables; i++) {
+        // The function declarations of the constants in the enumeration.
+
+        Expr val = m.getConstInterp(ctx.mkBoolConst("x_" + i));
+        if (val.isTrue()) {
+          modelLiterals.add(new Literal(i, true));
+        } else if (val.isFalse()) {
+          modelLiterals.add(new Literal(i, false));
+        } else {
+          throw new IllegalArgumentException();
+        }
+      }
     }
     solver.dispose();
-    return null;
+    return modelLiterals;
   }
-
 }
