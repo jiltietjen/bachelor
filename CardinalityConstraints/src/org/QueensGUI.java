@@ -42,6 +42,7 @@ public class QueensGUI extends Application {
           root.getChildren().add(rect1);
 
         }
+        // circle, falls SAT
         if (result != null) {
           int xCoord = x / WIDTH;
           int yCoord = y / HEIGHT;
@@ -76,7 +77,21 @@ public class QueensGUI extends Application {
     primaryStage.show();
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Z3Exception {
+    // Encoding enc = new NiklasseBDDs();
+    // ArrayList<Literal> lits = new ArrayList<>();
+    // lits.add(new Literal(0, true));
+    // lits.add(new Literal(1, true));
+    // lits.add(new Literal(2, true));
+    // ArrayList<Literal> lits2 = new ArrayList<>();
+    // lits2.add(new Literal(0, true));
+    // lits2.add(new Literal(1, true));
+    // Context ctx = new Context();
+    // Solver solver = ctx.mkSolver("QF_LIA");
+    // enc.encode(lits, 1, 0, solver, ctx);
+    // enc.encode(lits2, 1, 1, solver, ctx);
+    // System.out.println(solver);
+    // return;
 
     try {
       result = DamenProblem.solve(QUEENS);
@@ -84,6 +99,7 @@ public class QueensGUI extends Application {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    // zeichnet das Board
     launch(args);
   }
 }

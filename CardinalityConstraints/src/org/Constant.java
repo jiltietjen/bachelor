@@ -4,6 +4,7 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+// Wrapper für true und false für den Algo
 public class Constant extends Signal {
 
   private Boolean value;
@@ -21,11 +22,15 @@ public class Constant extends Signal {
     this.value = value;
   }
 
-  public void toZ3(Context ctx, Solver solver, int counter) throws Z3Exception {
+  public void toZ3(Context ctx, Solver solver, int count) throws Z3Exception {
+    if (encoded) {
+      return;
+    }
+    encoded = true;
     if (value == false) {
-      solver.add(ctx.mkNot(ctx.mkBoolConst("b" + tseitinVar + "_Niklasse_" + counter)));
+      solver.add(ctx.mkNot(ctx.mkBoolConst("b" + tseitinVar + "_Niklasse_" + count)));
     } else {
-      solver.add(ctx.mkBoolConst("b" + tseitinVar + "_Niklasse_" + counter));
+      solver.add(ctx.mkBoolConst("b" + tseitinVar + "_Niklasse_" + count));
     }
 
   }

@@ -10,7 +10,7 @@ import com.microsoft.z3.Z3Exception;
 
 public class TestUtils {
 
-
+  // ausgelagert für die verschiedenen Kodierungen
   public static Solver makeEncoding(int n, int r, Encoding encoding, Context ctx)
       throws Z3Exception {
     ArrayList<Literal> literals = new ArrayList<>();
@@ -39,6 +39,51 @@ public class TestUtils {
       }
     }
     return vars.size();
+  }
+
+
+  public static Solver testVariables(int n, int r, Encoding encoding, Context ctx,
+      boolean[] assignment) throws Z3Exception {
+    Solver solver = makeEncoding(n, r, encoding, ctx);
+    for (int i = 0; i < assignment.length; i++) {
+      if (assignment[i]) {
+        solver.add(ctx.mkBoolConst("x_" + (i + 1)));
+      } else {
+        solver.add(ctx.mkNot(ctx.mkBoolConst("x_" + (i + 1))));
+      }
+    }
+    return solver;
+  }
+
+
+  public static boolean checkAllTrue(boolean[] assignment) {
+    for (int i = 0; i < assignment.length; i++) {
+      if (!assignment[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public static void nextAssignment(boolean[] assignment) {
+    for (int i = 0; i < assignment.length; i++) {
+      if (!assignment[i]) {
+        assignment[i] = true;
+        return;
+      } else {
+        assignment[i] = false;
+      }
+    }
+  }
+
+  public static int countTrues(boolean[] assignment) {
+    int counter = 0;
+    for (int i = 0; i < assignment.length; i++) {
+      if (assignment[i]) {
+        counter++;
+      }
+    }
+    return counter;
   }
 
 }

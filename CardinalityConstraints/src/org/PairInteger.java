@@ -1,5 +1,6 @@
 package org;
 
+// neuer Datentyp für Algo von Integer und Integer
 public class PairInteger {
   private int i1;
   private int i2;

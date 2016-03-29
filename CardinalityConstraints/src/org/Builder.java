@@ -64,10 +64,10 @@ public class Builder {
       System.out.println("SAT");
       Model m = solver.getModel();
       modelLiterals = new ArrayList<>();
-      System.out.println("Model is" + m); // TODO Model zurückübersetzen in k Damen Problem
+      System.out.println("Model is" + m); // TODO Model zurückübersetzen in k Damen Problem.
+                                          // Ermöglicht das Übergeben der x-Werte für die GUI
       for (int i = 0; i < numVariables; i++) {
-        // The function declarations of the constants in the enumeration.
-
+        // Retrieves the interpretation (the assignment) of x in the model
         Expr val = m.getConstInterp(ctx.mkBoolConst("x_" + i));
         if (val.isTrue()) {
           modelLiterals.add(new Literal(i, true));
