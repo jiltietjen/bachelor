@@ -38,7 +38,24 @@ public class KnuthBailleux extends Encoding {
   }
 
   public static int calcT(int t, int n, int r) {
-    return Math.min(calcT(t, n), r);
+    return Math.min(calcTWithoutRecursion(t, n), r);
+  }
+
+
+  public static int calcTWithoutRecursion(int t, int n) {
+    if (t >= n) {
+      return 1;
+    }
+    // zählt die Anzahl der Blätter
+    int result = 0;
+    // Blätter sind n bis 2*n
+    for (int i = n; i < 2 * n; i++) {
+      // i wird um die Differenz von t-i geshiftet
+      if (i >>> (Integer.numberOfLeadingZeros(t) - Integer.numberOfLeadingZeros(i)) == t) {
+        result++;
+      }
+    }
+    return result;
   }
 
   /* zweite Formel wird erstellt */

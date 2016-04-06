@@ -51,7 +51,7 @@ public class KnuthSinzTest {
       for (int r = 1; r < n; r++) {
         for (boolean[] assignment = new boolean[n]; !TestUtils.checkAllTrue(assignment); TestUtils
             .nextAssignment(assignment)) {
-          Solver solver = TestUtils.testVariables(n, r, new KnuthBailleux(), ctx, assignment);
+          Solver solver = TestUtils.testVariables(n, r, new KnuthSinz(), ctx, assignment);
           assertEquals(solver.check(), TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE
               : Status.UNSATISFIABLE);
         }

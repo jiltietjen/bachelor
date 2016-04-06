@@ -56,6 +56,16 @@ public class BailleuxTest {
         }
       }
     }
+  }
+
+  @Test
+  public void testCalcT() throws Z3Exception {
+    for (int n = 2; n < 1000; n++) {
+      for (int t = 1; t < 2 * n; t++) {
+        assertEquals(KnuthBailleux.calcT(t, n), KnuthBailleux.calcTWithoutRecursion(t, n));
+      }
+    }
+
     // n=2 r=1
     // Solver solver = TestUtils.testVariables(2, 1, new KnuthBailleux(), ctx);
     // x_1 = true

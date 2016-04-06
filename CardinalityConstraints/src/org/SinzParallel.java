@@ -65,6 +65,10 @@ public class SinzParallel extends Encoding {
     solver.add(ctx.mkOr(aIn, ctx.mkNot(carryIn), sum));
     solver.add(ctx.mkOr(ctx.mkNot(aIn), carryIn, sum));
     solver.add(ctx.mkOr(ctx.mkNot(aIn), ctx.mkNot(carryIn), carry));
+
+    // Evtl Verbesserung der Performanz durch häufigere Unit-Propagation. Nochmal mit richtiger
+    // Benchmark testen.
+    // solver.add(ctx.mkOr(ctx.mkNot(aIn), carryIn, sum));
   }
 
   // Adder aus dem Paper
@@ -77,6 +81,10 @@ public class SinzParallel extends Encoding {
     solver.add(ctx.mkOr(ctx.mkNot(aIn), ctx.mkNot(bIn), carry));
     solver.add(ctx.mkOr(ctx.mkNot(aIn), ctx.mkNot(carryIn), carry));
     solver.add(ctx.mkOr(ctx.mkNot(bIn), ctx.mkNot(carryIn), carry));
+
+    // Evtl Verbesserung der Performanz durch häufigere Unit-Propagation. Nochmal mit richtiger
+    // Benchmark testen.
+    // solver.add(ctx.mkOr(ctx.mkNot(aIn), carry, sum));
 
   }
 

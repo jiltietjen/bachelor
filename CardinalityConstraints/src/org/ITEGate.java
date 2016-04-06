@@ -57,7 +57,9 @@ public class ITEGate extends Signal {
 
     solver.add(ctx.mkOr(ctx.mkNot(tVar), in1Var, in3Var)); // drin
     solver.add(ctx.mkOr(ctx.mkNot(tVar), ctx.mkNot(in1Var), in2Var)); // drin
-    // solver.add(ctx.mkOr(ctx.mkNot(tVar), in2Var, in3Var));
+    // solver.add(ctx.mkOr(ctx.mkNot(tVar), in2Var, in3Var)); verschlechtert die Performanz
+    // solver.add(ctx.mkOr(tVar, ctx.mkNot(in2Var), ctx.mkNot(in3Var))); verschlechtert die
+    // Performanz
     solver.add(ctx.mkOr(tVar, ctx.mkNot(in1Var), ctx.mkNot(in2Var))); // drin
     solver.add(ctx.mkOr(tVar, in1Var, ctx.mkNot(in3Var))); // drin
     input2.toZ3(ctx, solver, count);

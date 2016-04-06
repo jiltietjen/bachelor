@@ -48,11 +48,11 @@ public class SinzParallelTest {
   @Test
   public void testVariablesSAT() throws Z3Exception {
     Context ctx = new Context();
-    for (int n = 2; n < 5; n++) {
+    for (int n = 2; n < 10; n++) {
       for (int r = 1; r < n; r++) {
         for (boolean[] assignment = new boolean[n]; !TestUtils.checkAllTrue(assignment); TestUtils
             .nextAssignment(assignment)) {
-          Solver solver = TestUtils.testVariables(n, r, new KnuthBailleux(), ctx, assignment);
+          Solver solver = TestUtils.testVariables(n, r, new SinzParallel(), ctx, assignment);
           assertEquals(solver.check(), TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE
               : Status.UNSATISFIABLE);
         }
