@@ -22,6 +22,18 @@ public class TestUtils {
     return solver;
   }
 
+
+  public static Solver makeEncodingNeg(int n, int r, Encoding encoding, Context ctx)
+      throws Z3Exception {
+    ArrayList<Literal> literals = new ArrayList<>();
+    for (int i = 1; i <= n; i++) {
+      literals.add(new Literal(i, false));
+    }
+    Solver solver = ctx.mkSolver("QF_LIA");
+    encoding.encode(literals, r, 0, solver, ctx);
+    return solver;
+  }
+
   public static int numVars(Solver solver) throws Z3Exception {
     BoolExpr[] exprs = solver.getAssertions();
     ArrayList<BoolExpr> vars = new ArrayList<>();
@@ -47,6 +59,20 @@ public class TestUtils {
     Solver solver = makeEncoding(n, r, encoding, ctx);
     for (int i = 0; i < assignment.length; i++) {
       if (assignment[i]) {
+        solver.add(ctx.mkBoolConst("x_" + (i + 1)));
+      } else {
+        solver.add(ctx.mkNot(ctx.mkBoolConst("x_" + (i + 1))));
+      }
+    }
+    return solver;
+  }
+
+
+  public static Solver testVariablesNeg(int n, int r, Encoding encoding, Context ctx,
+      boolean[] assignment) throws Z3Exception {
+    Solver solver = makeEncodingNeg(n, r, encoding, ctx);
+    for (int i = 0; i < assignment.length; i++) {
+      if (!assignment[i]) {
         solver.add(ctx.mkBoolConst("x_" + (i + 1)));
       } else {
         solver.add(ctx.mkNot(ctx.mkBoolConst("x_" + (i + 1))));

@@ -56,6 +56,13 @@ public class NetworksNaiv extends Encoding {
 
   public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
+    if (literals.size() == 1) {
+      if (r == 0) {
+        solver.add(ctx.mkNot(literals.get(0).toZ3(ctx)));
+      }
+      return;
+    }
+
     ArrayList<BoolExpr> inputs = new ArrayList<>();
     for (int i = 0; i < literals.size(); i++) {
       inputs.add(literals.get(i).toZ3(ctx));

@@ -55,7 +55,7 @@ public class NetworkComparator {
     this.output1 = output1;
   }
 
-  // logische Überlegung für den Comparator, so dass alle möglichen Falle richtig behandelt werden
+  // logische Überlegung für den Comparator, so dass alle möglichen Fälle richtig behandelt werden
   public void toZ3(Context ctx, Solver solver) throws Z3Exception {
     solver.add(ctx.mkOr(ctx.mkNot(output2), output1));
     solver.add(ctx.mkOr(ctx.mkNot(input1), ctx.mkNot(input2), output2));

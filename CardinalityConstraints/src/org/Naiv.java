@@ -35,6 +35,14 @@ public class Naiv extends Encoding {
   // Wandelt das Array in Klauseln für den Z3 um
   public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
+
+    if (literals.size() == 1) {
+      if (r == 0) {
+        solver.add(ctx.mkNot(literals.get(0).toZ3(ctx)));
+      }
+      return;
+    }
+
     ArrayList<ArrayList<Literal>> clauses =
         createSubsets(new ArrayList<Literal>(), r + 1, literals);
     for (int i = 0; i < clauses.size(); i++) {

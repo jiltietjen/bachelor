@@ -53,6 +53,13 @@ public class NiklasseBDDs extends Encoding {
 
   public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
+    if (literals.size() == 1) {
+      if (r == 0) {
+        solver.add(ctx.mkNot(literals.get(0).toZ3(ctx)));
+      }
+      return;
+    }
+
     Signal root =
         buildBDD(literals, r + 1, literals.size(), 0, literals.size(),
             new HashMap<PairInteger, Signal>());

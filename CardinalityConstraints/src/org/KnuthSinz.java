@@ -92,6 +92,13 @@ public class KnuthSinz extends Encoding {
   @Override
   public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
+
+    if (literals.size() == 1) {
+      if (r == 0) {
+        solver.add(ctx.mkNot(literals.get(0).toZ3(ctx)));
+      }
+      return;
+    }
     createFormulaFirst(ctx, solver, literals.size(), r, counter, literals);
     createFormulaSecond(ctx, solver, literals.size(), r, counter, literals);
 

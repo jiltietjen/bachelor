@@ -35,13 +35,19 @@ public class NetworksNaivTest {
   @Test
   public void testVariablesSAT() throws Z3Exception {
     Context ctx = new Context();
-    for (int n = 2; n < 5; n++) {
-      for (int r = 1; r < n; r++) {
+    for (int n = 1; n < 5; n++) {
+      for (int r = 0; r < n; r++) {
         for (boolean[] assignment = new boolean[n]; !TestUtils.checkAllTrue(assignment); TestUtils
             .nextAssignment(assignment)) {
           Solver solver = TestUtils.testVariables(n, r, new NetworksNaiv(), ctx, assignment);
           assertEquals(solver.check(), TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE
               : Status.UNSATISFIABLE);
+          Solver solver1 = TestUtils.testVariablesNeg(n, r, new NetworksNaiv(), ctx, assignment);
+          assertEquals(solver1.check(), TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE
+              : Status.UNSATISFIABLE);
+          if (TestUtils.checkAllTrue(assignment)) {
+            break;
+          }
         }
       }
     }

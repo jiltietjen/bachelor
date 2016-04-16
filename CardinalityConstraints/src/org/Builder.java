@@ -30,8 +30,8 @@ public class Builder {
           // kein Break, da greaterequals und smallerequals benutzt werden sollen
         case GREATEREQUALS:
           Constraint leqConstraint =
-              new Constraint(Type.SMALLEREQUALS, new ArrayList<Literal>(), numVariables
-                  - constraint.getLimitR());
+              new Constraint(Type.SMALLEREQUALS, new ArrayList<Literal>(), constraint
+                  .getVariables().size() - constraint.getLimitR());
           for (int j = 0; j < constraint.getVariables().size(); j++) {
             leqConstraint.getVariables().add(constraint.getVariables().get(j));
             leqConstraint.getVariables().get(j)
@@ -46,7 +46,7 @@ public class Builder {
     }
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new KnuthBailleux();
+    Encoding encoding = new NetworksNaiv();
     for (Constraint c : leqConstraints) {
       System.out.println(c);
     }

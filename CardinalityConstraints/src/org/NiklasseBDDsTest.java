@@ -16,13 +16,16 @@ public class NiklasseBDDsTest {
   @Test
   public void testVariablesSAT() throws Z3Exception {
     Context ctx = new Context();
-    for (int n = 2; n < 10; n++) {
-      for (int r = 1; r < n; r++) {
+    for (int n = 1; n < 5; n++) {
+      for (int r = 0; r < n; r++) {
         for (boolean[] assignment = new boolean[n];; TestUtils.nextAssignment(assignment)) {
           Solver solver = TestUtils.testVariables(n, r, new NiklasseBDDs(), ctx, assignment);
           assertEquals(solver.toString(), solver.check(),
               TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE : Status.UNSATISFIABLE);
-          solver.dispose();
+          Solver solver1 = TestUtils.testVariablesNeg(n, r, new NiklasseBDDs(), ctx, assignment);
+          assertEquals(solver1.toString(), solver.check(),
+              TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE : Status.UNSATISFIABLE);
+          // solver.dispose();
           if (TestUtils.checkAllTrue(assignment)) {
             break;
           }
