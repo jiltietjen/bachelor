@@ -106,9 +106,11 @@ Jil Tietjen
 In diesem Kapitel werden die unterschiedlichen Kodierungen beschrieben. Das Ziel ist es, dass die Cardinality Constraints über die Menge der Boolschen Variablen in eine Konjunktive Normalform (KNF) gebracht werden. %Innerhalb der KNF gibt es Einschränkungen, die verlangen, dass höchstens $r$ der Booleschen Variablen 1 sein können. Rein in die Grundlagen
 Das Cardinalitiy Constraint ist genau dann erfüllt, wenn die aus der Kodierung resultierende Formel erfüllt ist. Ein einzelnes Cardinality Constraint ist immer erfüllbar. Erst eine Kombination mehrerer Cardinality Constraints kann zu einer unerfüllbaren Formel führen.
 
-%Evaluation Alle Kodierungen werden anhand des Damen-Problems auf ihre Praxistauglichkeit überprüft.
+%Evaluation Alle Kodierungen werden anhand des Damen-Problems und anhand einer Tomography auf ihre Praxistauglichkeit überprüft.
 
 	\subsection{naiver Ansatz}
+Zur Verdeutlichung der Einflüsse der weiteren Kodierungen wird als Erstes der naive Ansatz verfolgt. Bei dieser Methode wird aus allen möglichen Kombinationen die KNF gebildet. Das bedeutet, dass beispielsweise aus $x+y+z$ $(\neg x \vee \neg y) \wedge (\neg x \vee \neg z) \wedge (\neg z \vee \neg y)$ wird. Um alle Möglichkeiten auch bei einer grossen Anzahl von Variablen zu erfassen, wird als Grundlage die Mengenlehre angewendet. Es werden Untermengen erstellt, die sich mit folgendem System aufbauen. Das erste Element in der Menge bleibt immer gleich und für das zweite Element wird immer das nächst grössere Element ausgewählt. Eine Menge besteht immer aus den Teilmengen des ersten Index des Arrays vereinigt mit dem Element aus dem zweiten Index, aus dem dritten Index und so weiter. Dies wird rekursiv so lange fortgeführt bis alle Teilmengen erstellt sind. Die gebildete KNF kann schließlich mit $k$ verglichen werden.
+%Todo Beweis für <= 1
 
 	\subsection{Kodierung nach Bailleux und Boufkhad}
 Im folgenden wird die Kodierung aus \cite[][]{bailleux} vorgetellt. Im weiteren Verlauf werden zusätzlich Formeln aus \cite[][]{knuth} hinzugezogen.
@@ -198,7 +200,7 @@ Die sequentlielle Variante besteht aus zwei aufeinander folgende Stufen. In der 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{Sinz_seq.png}
-\caption{Counter von Sinz in Anlehnung an \cite[][] {sinz}}
+\caption{Sequentieller Counter von Sinz in Anlehnung an \cite[][] {sinz}}
 \label{fig:sinz_counter}
 \end{figure}
 
@@ -247,11 +249,77 @@ Die vollständige KNF sieht folgendermaßen aus:\\
 $(\neg b_1^1 \vee b_2^1) \wedge (\neg b_2^1 \vee b_3^1) \wedge (\neg x_1 \vee b_1^1) \wedge (\neg x_2 \vee b_2^1) \wedge (\neg x_3 \vee b_3^1) \wedge (\neg x_2 \vee \neg b_1^1) \wedge (\neg x_3 \vee \neg b_2^1) \wedge (\neg x_4 \vee \neg b_3^1) $\\
 
 		\subsubsection{parallel}
+Der Unterschied zum sequentiellen Counter besteht darin, dass beim parallelen Counter die Eingangsvariablen in zwei Hälften geteilt werden und durch Sub-Counter parallel verarbeitet werden können. Die erste Hälfte bildet sich durch $2^m$ und muss grösser sein als die zweite Hälfte. Daher wird die zweite Hälfte durch $2^{m+1}$ berechnet. In beiden Fällen bildet sich $m$ durch den Logarithmus von n und $m$ muss so gewäht werden, dass folgende Bedingung erfüllt ist $2^m \leq n \textless 2^{m+1}$. Damit die zweite Hälfte nie weniger Eingangsvariablen enthält als die erste, gibt es den Sonderfall, dass die zweite Hälfte keine Eingangsvariablen hat. Gibt es nur eine oder zwei Eingangsvariablen, gehen die Inputs sofort in den Halbaddierer als CarryIn und Eingangsvariable.\\
+Im nächsten Schritt wird rekursiv in den Countern berechnet wie gross die Anzahl der Eingangsvariablen ist, die auf true gesetzt werden müssen. Dabei sind die Counter der ersten Hälfte Halbaddierer und die Counter der zweiten Hälfte 1-Bit-Volladdierer. Die letzte Einganzsvariable wird als Carry-Bit in den Counter gegeben. Die parallelen Counter berechnen somit die Summe von $2^m-1$ Eingangsvariablen.\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm]{Sinz_para.png}
+\caption{Paralleler Counter von Sinz (siehe \cite[][] {sinz}, Seite 9)}
+\label{fig:sinz_counter_para}
+\end{figure}
+
+Bei den Volladdierern wird ausgenutzt, dass jeder Output einen weniger hat als es Inputs gab. Somit können Leitungen reduziert werden. Des Weiteren kann durch die Anzahl der Eingangsvariablen ($n$) und den $m+1$ Outputs gesagt werden, dass der Schaltkreis aus $n-(m+1)$ Volladdierern besteht. Die Anzahl der Halbaddierer kann ebenfalls berechnet werden, indem die Nullen in der binären Repräsentation der Eingangsvariablen ($n$) gezhählt werden. Die Anzahl müsste kleiner oder gleich $m$ sein.\\
+
+Der Halb-Addierer und Voll-Addierer kann folgendermaßen als KNF ausgedrückt werden:\\
+Der Halb-Addierer besteht aus drei Klauseln:
+\begin{itemize}
+\item $(a \vee \neg carryIn \vee sum)$
+\item $(\neg a \vee carryIn \vee sum)$
+\item $(\neg a \vee \neg caaryIn \vee carryOut )$
+\end{itemize}
+
+Der Voll-Addierer besteht aus sieben Klauseln:
+\begin{itemize}
+\item $(a \vee b \vee \neg carryIn \vee sum)$
+\item $( a \vee \neg b \vee carryIn \vee sum)$
+\item $(\neg a \vee b \vee caaryIn \vee sum )$
+\item $(\neg a \vee \neg b \vee \neg carryIn \vee sum)$
+\item$(\neg a \vee \neg b \vee carryOut)$
+\item$(\neg a \vee \neg carryIn \vee carryOut)$
+\item$(\neg b \vee carryIn \vee carryOut)$
+\end{itemize}
+
+Zum Schluss wird noch ein Comparator benötigt, damit die Cardinality Constraints mit $k$ vergllichen werden können. Dieser stellt sicher, dass das Ergebnis nicht grösser ist als $k$. Dafür wird $k$ als binäre Repräsentation dargestellt, so dass die Belegung der Outputs mit der binären Repräsentation von $k$ verglichen werden kann.
+
+\subsubsection{Beispiel für eine parallele Kodierung}
+Für dieses Beispiel wird $n=9$ gesetzt, so dass $2^3 \leq 9 \textless 2^4$ ist. Somit ergibt sich für dieses Beispiel, dass es Volladdierer und Halbaddierer gibt. Der Aufbau der Schaltkreise wird in den folgenden Bildern dargestellt.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Bsp_Sinz_grob.png}
+\caption{Paralleler Counter von Sinz für $n=9$}
+\label{fig:sinz_counter_para_bsp}
+\end{figure}
+
+Durch die hohe Summe für die erste Hälfte der Eingangsvariablen ($\sum7$) wird der Schaltkreis weiter unterteilt dargestellt.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Bsp_Sinz_fein.png}
+\caption{Paralleler Counter von Sinz}
+\label{fig:sinz_counter_para_bsp}
+\end{figure}
+
+Das Beispiel besteht aus 11 Volladdierern sowie 6 Halbaddierern und aus 95 Klauseln für den Schaltkreis.\\
+
+\textbf{Beispiel für den Comparator anhand von $k$}:\\
+$k = 18$, in binärer Repräsenation ist dies $10010$. Daraus ergeben sich 3 Klauseln, da es drei Nullen gibt und 5 verschiedene Variablen, bei denen die Variablen mit einer $0$ nur negiert aufgeschrieben werden. Das bedeutet, dass $1=x_4, 0=x_3, 0=x_2, 1=x_1$ und $0=x_0$.\\
+Die folgenden Klauseln können gebildet werden:\\
+\begin{itemize}
+\item $\{\neg x_0\}$ (Variale wird nur negiert aufgeschrieben)
+\item  $\{\neg x_0,\neg x_1\}$ (Variable wird in alle bestehenden Mengen hinzugefügt)
+\item $\{\{\neg x_0, \neg x_1\},\{\neg x_2\}\}$
+\item $\{\{\neg x_0, \neg x_1\},\{\neg x_2\}, \{\neg x_3\}\}$
+\item $\{\{\neg x_0, \neg x_1\, \neg x_4\},\{\neg x_2, \neg x_4\}, \{\neg x_3, \neg x_4\}\}$
+\end{itemize}
+
 
 	\subsection{naive Kodierung basierend auf Sorting Networks}
+	\subsection{Sorting Networks mit odd-even Mergesort}
 	\subsection{Kodierung basierend auf BDDs}
 
-	\subsection{Entwickelte Kodierung auf Grundlage von Bailleux und Boufkhad}
+	\subsection{Entwickelte Kodierung mit Sorting Networks}
 
 \section{Umsetzung}
  Als Testproblem für die unterschiedlichen Kodierungen wird das n-Damen-Problem verwendet, da dieses Problem eine wichtige Rolle in der Informatik spielt und viele Constraints abgeleitet werden können. In jeder Reihe (vertikal, horizontal und diagonal) ist nur eine Dame erlaubt. Somit ergeben sich unterschiedliche Kombinationen, die für die Belegung der Literale nur erlaubt sind. Ziel ist es eine Belegung zu finden, die alle Bedingungen erfüllt. 
