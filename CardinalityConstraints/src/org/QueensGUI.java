@@ -14,7 +14,7 @@ import com.microsoft.z3.Z3Exception;
 
 public class QueensGUI extends Application {
 
-  private static final int QUEENS = 3;
+  private static final int QUEENS = 4;
   private static final int WIDTH = 40;
   private static final int HEIGHT = 40;
   private static final int BOARD_SIZE = 40 * QUEENS;
