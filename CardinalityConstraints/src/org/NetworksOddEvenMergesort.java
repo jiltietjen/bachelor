@@ -10,6 +10,7 @@ import com.microsoft.z3.Z3Exception;
 public class NetworksOddEvenMergesort extends Encoding {
 
   // Comparators aufrufen und die inputs zu den comparators sortieren
+  // legt fest, in welcher Reihe welcher Comparator ist
   private ArrayList<NetworkComparator> makeSortingNetwork(Context ctx, ArrayList<BoolExpr> inputs,
       ArrayList<BoolExpr> outputs, int counter, Solver solver) throws Z3Exception {
     ArrayList<NetworkComparator> result = new ArrayList<>();
@@ -29,6 +30,7 @@ public class NetworksOddEvenMergesort extends Encoding {
   }
 
   // http://www.iti.fh-flensburg.de/lang/algorithmen/sortieren/networks/oemen.htm
+  // https://en.wikipedia.org/wiki/Batcher_odd%E2%80%93even_mergesort
   private ArrayList<NetworkComparator> oddEvenMergeSort(int lo, int n, int[] countComp,
       Context ctx, int counter) throws Z3Exception {
     ArrayList<NetworkComparator> result = new ArrayList<>();

@@ -13,7 +13,9 @@ import com.microsoft.z3.Z3Exception;
 
 public class TomographyGUI extends Application {
 
+  // Bildgrösse
   private static boolean[][] picture;
+  // n
   private static final int TOMOGRAPHY = 4;
 
   private static ArrayList<Literal> result = new ArrayList<>();
@@ -58,10 +60,9 @@ public class TomographyGUI extends Application {
   public void start(Stage primaryStage) {
 
 
-
     Pane root = new Pane();
 
-
+    // zeichnet die einzelnen H-Linien
     Line line1 = new Line(0, 0, 0, picture[0].length * 10);
     root.getChildren().add(line1);
 
@@ -70,6 +71,7 @@ public class TomographyGUI extends Application {
 
     Line line3 = new Line(picture.length * 20, 0, picture.length * 20, picture[0].length * 10);
     root.getChildren().add(line3);
+
 
 
     for (int x = 0; x < picture.length; x++) {
@@ -87,6 +89,7 @@ public class TomographyGUI extends Application {
         if (lit.isPositive()) {
           int x = lit.getIndex() % picture.length;
           int y = lit.getIndex() / picture.length;
+          // färbt die Felder entsprechend ein
           Rectangle rec1 = new Rectangle(x * 10 + 10 * picture.length, y * 10, 10, 10);
           root.getChildren().add(rec1);
         }
@@ -105,7 +108,9 @@ public class TomographyGUI extends Application {
   public static void main(String[] args) throws Z3Exception {
 
     try {
+      // Grösse
       picture = new boolean[20][16];
+      // hTree(lineSize, depthRecursion, maxX, maxY, centerX, centerY, picture)
       DigitalTomography.hTree(10, TOMOGRAPHY, 20, 16, 10, 8, picture);
       result = DigitalTomography.solve(picture);
     } catch (Z3Exception e) {
