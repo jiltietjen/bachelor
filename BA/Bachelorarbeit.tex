@@ -315,9 +315,83 @@ Die folgenden Klauseln können gebildet werden:\\
 \end{itemize}
 
 
-	\subsection{naive Kodierung basierend auf Sorting Networks}
-	\subsection{Sorting Networks mit odd-even Mergesort}
 	\subsection{Kodierung basierend auf BDDs}
+Mit Hilfe vo BDDs können Cardinality Constraints in Klauseln übersetzt werden. Dafür werden die Constraints in den BDDs dargestellt und aus dem BDD können die Klauseln erstellt werden. Der BDD kann einfach als ein Schaltkreis von if-then-else Gattern angesehen werden, der durch die Tseitin Transformation zu Klauseln übersetzt wird. Der Algorithmus aus dem Paper \cite[][]{niklasse} (Seite 11) musste angepasst werden, da er nur für $\geq$ und nicht für $\leq$ gilt. Dafür wurde für Cs[size] immer eine $1$ eingesetzt, da es in diesem Fall keine Koeffizienten gibt, bzw. der Koeffizient immer $1$ ist. Vertauscht wurde beim Erstellen der ITE-Gates das hi\_result und lo\_result.\\
+
+\begin{algorithm}
+\caption{buildBDD}
+\label{alg:buildBDD}
+\begin{algorithmic}
+
+\State $\text{~~}if (sum \leq rhs)$
+\State $\text{~~~~~~~~return } TRUE$
+\State $\text{~~~~}else if (sum + material\_left \textless rhs$
+\State $\text{~~~~~~~~return } FALSE$
+\State $\text{~~~~} key = (size, sum)$
+\State $\text{~~~~~~ }if (memo[key] == UNDEF) \{$
+\State $\text{~~~~~~~~} size--$
+\State $\text{~~~~~~~~} material\_left -= 1$
+\State $\text{~~~~~~~~} hi\_sum = sign(ps[size]= ? sum : sum + 1$
+\State $\text{~~~~~~~~} hi\_sum = sign(ps[size]= ? sum + 1 : sum$
+\State $\text{~~~~~~~~} hi\_result = buildBDD(ps , rhs, size, hi\_sum, material\_left, memo)$
+\State $\text{~~~~~~~~} lo\_result = buildBDD(ps , rhs, size, lo\_sum, material\_left, memo)$
+\State $\text{~~~~~~~~} memo[key] = ITE(var(ps[size]), lo\_result, hi\_result)\}$
+\State $\text{~~~~return }memo[key]$
+\end{algorithmic}
+\end{algorithm}
+
+Der Algorithmus konstruiert den BDD, indem neue Literals gebildet werden, wenn die Anzahl der Literals nicht mehr positiv ist. Dann wird das ITE-Gate erstellt mit dem Literal als Knoten und einer low- und high-Kante unterhalb des Knotens. Durch das Hinzunehmen der Tseitin-Variablen, kann der key herausgefunden werdn und damit welcher Knoten zu welchem Eltern-Knoten gehört. Eine weitere Aufgabe bestand darin, dass die ITE-Gates mit Tseitin als Konjunktive Normalform repräsentiert werden müssen (t ist dabei die Tseitin-Variable und a,b und c die unterschiedlichen Inputs). Dies kann folgendermaßen hergeleitet werden:\\
+\begin{enumerate}
+\item $t \leftrightarrow ite(a,b,c)$
+\item $t \rightarrow ite (a,b,c) \wedge ite (a,b,c) \rightarrow t$ (Regel der Implikation)
+\item $\neg t \vee ite(a,b,c) \wedge \neg ite(a,b,c) \vee t$
+\item $(\neg t \vee (a \wedge b) \vee (\neg a \wedge c)) \wedge (\neg((a \wedge b) \vee (\neg a \wedge c)) \vee t)$
+\item $(\neg t \vee (a \wedge b) \vee (\neg a \wedge c)) \wedge ((\neg(a \wedge b) \wedge \neg (\neg a \wedge c)) \vee t$
+\item $(\neg t \vee (a \wedge b) \vee (\neg a \wedge c)) \wedge ((\neg a \vee \neg b) \wedge (a \vee \neg c)) \vee t$
+\item $(\neg t \vee (a \wedge b) \vee (\neg a \wedge c)) \wedge (\neg a \vee \neg b \vee t) \wedge (a \vee \neg c \vee t)$
+\item $(\neg t \vee a \vee \neg a) \wedge (\neg t \vee a\vee c) \wedge (\neg t \vee b \vee \neg a) \wedge (\neg t \vee b \vee c) \wedge (\neg a \vee \neg b \vee t) \wedge (a \vee \neg c \vee t)$
+\item $(\neg t \vee a\vee c) \wedge (\neg t \vee b \vee \neg a) \wedge (\neg a \vee \neg b \vee t) \wedge (a \vee \neg c \vee t)$
+\end{enumerate}
+
+Ein ITE-Gate sagt nichts anderes als if (a then b else c) und das bedeutet $(a \wedge b) \vee (\neg a \wedge c)$. Daher kann dies in Schritt 4 eingesetzt werden. Die Klausel $(\neg t \vee a \vee \neg a)$ kann entfernt werden, da $(a \vee \neg a)$ immer $1$ ist und somit die ganze Klausel $1$ ist. Die Klausel $(\neg t \vee b \vee c)$ wird aus Performanzgründen nicht verwendet. %Todo warum nicht?
+
+	\subsection{naive Kodierung basierend auf Sorting Networks}
+Sorting Networks ermöglichen das parallele Verarbeiten von Algorithmen. Hierbei werden die Eingangsvariablen sortiert, so dass am Ende die Eingangsvariablen, die mit True belegt sind, oben angeordnet sind und die Variablen, die mit False deklariert werden in der unteren Hälfte angeordnet sind. Dies ist möglich durch einzelne Comparators zwischen zwei verschiedenen Leitungen. Ein Comparator hat somit zwei Eingangsvariablen und zwei Ausgangsvariablen, wobei die Ausgangsvariablen so sortiert werden, dass ein Ausgang den Maximumwert darstellt und der andere Ausgang den Minimumwert. Das Konstrukt eines Sorting Networks kann für SAT ausgenutzt werden. Alle Eingangsvariablen, die mit True belegt werden müssen anhand der Constraints können getrennt angeordnet werden von den Eingangsvariablen, die mit False belegt werden müssen. Es kann schnell abgelsen werden, ob $k$ erfüllt werden kann oder nicht, da beispielsweise bei $\leq 3$ nicht mehr als 3 Ausgänge mit einer eins belegt sein dürfen. Sind mehr als drei Ausgänge mit einer eins belegt, kann der SAT-Solver schnell feststellen, dass dieses Cardinality Constraint nicht erfüllbar ist (Unsat).\\
+Die Comparator können durch verschiedene Algorithmen angeordnet werden. Für die naive Variante wird der Bubble-Sort verwendet. Der Aufbau des Netzes lässt sich folgendermassen darstellen:\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm]{sorting_network_bubble.png}
+\caption{Sorting Network mit Bubble-Sort}
+\label{fig:sorting_network_naiv_bsp}
+\end{figure}
+
+In Abbilung \ref{fig:sorting_network_naiv_bsp} gibt es somit die Eigangsvariablen $x_0$ bis $x_5$, daher ist $n=6$. Jedes Mal wenn an einem Comparator eine Null und eine Eins anliegen, wird getauscht (siehe Abbilung \ref{fig:sorting_network_naiv_bsp1}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm]{sorting_network_bubble_rot.png}
+\caption{Sorting Network mit Bubble-Sort und markierten Leitungen}
+\label{fig:sorting_network_naiv_bsp1}
+\end{figure}
+
+Damit der Comparator alle möglichen Eingangsvariablen richtig behandelt, müssen verschiedene Fälle berücksichtigt werden. Daraus ergibt sich folgende KNF:\\
+$(\neg output_2 \vee output_1) \wedge (\neg input_1 \vee \neg input_2 \vee output_2) \wedge (input_1 \vee \neg output_2) \wedge (input_2 \vee \neg output_2) \wedge (input_1 \vee input_2 \vee \neg output_1) \wedge (\neg input_1 \vee output_1) \wedge (\neg input_2 \vee output_1)$
+
+	\subsection{Sorting Networks mit odd-even Mergesort}
+Als Grundlage für die eigene entwickelte Kodierung dient das Sorting Network mit einem odd-even Mergesort. Der Unterschied zur naiven Kodierung ist der, dass nicht der Bubblesort als Sortieralgorithmus verwendet wird, sondern der odd-even Mergesort. Dadurch entsteht ein Netz mit anders angeordneten Comparators.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{odd-even-mergesort.png}
+\caption{Sorting Network mit Odd-Even-Mergesort}
+\label{fig:odd-even-mergesort}
+\end{figure}
+
+Durch die andere Anordnung der Comparators durch den odd-even Mergesort können Comparators eingespart werden, welches zu einer Performanzsteigerung führt. Beim odd-even Mergesort werden die Eingänge in zwei Hälften geteilt und zunächst rekursiv sortiert. Im Anschluss daran werden die beiden sortierten Hälften wieder verschmolzen. Beim Verschmelzungsprozess werden immer die benachbarten Elemente verglichen. Welche Elemente benachbart sind, wird durch einen Parameter angegeben.\\
+Normalerweise ist $n$ immer die exakte Potenz von $2$. Dies ist nicht immer möglich, daher wird bei ungeraden Werten auf die entsprechende Zweierpotenz abgerundet. Das Sorting-Network wird rekursiv aufgebaut und entsprechend verkleinert, bzw vergrößert. In Abbildung \ref{fig:odd-even-mergesort} sieht man das Sorting-Network für $n=8$. Die erste Hälfte besteht aus zwei $4$-Input Merge-Sorters. Das selbe gilt auch für die zweite Hälfte. Nachdem die einzelnen Hälften sortiert sind, werden die beiden Hälften ab dem dritten Comparator bei der ersten Leitung gemergt. Das Ergebnis ist dann ein korrekt sortiertes Sorting-Network.
+
+
 
 	\subsection{Entwickelte Kodierung mit Sorting Networks}
 
