@@ -11,7 +11,7 @@ import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import com.microsoft.z3.Z3Exception;
 
-public class NetworksOddEvenMergesortTest {
+public class NetworksOwnSortingTest {
 
   // @Test
   // public void test() throws Z3Exception {
@@ -36,13 +36,12 @@ public class NetworksOddEvenMergesortTest {
             .nextAssignment(assignment)) {
 
           System.out.println(n + " " + r + " Assignment " + Arrays.toString(assignment));
-          Solver solver =
-              TestUtils.testVariables(n, r, new NetworksOddEvenMergesort(), ctx, assignment);
+          Solver solver = TestUtils.testVariables(n, r, new NetworksOwnSorting(), ctx, assignment);
           System.out.println(solver);
           assertEquals(solver.check(), TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE
               : Status.UNSATISFIABLE);
           Solver solver1 =
-              TestUtils.testVariablesNeg(n, r, new NetworksOddEvenMergesort(), ctx, assignment);
+              TestUtils.testVariablesNeg(n, r, new NetworksOwnSorting(), ctx, assignment);
           System.out.println(solver1);
           assertEquals(solver1.check(), TestUtils.countTrues(assignment) <= r ? Status.SATISFIABLE
               : Status.UNSATISFIABLE);

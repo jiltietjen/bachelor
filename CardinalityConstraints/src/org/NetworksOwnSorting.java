@@ -7,25 +7,27 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
-public class NetworksOddEvenMergesort extends Encoding {
+public class NetworksOwnSorting extends Encoding {
 
   // Comparators aufrufen und die inputs zu den comparators sortieren
   // legt fest, in welcher Reihe welcher Comparator ist
   private ArrayList<NetworkComparator> makeSortingNetwork(Context ctx, ArrayList<BoolExpr> inputs,
-      ArrayList<BoolExpr> outputs, int counter, Solver solver) throws Z3Exception {
+      ArrayList<BoolExpr> outputs, int counter, Solver solver, int r) throws Z3Exception {
     ArrayList<NetworkComparator> result = new ArrayList<>();
     int[] countComp = new int[inputs.size()];
     result.addAll(oddEvenMergeSort(0, inputs.size(), countComp, ctx, counter));
     for (int i = 0; i < inputs.size(); i++) {
       solver.add(ctx.mkOr(ctx.mkNot(inputs.get(i)),
-          ctx.mkBoolConst("b_" + 0 + "_" + (i) + "_NetworksMerge_" + counter)));
+          ctx.mkBoolConst("b_" + 0 + "_" + (i) + "_OwnNetworksMerge_" + counter)));
       solver.add(ctx.mkOr(inputs.get(i),
-          ctx.mkNot(ctx.mkBoolConst("b_" + 0 + "_" + (i) + "_NetworksMerge_" + counter))));
+          ctx.mkNot(ctx.mkBoolConst("b_" + 0 + "_" + (i) + "_OwnNetworksMerge_" + counter))));
       solver.add(ctx.mkOr(ctx.mkNot(outputs.get(i)),
-          ctx.mkBoolConst("b_" + countComp[i] + "_" + i + "_NetworksMerge_" + counter)));
-      solver.add(ctx.mkOr(outputs.get(i),
-          ctx.mkNot(ctx.mkBoolConst("b_" + countComp[i] + "_" + i + "_NetworksMerge_" + counter))));
+          ctx.mkBoolConst("b_" + countComp[i] + "_" + i + "_OwnNetworksMerge_" + counter)));
+      solver.add(ctx.mkOr(outputs.get(i), ctx.mkNot(ctx.mkBoolConst("b_" + countComp[i] + "_" + i
+          + "_OwnNetworksMerge_" + counter))));
     }
+    filterComparators(result,
+        ctx.mkBoolConst("b_" + countComp[r] + "_" + r + "_OwnNetworksMerge_" + counter));
     return result;
   }
 
@@ -59,34 +61,65 @@ public class NetworksOddEvenMergesort extends Encoding {
       for (int i = lo + r; i + r < lo + n; i += m) {
 
         BoolExpr input1 =
-            ctx.mkBoolConst("b_" + countComp[i] + "_" + (i) + "_NetworksMerge_" + counter);
+            ctx.mkBoolConst("b_" + countComp[i] + "_" + (i) + "_OwnNetworksMerge_" + counter);
         BoolExpr input2 =
-            ctx.mkBoolConst("b_" + countComp[i + r] + "_" + (i + r) + "_NetworksMerge_" + counter);
+            ctx.mkBoolConst("b_" + countComp[i + r] + "_" + (i + r) + "_OwnNetworksMerge_"
+                + counter);
         countComp[i] += 1;
         countComp[i + r] += 1;
         BoolExpr output1 =
-            ctx.mkBoolConst("b_" + countComp[i] + "_" + (i) + "_NetworksMerge_" + counter);
+            ctx.mkBoolConst("b_" + countComp[i] + "_" + (i) + "_OwnNetworksMerge_" + counter);
         BoolExpr output2 =
-            ctx.mkBoolConst("b_" + countComp[i + r] + "_" + (i + r) + "_NetworksMerge_" + counter);
+            ctx.mkBoolConst("b_" + countComp[i + r] + "_" + (i + r) + "_OwnNetworksMerge_"
+                + counter);
 
 
         result.add(new NetworkComparator(input1, output1, input2, output2));
       }
     } else {
       BoolExpr input1 =
-          ctx.mkBoolConst("b_" + countComp[lo] + "_" + (lo) + "_NetworksMerge_" + counter);
+          ctx.mkBoolConst("b_" + countComp[lo] + "_" + (lo) + "_OwnNetworksMerge_" + counter);
       BoolExpr input2 =
-          ctx.mkBoolConst("b_" + countComp[lo + r] + "_" + (lo + r) + "_NetworksMerge_" + counter);
+          ctx.mkBoolConst("b_" + countComp[lo + r] + "_" + (lo + r) + "_OwnNetworksMerge_"
+              + counter);
       countComp[lo] += 1;
       countComp[lo + r] += 1;
       BoolExpr output1 =
-          ctx.mkBoolConst("b_" + countComp[lo] + "_" + (lo) + "_NetworksMerge_" + counter);
+          ctx.mkBoolConst("b_" + countComp[lo] + "_" + (lo) + "_OwnNetworksMerge_" + counter);
       BoolExpr output2 =
-          ctx.mkBoolConst("b_" + countComp[lo + r] + "_" + (lo + r) + "_NetworksMerge_" + counter);
+          ctx.mkBoolConst("b_" + countComp[lo + r] + "_" + (lo + r) + "_OwnNetworksMerge_"
+              + counter);
 
       result.add(new NetworkComparator(input1, output1, input2, output2));
     }
     return result;
+  }
+
+  private void filterComparators(ArrayList<NetworkComparator> oldResult, BoolExpr relevantOutput) {
+    for (int i = oldResult.size() - 1; i >= 0; i++) {
+      if (!isUsed(oldResult.get(i), oldResult, relevantOutput)) {
+        oldResult.remove(i);
+        i--;
+      }
+    }
+  }
+
+  private boolean isUsed(NetworkComparator current, ArrayList<NetworkComparator> allComparators,
+      BoolExpr relevantOutput) {
+    if (current.getOutput1().equals(relevantOutput) || current.getOutput2().equals(relevantOutput)) {
+      return true;
+    } else {
+      for (int i = 0; i < allComparators.size(); i++) {
+        NetworkComparator other = allComparators.get(i);
+        if (current.getOutput1().equals(other.getInput1())
+            || current.getOutput1().equals(other.getInput2())
+            || current.getOutput2().equals(other.getInput1())
+            || current.getOutput2().equals(other.getInput2())) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   private static int power2(int m) {
@@ -105,7 +138,7 @@ public class NetworksOddEvenMergesort extends Encoding {
     }
   }
 
-  // Inputs sind nur 2er Potenzen. Nullen, um es auf die richtige Größe zu bekommen.
+  //
   public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
     ArrayList<BoolExpr> inputs = new ArrayList<>();
@@ -120,16 +153,16 @@ public class NetworksOddEvenMergesort extends Encoding {
     solver.add(ctx.mkNot(ctx.mkBoolConst("FillingZero")));
     ArrayList<BoolExpr> outputs = new ArrayList<>();
     for (int i = 0; i < nextPowerOf2; i++) {
-      outputs.add(ctx.mkBoolConst("b_output_" + i + "_NetworksMerge_" + counter));
+      outputs.add(ctx.mkBoolConst("b_output_" + i + "_OwnNetworksMerge_" + counter));
     }
 
     // Todo n nimmt er nicht
     ArrayList<NetworkComparator> comparators =
-        makeSortingNetwork(ctx, inputs, outputs, counter, solver);
+        makeSortingNetwork(ctx, inputs, outputs, counter, solver, r);
     // System.out.println(comparators);
     for (int i = 0; i < comparators.size(); i++) {
       comparators.get(i).toZ3(ctx, solver);
     }
-    solver.add(ctx.mkNot(ctx.mkBoolConst("b_output_" + r + "_NetworksMerge_" + counter)));
+    solver.add(ctx.mkNot(ctx.mkBoolConst("b_output_" + r + "_OwnNetworksMerge_" + counter)));
   }
 }

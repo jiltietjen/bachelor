@@ -46,16 +46,18 @@ public class Builder {
     }
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new NetworksOddEvenMergesort();
+    Encoding encoding = new KnuthBailleux();
     for (Constraint c : leqConstraints) {
       System.out.println(c);
     }
     for (int i = 0; i < leqConstraints.size(); i++) {
-      encoding.encode(leqConstraints.get(i).getVariables(), leqConstraints.get(i).getLimitR(), i,
-          solver, ctx);
+      if (leqConstraints.get(i).getVariables().size() > leqConstraints.get(i).getLimitR()) {
+        encoding.encode(leqConstraints.get(i).getVariables(), leqConstraints.get(i).getLimitR(), i,
+            solver, ctx);
+      }
     }
 
-    System.out.println(solver);
+    System.out.println(solver.getNumAssertions());
 
     ArrayList<Literal> modelLiterals = null;
     if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
