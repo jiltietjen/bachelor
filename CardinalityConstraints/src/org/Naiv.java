@@ -25,7 +25,6 @@ public class Naiv extends Encoding {
       ArrayList<Literal> newToBeAdded = new ArrayList<>();
       for (int j = i + 1; j < toBeAdded.size(); j++) {
         newToBeAdded.add(toBeAdded.get(j));
-        System.out.println(newToBeAdded);
       }
       result.addAll(createSubsets(setCopy, limit, newToBeAdded));
     }

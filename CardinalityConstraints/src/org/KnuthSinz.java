@@ -27,7 +27,6 @@ public class KnuthSinz extends Encoding {
         if (formularFirstSVariable != null) {
           variablesFirst.add(formularFirstSVariable);
         }
-        System.out.println("first " + variablesFirst);
         solver
             .add(ctx.mkOr((BoolExpr[]) variablesFirst.toArray(new BoolExpr[variablesFirst.size()])));
 

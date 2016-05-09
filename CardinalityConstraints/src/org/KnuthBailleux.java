@@ -81,7 +81,6 @@ public class KnuthBailleux extends Encoding {
         if (formularSecondSVariable != null) {
           variablesSecond.add(formularSecondSVariable);
         }
-        System.out.println("second " + variablesSecond);
         solver.add(ctx.mkOr((BoolExpr[]) variablesSecond.toArray(new BoolExpr[variablesSecond
             .size()])));
       }
@@ -115,7 +114,6 @@ public class KnuthBailleux extends Encoding {
             if (formularFirstTVariable != null) {
               variablesFirst.add(formularFirstTVariable);
             }
-            System.out.println("first " + variablesFirst);
             solver.add(ctx.mkOr((BoolExpr[]) variablesFirst.toArray(new BoolExpr[variablesFirst
                 .size()])));
 

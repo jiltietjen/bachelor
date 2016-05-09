@@ -8,21 +8,17 @@ import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import com.microsoft.z3.Z3Exception;
 
-public class synthetischeTestfaelle {
-
-  static int sat = 0;
-  static int unsat = 0;
+public class SynthetischeTestfaelle {
 
   public static void main(String[] args) throws Z3Exception {
     for (int i = 0; i <= 100; i++) {
-      solve(2000);
+      solve(2000, new KnuthBailleux());
     }
-    System.out.println(sat + " " + unsat);
   }
 
   private static Random randomGenerator = new Random();
 
-  public static void solve(int n) throws Z3Exception {
+  public static void solve(int n, Encoding encoding) throws Z3Exception {
 
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
@@ -48,10 +44,7 @@ public class synthetischeTestfaelle {
       }
     }
 
-    Encoding encoding = new NetworksOddEvenMergesort();
-    for (Constraint c : filledVariables) {
-      System.out.println(c);
-    }
+
     for (int i = 0; i < filledVariables.size(); i++) {
       encoding.encode(filledVariables.get(i).getVariables(), filledVariables.get(i).getLimitR(), i,
           solver, ctx);
@@ -60,11 +53,9 @@ public class synthetischeTestfaelle {
     // System.out.println(solver);
 
     if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
-      System.out.println("UNSAT");
-      unsat++;
+      TestBench.file("UNSAT");
     } else {
-      System.out.println("SAT");
-      sat++;
+      TestBench.file("SAT");
     }
     // TODO memory aufräumen
     solver.reset();

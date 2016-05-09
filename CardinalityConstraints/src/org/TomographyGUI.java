@@ -112,7 +112,7 @@ public class TomographyGUI extends Application {
       picture = new boolean[20][16];
       // hTree(lineSize, depthRecursion, maxX, maxY, centerX, centerY, picture)
       DigitalTomography.hTree(10, TOMOGRAPHY, 20, 16, 10, 8, picture);
-      result = DigitalTomography.solve(picture);
+      result = DigitalTomography.solve(picture, new KnuthBailleux());
     } catch (Z3Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

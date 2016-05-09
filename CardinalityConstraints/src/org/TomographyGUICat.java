@@ -69,8 +69,8 @@ public class TomographyGUICat extends Application {
   public static void main(String[] args) throws Z3Exception {
 
     try {
-      picture = DigitalTomographyCat.getCat(2);
-      result = DigitalTomographyCat.solve(picture);
+      picture = DigitalTomographyCat.getCat(0.2);
+      result = DigitalTomographyCat.solve(picture, new KnuthBailleux());
     } catch (Z3Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

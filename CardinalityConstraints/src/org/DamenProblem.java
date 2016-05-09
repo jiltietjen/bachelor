@@ -16,7 +16,7 @@ public class DamenProblem {
    * Feld wird durchlaufen und einzelne Variablen werden vergeben. Es wird dann an den Solver
    * übergeben
    */
-  public static ArrayList<Literal> solve(int k) throws Z3Exception {
+  public static ArrayList<Literal> solve(int k, Encoding encoding) throws Z3Exception {
     // Erstellt das Spielfeld
     ArrayList<Constraint> constraints = new ArrayList<>();
     // Reihen
@@ -76,8 +76,9 @@ public class DamenProblem {
     constraints.add(new Constraint(Constraint.Type.EQUALS, literals, k));
 
     Builder builder = new Builder();
-    return builder.solve(constraints, k * k); // TODO zurückübersetzen für die Belegung des
-                                              // Damenfeldes
+    return builder.solve(constraints, k * k, encoding); // TODO zurückübersetzen für die Belegung
+                                                        // des
+    // Damenfeldes
   }
 
 }

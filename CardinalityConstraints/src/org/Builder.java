@@ -13,8 +13,8 @@ import com.microsoft.z3.Z3Exception;
 
 public class Builder {
 
-  public ArrayList<Literal> solve(ArrayList<Constraint> constraints, int numVariables)
-      throws Z3Exception {
+  public ArrayList<Literal> solve(ArrayList<Constraint> constraints, int numVariables,
+      Encoding encoding) throws Z3Exception {
     ArrayList<Constraint> leqConstraints = new ArrayList<>();
     for (int i = 0; i < constraints.size(); i++) {
       Constraint constraint = constraints.get(i);
@@ -46,10 +46,6 @@ public class Builder {
     }
     Context ctx = new Context();
     Solver solver = ctx.mkSolver("QF_LIA");
-    Encoding encoding = new KnuthBailleux();
-    for (Constraint c : leqConstraints) {
-      System.out.println(c);
-    }
     for (int i = 0; i < leqConstraints.size(); i++) {
       if (leqConstraints.get(i).getVariables().size() > leqConstraints.get(i).getLimitR()) {
         encoding.encode(leqConstraints.get(i).getVariables(), leqConstraints.get(i).getLimitR(), i,
@@ -57,17 +53,15 @@ public class Builder {
       }
     }
 
-    System.out.println(solver.getNumAssertions());
-
     ArrayList<Literal> modelLiterals = null;
     if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
-      System.out.println("UNSAT");
+      TestBench.file("UNSAT");
     } else {
-      System.out.println("SAT");
+      TestBench.file("SAT");
       Model m = solver.getModel();
       modelLiterals = new ArrayList<>();
-      System.out.println("Model is" + m); // TODO Model zurückübersetzen in k Damen Problem.
-                                          // Ermöglicht das Übergeben der x-Werte für die GUI
+
+      // Ermöglicht das Übergeben der x-Werte für die GUI
       for (int i = 0; i < numVariables; i++) {
         // Retrieves the interpretation (the assignment) of x in the model
         Expr val = m.getConstInterp(ctx.mkBoolConst("x_" + i));

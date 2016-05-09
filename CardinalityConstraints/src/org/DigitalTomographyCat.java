@@ -55,18 +55,19 @@ public class DigitalTomographyCat {
 
   }
 
-  public static boolean[][] getCat(int n) {
+  public static boolean[][] getCat(double n) {
     boolean[][] picOriginal = getCat();
-    boolean[][] result = new boolean[picOriginal.length * n][picOriginal[0].length * n];
+    boolean[][] result =
+        new boolean[(int) (picOriginal.length * n)][(int) (picOriginal[0].length * n)];
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[i].length; j++) {
-        result[i][j] = picOriginal[i / n][j / n];
+        result[i][j] = picOriginal[i % picOriginal.length][j % picOriginal[0].length];
       }
     }
     return result;
   }
 
-  public static ArrayList<Literal> solve(boolean[][] picture) throws Z3Exception {
+  public static ArrayList<Literal> solve(boolean[][] picture, Encoding encoding) throws Z3Exception {
     int width = picture.length;
     int height = picture[0].length;
     System.out.println(width + " " + height);
@@ -127,7 +128,7 @@ public class DigitalTomographyCat {
 
     System.out.println(constraints);
     Builder builder = new Builder();
-    return builder.solve(constraints, width * height);
+    return builder.solve(constraints, width * height, encoding);
   }
 
 }

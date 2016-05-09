@@ -26,8 +26,6 @@ public class SinzParallel extends Encoding {
     // 2. Hälfte 2^m - 1
     ArrayList<BoolExpr> secondHalf =
         new ArrayList<>(literals.subList(power2(m) - 1, literals.size() - 1));
-    System.out.println(counter + " m " + m + " m^2 " + power2(m) + " firstHalf " + firstHalf
-        + " SecondHalf " + secondHalf);
     // Hälften in die Counter (rekursiv bis keine Subcounter mehr gebildet werden können)
     ArrayList<BoolExpr> firstOutputs =
     // CircuitCounter ist Zähler für die circuits

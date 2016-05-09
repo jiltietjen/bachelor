@@ -94,7 +94,7 @@ public class QueensGUI extends Application {
     // return;
 
     try {
-      result = DamenProblem.solve(QUEENS);
+      result = DamenProblem.solve(QUEENS, new KnuthBailleux());
     } catch (Z3Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
