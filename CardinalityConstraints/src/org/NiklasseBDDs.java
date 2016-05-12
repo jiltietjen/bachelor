@@ -51,6 +51,7 @@ public class NiklasseBDDs extends Encoding {
     return memo.get(key);
   }
 
+
   public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
     if (literals.size() == 1) {

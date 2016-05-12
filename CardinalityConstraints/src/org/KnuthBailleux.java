@@ -12,18 +12,7 @@ public class KnuthBailleux extends Encoding {
 
 
   /* Beginn Bailleux nach Knuth (sequentiell)---------------------------------------------- */
-  // static int n = 4;
-  // static int r = 1;
 
-
-  /*
-   * Erstellt den Baum für n und r nur zur Überprüfung -> wird später gelöscht public static void
-   * createTree() { int root = 1; int k1; int k2; System.out.println("Wurzel: " + root + ", "); for
-   * (int k = 1; k < n; k++) { System.out.println("interner Knoten: " + k); k1 = 2 * k; k2 = 2 * k +
-   * 1; System.out.println("Kind links: " + k1); System.out.println("Kind rechts: " + k2); } }
-   */
-
-  // TODO r
   /* Zählt die Blätter unter den jeweiligen Knoten t */
   public static int calcT(int t, int n) {
     if (t >= n) {
@@ -156,14 +145,6 @@ public class KnuthBailleux extends Encoding {
   /* Ende Bailleux nach Knuth --------------------------------------------------------- */
 
 
-  /*
-   * // z3 Solver public static void solver() { Context ctx = null; try { ctx = new Context();
-   * Solver solver = ctx.mkSolver("QF_LIA"); createFormulaFirst(ctx, solver);
-   * createFormulaSecond(ctx, solver); System.out.println(solver); if (solver.check() ==
-   * Status.UNSATISFIABLE) { System.out.println("UNSAT"); } else { System.out.println("SAT"); Model
-   * m = solver.getModel(); System.out.println("Model is" + m); } solver.dispose(); } catch
-   * (Z3Exception ex) { ex.printStackTrace(); } finally { ctx.dispose(); } }
-   */
   @Override
   public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {

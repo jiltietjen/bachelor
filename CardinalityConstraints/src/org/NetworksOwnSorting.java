@@ -96,7 +96,7 @@ public class NetworksOwnSorting extends Encoding {
   }
 
   private void filterComparators(ArrayList<NetworkComparator> oldResult, BoolExpr relevantOutput) {
-    for (int i = oldResult.size() - 1; i >= 0; i++) {
+    for (int i = oldResult.size() - 1; i >= 0; i--) {
       if (!isUsed(oldResult.get(i), oldResult, relevantOutput)) {
         oldResult.remove(i);
         i--;

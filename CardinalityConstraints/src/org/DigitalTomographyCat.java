@@ -70,7 +70,6 @@ public class DigitalTomographyCat {
   public static ArrayList<Literal> solve(boolean[][] picture, Encoding encoding) throws Z3Exception {
     int width = picture.length;
     int height = picture[0].length;
-    System.out.println(width + " " + height);
     ArrayList<Constraint> constraints = new ArrayList<>();
     // Spalten
     for (int x = 0; x < width; x++) {
@@ -126,7 +125,6 @@ public class DigitalTomographyCat {
       constraints.add(new Constraint(Type.EQUALS, lits, sum));
     }
 
-    System.out.println(constraints);
     Builder builder = new Builder();
     return builder.solve(constraints, width * height, encoding);
   }

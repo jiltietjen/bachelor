@@ -1,12 +1,12 @@
 package org;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.Constraint.Type;
 
 import com.microsoft.z3.Context;
-import com.microsoft.z3.Expr;
-import com.microsoft.z3.Model;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import com.microsoft.z3.Z3Exception;
@@ -15,6 +15,8 @@ public class Builder {
 
   public ArrayList<Literal> solve(ArrayList<Constraint> constraints, int numVariables,
       Encoding encoding) throws Z3Exception {
+    TestBench.file("starting preprocessing");
+    TestBench.measureTime();
     ArrayList<Constraint> leqConstraints = new ArrayList<>();
     for (int i = 0; i < constraints.size(); i++) {
       Constraint constraint = constraints.get(i);
@@ -44,8 +46,14 @@ public class Builder {
           break;
       }
     }
-    Context ctx = new Context();
+    Map<String, String> params = new HashMap<>();
+    params.put("timeout", Integer.toString(TestBench.TIMEOUT));
+    Context ctx = new Context(params);
     Solver solver = ctx.mkSolver("QF_LIA");
+    // Params p = ctx.mkParams();
+    // p.add("T:TIMEOUT", 2000);
+    // System.out.println(p);
+    // solver.setParameters(p);
     for (int i = 0; i < leqConstraints.size(); i++) {
       if (leqConstraints.get(i).getVariables().size() > leqConstraints.get(i).getLimitR()) {
         encoding.encode(leqConstraints.get(i).getVariables(), leqConstraints.get(i).getLimitR(), i,
@@ -54,26 +62,36 @@ public class Builder {
     }
 
     ArrayList<Literal> modelLiterals = null;
-    if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
-      TestBench.file("UNSAT");
-    } else {
-      TestBench.file("SAT");
-      Model m = solver.getModel();
-      modelLiterals = new ArrayList<>();
-
-      // Ermöglicht das Übergeben der x-Werte für die GUI
-      for (int i = 0; i < numVariables; i++) {
-        // Retrieves the interpretation (the assignment) of x in the model
-        Expr val = m.getConstInterp(ctx.mkBoolConst("x_" + i));
-        if (val.isTrue()) {
-          modelLiterals.add(new Literal(i, true));
-        } else if (val.isFalse()) {
-          modelLiterals.add(new Literal(i, false));
-        } else {
-          throw new IllegalArgumentException();
-        }
-      }
-    }
+    TestBench.file("preprocessing done. Starting the solver.");
+    TestBench.measureTime();
+    TestBench.file("Number of clauses: " + solver.getNumAssertions());
+    // long time = System.currentTimeMillis();
+    Status stat = solver.check();
+    TestBench.file(stat.toString());
+    TestBench.measureTime();
+    // if (stat == Status.UNSATISFIABLE) { // TODO Timeout abfangen
+    // TestBench.file("UNSAT");
+    // TestBench.measureTime();
+    // } else {
+    // System.out.println(System.currentTimeMillis() - time);
+    // TestBench.file("SAT");
+    // TestBench.measureTime();
+    // Model m = solver.getModel();
+    // modelLiterals = new ArrayList<>();
+    //
+    // // Ermöglicht das Übergeben der x-Werte für die GUI
+    // for (int i = 0; i < numVariables; i++) {
+    // // Retrieves the interpretation (the assignment) of x in the model
+    // Expr val = m.getConstInterp(ctx.mkBoolConst("x_" + i));
+    // if (val.isTrue()) {
+    // modelLiterals.add(new Literal(i, true));
+    // } else if (val.isFalse()) {
+    // modelLiterals.add(new Literal(i, false));
+    // } else {
+    // throw new IllegalArgumentException();
+    // }
+    // }
+    // }
     solver.dispose();
     return modelLiterals;
   }

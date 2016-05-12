@@ -27,4 +27,17 @@ public class PairInteger {
     this.i2 = i2;
   }
 
+  public boolean equals(Object other) {
+    if (other == null || !(other instanceof PairInteger)) {
+      return false;
+    } else {
+      PairInteger otherPair = (PairInteger) other;
+      return this.i1 == otherPair.i1 && this.i2 == otherPair.i2;
+    }
+  }
+
+  public int hashCode() {
+    return i1 * 1 << 16 + i2;
+  }
+
 }

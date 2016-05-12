@@ -1,6 +1,8 @@
 package org;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.microsoft.z3.Context;
@@ -19,9 +21,15 @@ public class SynthetischeTestfaelle {
   private static Random randomGenerator = new Random();
 
   public static void solve(int n, Encoding encoding) throws Z3Exception {
-
-    Context ctx = new Context();
+    TestBench.file("starting preprocessing");
+    TestBench.measureTime();
+    Map<String, String> params = new HashMap<>();
+    params.put("timeout", Integer.toString(TestBench.TIMEOUT));
+    Context ctx = new Context(params);
     Solver solver = ctx.mkSolver("QF_LIA");
+    // Params p = ctx.mkParams();
+    // p.add("soft_timeout", 1);
+    // solver.setParameters(p);
     ArrayList<Literal> lits = new ArrayList<>();
     ArrayList<Constraint> filledVariables = new ArrayList<>();
 
@@ -51,14 +59,19 @@ public class SynthetischeTestfaelle {
     }
 
     // System.out.println(solver);
-
-    if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
-      TestBench.file("UNSAT");
-    } else {
-      TestBench.file("SAT");
-    }
+    TestBench.file("preprocessing done. Starting the solver.");
+    TestBench.measureTime();
+    TestBench.file("Number of clauses: " + solver.getNumAssertions());
+    Status stat = solver.check();
+    TestBench.file(stat.toString());
+    TestBench.measureTime();
+    // if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
+    // TestBench.file("UNSAT");
+    // TestBench.measureTime();
+    // } else {
+    // TestBench.file("SAT");
+    // TestBench.measureTime();
+    // }
     // TODO memory aufräumen
-    solver.reset();
-    ctx.dispose();
   }
 }
