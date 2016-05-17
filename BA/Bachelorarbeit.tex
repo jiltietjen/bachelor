@@ -101,7 +101,18 @@ Jil Tietjen
 	\clearpage
 
 \section{Einleitung}
-
+%zusätzlich vielleicht 2 Sätze zu den jeweiligen Kodierungen
+Ein Teilbereich der Informatik ist es, dass praktische Probleme, wie zum Beispiel im Bereich von Bio-Chips, durch Konzepte oder Methoden der Informatik gelöst werden können.
+In den letzten Jahren wurde das Interesse geweckt, diese Probleme mit Cardinality Constraints und SAT-Solvern zu lösen. In der Vergangenheit wurden diese Kodierungen nicht oder nur begrenzt für praktische Probleme getesetet. Die Cardinality Constraints können dafür allerdings nicht einfach verwendet werden, sondern sie müssen in die Sprache der Aussagenlogik, oder besser noch in die Konjunktive Normalform, kodiert werden, damit sie durch den SAT-Solver verarbeitet werden können. Es gibt noch keine allgemeine Definition über die beste Kodierung für die Cardinality Constraints. Es lässt sich nur festlegen, dass es von Vorteil ist, wenn die Formel so klein wie möglich gehalten wird im Hinblick auf Anzahl der Variablen und Klauseln.\\
+In dieser Arbeit werden daher verschiedene Kodierungen für die Cardinality Constraints anhand von Benchmark-Problemen untersucht. Es werden das n-Damen-Problems und Digital Tomography untersucht. Des Weiteren gibt es zufällig generierte Testfälle, die Cardinality Constraints unterschiedlicher Größe untersuchen. \\
+Außerdem wurde in dieser Arbeit eine eigene Kodierung, basierend auf Sorting Networks, entwickelt. Hier soll vor allem hinsichtlich des Speicherbedarfs eine Optimierung gegenüber anderen etablierten Verfahren erreicht werden. Dies geschieht durch das Entfernen nicht benötigter Comparators im Sorting Network. 
+Ziel dieser Arbeit ist es, die untersuchten Kodierungen für diese praktischen Probleme zu vergleichen. Hierbei wird der Speicher- und Zeitbedarf für das Lösen der Probleme gemessen. \\
+\newline
+Der Rest dieser Arbeit teilt sich in folgende Abschnitte:\\
+In Abschnitt $2$ werden die notwendigen Grundlagen für diese Arbeit vermittelt. Dazu gehören das SAT-Problem mit dem SAT-Solver und den Cardinality Constraints, sowie die Tseitin-Transformation und Sorting Networks, die bei mehreren Kodierungen eingesetzt werden.\\
+Der nächste Abschnitt erläutert die unterschiedlichen Kodierungen mit einigen Beispielen, die das Vorgehen der Algorithmen besser verdeutlichen. In diesem Abschnitt wird als Letztes die eigene Kodierung vorgestellt.\\
+In Abschnitt $4$ werden die Ergebnisse der Evalutation dargelegt. \\
+Das letzte Kapitel fasst alle Kernelemente der Arbeit zusammen und gibt einen Ausblick auf mögliche weitere Themen für Anschlussarbeiten.
 
 
 \section{Grundlagen}
@@ -455,7 +466,7 @@ Durch die hohe Summe für die erste Hälfte der Eingangsvariablen ($\sum7$) wird
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{Bsp_Sinz_fein.png}
+\includegraphics[width=\textwidth]{Bsp_Sinz_fein.pdf}
 \caption{Paralleler Counter von Sinz für $n=7$}
 \label{fig:sinz_counter_para_bsp}
 \end{figure}
