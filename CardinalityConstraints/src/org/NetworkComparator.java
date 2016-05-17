@@ -11,6 +11,10 @@ public class NetworkComparator {
   private BoolExpr output1;
   private BoolExpr input2;
   private BoolExpr output2;
+  private int i1Row;
+  private int i1Pos;
+  private int i2Row;
+  private int i2Pos;
 
 
   public NetworkComparator(BoolExpr input1, BoolExpr output1, BoolExpr input2, BoolExpr output2) {
@@ -20,6 +24,14 @@ public class NetworkComparator {
     this.output2 = output2;
   }
 
+  public NetworkComparator(BoolExpr input1, BoolExpr output1, BoolExpr input2, BoolExpr output2,
+      int i1Row, int i1Pos, int i2Row, int i2Pos) {
+    this(input1, output1, input2, output2);
+    this.setI1Pos(i1Pos);
+    this.setI1Row(i1Row);
+    this.setI2Pos(i2Pos);
+    this.setI2Row(i2Row);
+  }
 
   public BoolExpr getInput2() {
     return input2;
@@ -69,5 +81,39 @@ public class NetworkComparator {
   public String toString() {
     return "inputs " + input1 + " " + input2 + " outputs " + output1 + " " + output2;
   }
+
+  public int getI1Row() {
+    return i1Row;
+  }
+
+  public void setI1Row(int i1Row) {
+    this.i1Row = i1Row;
+  }
+
+  public int getI1Pos() {
+    return i1Pos;
+  }
+
+  public void setI1Pos(int i1Pos) {
+    this.i1Pos = i1Pos;
+  }
+
+  public int getI2Row() {
+    return i2Row;
+  }
+
+  public void setI2Row(int i2Row) {
+    this.i2Row = i2Row;
+  }
+
+  public int getI2Pos() {
+    return i2Pos;
+  }
+
+  public void setI2Pos(int i2Pos) {
+    this.i2Pos = i2Pos;
+  }
+
+
 
 }

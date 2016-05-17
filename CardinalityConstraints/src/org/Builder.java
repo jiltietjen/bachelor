@@ -13,6 +13,8 @@ import com.microsoft.z3.Z3Exception;
 
 public class Builder {
 
+  protected static final Object creation_lock = new Object();
+
   public ArrayList<Literal> solve(ArrayList<Constraint> constraints, int numVariables,
       Encoding encoding) throws Z3Exception {
     TestBench.file("starting preprocessing");
@@ -67,6 +69,11 @@ public class Builder {
     TestBench.file("Number of clauses: " + solver.getNumAssertions());
     // long time = System.currentTimeMillis();
     Status stat = solver.check();
+
+    solver.dispose();
+    ctx.dispose();
+    System.gc();
+
     TestBench.file(stat.toString());
     TestBench.measureTime();
     // if (stat == Status.UNSATISFIABLE) { // TODO Timeout abfangen
@@ -92,7 +99,6 @@ public class Builder {
     // }
     // }
     // }
-    solver.dispose();
     return modelLiterals;
   }
 }

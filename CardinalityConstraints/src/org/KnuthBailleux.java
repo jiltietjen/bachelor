@@ -34,20 +34,25 @@ public class KnuthBailleux extends Encoding {
   }
 
 
+  /*
+   * public static int calcTWithoutRecursion(int t, int n) { if (t >= n) { return 1; } // zählt die
+   * Anzahl der Blätter int result = 0; // Blätter sind n bis 2*n for (int i = n; i < 2 * n; i++) {
+   * // i wird um die Differenz von t-i geshiftet if (i >>> (Integer.numberOfLeadingZeros(t) -
+   * Integer.numberOfLeadingZeros(i)) == t) { result++; } } return result; }
+   */
+
+  // Zählt die Anzahl der Blätter unter einem Knoten. Lesbarere (aber langsamere) Version im
+  // Kommentar oben
   public static int calcTWithoutRecursion(int t, int n) {
     if (t >= n) {
       return 1;
     }
-    // zählt die Anzahl der Blätter
-    int result = 0;
-    // Blätter sind n bis 2*n
-    for (int i = n; i < 2 * n; i++) {
-      // i wird um die Differenz von t-i geshiftet
-      if (i >>> (Integer.numberOfLeadingZeros(t) - Integer.numberOfLeadingZeros(i)) == t) {
-        result++;
-      }
-    }
-    return result;
+    int tShifted = t << (Integer.numberOfLeadingZeros(t) - Integer.numberOfLeadingZeros(n));
+    int tMask = (1 << (Integer.numberOfLeadingZeros(t) - Integer.numberOfLeadingZeros(n))) - 1;
+    int highLeafs = Math.max(0, (tShifted | tMask) - Math.max(n, tShifted) + 1);
+    int lowLeafs =
+        Math.max(0, Math.min(2 * n, (tShifted << 1) + ((tMask << 1) + 2)) - (tShifted << 1));
+    return highLeafs + lowLeafs;
   }
 
   /* zweite Formel wird erstellt */

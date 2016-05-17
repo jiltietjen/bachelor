@@ -12,6 +12,8 @@ import com.microsoft.z3.Z3Exception;
 
 public class SynthetischeTestfaelle {
 
+  protected static final Object creation_lock = new Object();
+
   public static void main(String[] args) throws Z3Exception {
     for (int i = 0; i <= 100; i++) {
       solve(2000, new KnuthBailleux());
@@ -63,6 +65,11 @@ public class SynthetischeTestfaelle {
     TestBench.measureTime();
     TestBench.file("Number of clauses: " + solver.getNumAssertions());
     Status stat = solver.check();
+
+    solver.dispose();
+    ctx.dispose();
+    System.gc();
+
     TestBench.file(stat.toString());
     TestBench.measureTime();
     // if (solver.check() == Status.UNSATISFIABLE) { // TODO Timeout abfangen
@@ -73,5 +80,6 @@ public class SynthetischeTestfaelle {
     // TestBench.measureTime();
     // }
     // TODO memory aufräumen
+
   }
 }

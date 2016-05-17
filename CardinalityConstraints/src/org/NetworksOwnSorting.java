@@ -9,6 +9,7 @@ import com.microsoft.z3.Z3Exception;
 
 public class NetworksOwnSorting extends Encoding {
 
+
   // Comparators aufrufen und die inputs zu den comparators sortieren
   // legt fest, in welcher Reihe welcher Comparator ist
   private ArrayList<NetworkComparator> makeSortingNetwork(Context ctx, ArrayList<BoolExpr> inputs,
@@ -26,8 +27,7 @@ public class NetworksOwnSorting extends Encoding {
       solver.add(ctx.mkOr(outputs.get(i), ctx.mkNot(ctx.mkBoolConst("b_" + countComp[i] + "_" + i
           + "_OwnNetworksMerge_" + counter))));
     }
-    filterComparators(result,
-        ctx.mkBoolConst("b_" + countComp[r] + "_" + r + "_OwnNetworksMerge_" + counter));
+    filterComparators(result, r, countComp);
     return result;
   }
 
@@ -74,7 +74,8 @@ public class NetworksOwnSorting extends Encoding {
                 + counter);
 
 
-        result.add(new NetworkComparator(input1, output1, input2, output2));
+        result.add(new NetworkComparator(input1, output1, input2, output2, i, countComp[i], i + r,
+            countComp[i + r]));
       }
     } else {
       BoolExpr input1 =
@@ -90,35 +91,34 @@ public class NetworksOwnSorting extends Encoding {
           ctx.mkBoolConst("b_" + countComp[lo + r] + "_" + (lo + r) + "_OwnNetworksMerge_"
               + counter);
 
-      result.add(new NetworkComparator(input1, output1, input2, output2));
+      result.add(new NetworkComparator(input1, output1, input2, output2, lo, countComp[lo], lo + r,
+          countComp[lo + r]));
     }
     return result;
   }
 
-  private void filterComparators(ArrayList<NetworkComparator> oldResult, BoolExpr relevantOutput) {
+  private void filterComparators(ArrayList<NetworkComparator> oldResult, int relevantRow,
+      int[] countComp) {
     for (int i = oldResult.size() - 1; i >= 0; i--) {
-      if (!isUsed(oldResult.get(i), oldResult, relevantOutput)) {
+      if (!isUsed(oldResult.get(i), oldResult, relevantRow, countComp)) {
         oldResult.remove(i);
-        i--;
       }
     }
   }
 
+  // TODO: Performanz verbessern
   private boolean isUsed(NetworkComparator current, ArrayList<NetworkComparator> allComparators,
-      BoolExpr relevantOutput) {
-    if (current.getOutput1().equals(relevantOutput) || current.getOutput2().equals(relevantOutput)) {
+      int relevantRow, int[] countComp) {
+    int row1 = current.getI1Row();
+    int row2 = current.getI2Row();
+    if (row1 == relevantRow || row2 == relevantRow) {
       return true;
-    } else {
-      for (int i = 0; i < allComparators.size(); i++) {
-        NetworkComparator other = allComparators.get(i);
-        if (current.getOutput1().equals(other.getInput1())
-            || current.getOutput1().equals(other.getInput2())
-            || current.getOutput2().equals(other.getInput1())
-            || current.getOutput2().equals(other.getInput2())) {
-          return true;
-        }
-      }
     }
+    if (countComp[row1] != current.getI1Pos() || countComp[row2] != current.getI2Pos()) {
+      return true;
+    }
+    countComp[row1]--;
+    countComp[row2]--;
     return false;
   }
 

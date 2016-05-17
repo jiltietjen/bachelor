@@ -13,9 +13,13 @@ public class NiklasseBDDs extends Encoding {
   // if-then-else-Gattern, die zu
   // Klauseln durch Tseitin-Transformation geformt werden mit Extra-Variablen.
 
+  private int pack(int size, int sum) {
+    return size | (sum << 16);
+  }
+
   // Algo aus Paper S. 11
   private Signal buildBDD(ArrayList<Literal> ps, int r, int size, int sum, int materialLeft,
-      HashMap<PairInteger, Signal> memo) {
+      HashMap</* Pair */Integer, Signal> memo) {
     if (sum >= r) {
       Constant constant = new Constant(false);
       return constant;
@@ -23,7 +27,7 @@ public class NiklasseBDDs extends Encoding {
       Constant constant = new Constant(true);
       return constant;
     }
-    PairInteger key = new PairInteger(size, sum);
+    /* Pair */Integer key = pack(size, sum);// new PairInteger(size, sum);
     if (memo.get(key) == null) {
       size--;
       materialLeft -= 1;// cs[size];
@@ -45,7 +49,7 @@ public class NiklasseBDDs extends Encoding {
       if (!lit.isPositive()) {
         lit = new Literal(lit.getIndex(), true);
       }
-      ITEGate ite = new ITEGate(lit, loResult, hiResult); // TODO:tauschen
+      ITEGate ite = new ITEGate(lit, loResult, hiResult);
       memo.put(key, ite);
     }
     return memo.get(key);
@@ -63,7 +67,7 @@ public class NiklasseBDDs extends Encoding {
 
     Signal root =
         buildBDD(literals, r + 1, literals.size(), 0, literals.size(),
-            new HashMap<PairInteger, Signal>());
+            new HashMap</* Pair */Integer, Signal>());
     root.toZ3(ctx, solver, counter);
     solver.add(ctx.mkBoolConst("b" + root.getTseitinVar() + "_Niklasse_" + counter));
   }
