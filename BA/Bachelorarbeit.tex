@@ -10,6 +10,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[nochapters]{classicthesis} % nochapters, wenn du section als oberste ebene nimmst
 \usepackage{array}
+\usepackage{mdframed}
 \PassOptionsToPackage{big}{titlesec}
 
 \floatname{algorithm}{Algorithmus}
@@ -105,7 +106,8 @@ Jil Tietjen
 Ein Teilbereich der Informatik ist es, dass praktische Probleme, wie zum Beispiel im Bereich von Bio-Chips, durch Konzepte oder Methoden der Informatik gelöst werden können.
 In den letzten Jahren wurde das Interesse geweckt, diese Probleme mit Cardinality Constraints und SAT-Solvern zu lösen. In der Vergangenheit wurden diese Kodierungen nicht oder nur begrenzt für praktische Probleme getesetet. Die Cardinality Constraints können dafür allerdings nicht einfach verwendet werden, sondern sie müssen in die Sprache der Aussagenlogik, oder besser noch in die Konjunktive Normalform, kodiert werden, damit sie durch den SAT-Solver verarbeitet werden können. Es gibt noch keine allgemeine Definition über die beste Kodierung für die Cardinality Constraints. Es lässt sich nur festlegen, dass es von Vorteil ist, wenn die Formel so klein wie möglich gehalten wird im Hinblick auf Anzahl der Variablen und Klauseln.\\
 In dieser Arbeit werden daher verschiedene Kodierungen für die Cardinality Constraints anhand von Benchmark-Problemen untersucht. Es werden das n-Damen-Problems und Digital Tomography untersucht. Des Weiteren gibt es zufällig generierte Testfälle, die Cardinality Constraints unterschiedlicher Größe untersuchen. \\
-Außerdem wurde in dieser Arbeit eine eigene Kodierung, basierend auf Sorting Networks, entwickelt. Hier soll vor allem hinsichtlich des Speicherbedarfs eine Optimierung gegenüber anderen etablierten Verfahren erreicht werden. Dies geschieht durch das Entfernen nicht benötigter Comparators im Sorting Network. 
+Die Kodierungen, die binär oder unär sind, basieren auf unterschiedliche Methoden. Dazu gehören binäre Bäume, Schaltkreise (Addierer), Binary Decision Diagrams oder Sorting Networks mit verschiedenen Sortieralgorithmen. \\
+Außerdem wurde in dieser Arbeit eine eigene Kodierung, basierend auf Sorting Networks, entwickelt. Hier soll vor allem hinsichtlich des Speicherbedarfs eine Optimierung gegenüber anderen etablierten Verfahren erreicht werden. Dies geschieht durch das Entfernen nicht benötigter Comparators im Sorting Network. \\
 Ziel dieser Arbeit ist es, die untersuchten Kodierungen für diese praktischen Probleme zu vergleichen. Hierbei wird der Speicher- und Zeitbedarf für das Lösen der Probleme gemessen. \\
 \newline
 Der Rest dieser Arbeit teilt sich in folgende Abschnitte:\\
@@ -119,19 +121,43 @@ Das letzte Kapitel fasst alle Kernelemente der Arbeit zusammen und gibt einen Au
 %n in den Grundlagen erklären
 In diesem Kapitel werden alle notwendigen Grundlagen für das Verständnis der weiteren Bachelorarbeit dargelegt. Es dient als Einführung in das Thema, so dass alle benutzten Kodierungen nachvollzogen werden können.
 \subsection{SAT-Problem}
-Das Satisfiability Problem (kurz: SAT) ist das Erfüllbarkeitsproblem der Aussagenlogik. Es ist NP-vollständig und lässt sich daher vermutlich nicht in polynomieller Zeit lösen. Die Eingabe ist eine aussagenlogische Formel F, für die heraus gefunden werden soll, ob sie erfüllbar ist. Es wird also eine erfüllende Belegung der Variablen mit true oder false gesucht. Die Formel F liegt üblicherweise in Konjunktiver Normalform (KNF) vor. Eine Formel ist in konjunktiver Normalform, wenn sie eine Konjunktion von Klauseln ist. Eine Klausel ist eine Disjunktion von Literalen und ein Literal eine Formel der Form $x$ oder $\neg x$, wobei $x$ eine atomare Variable ist.\\
-\begin{align}
+Das Satisfiability Problem (kurz: SAT) ist das Erfüllbarkeitsproblem der Aussagenlogik \cite[vgl.][]{sat-problem}. Es ist NP-vollständig und lässt sich daher vermutlich nicht in polynomieller Zeit lösen. Die Eingabe ist eine aussagenlogische Formel F, für die heraus gefunden werden soll, ob sie erfüllbar ist. Es wird also eine erfüllende Belegung der Variablen mit true oder false gesucht.\\
+Eine Formel ist ein wohlgeformter Ausdruck für den folgende Regeln gelten:
+
+\begin{mdframed} [linecolor=black,linewidth=2pt]
+Eine Aussagenvariable ist eine Formel.\\
+Ist $F$ eine Formel, dann ist auch  $\neg F$  eine Formel.\\
+Sind $F$ und  $Q$  Formeln, dann sind
+$F \wedge Q  \text{ und }  F \vee Q \text{ auch Formeln.}$\\
+$F(P\wedge Q) = \begin{cases}1 \text{, gdw } F(P) = 1 \text{ und } F(Q)=1\\ 0 \text{ sonst}\end{cases}$\\
+$F(P\vee Q) = \begin{cases}0 \text{, gdw } F(P) = 0 \text{ und } F(Q)=0\\ 1 \text{ sonst}\end{cases}$\\
+$F(\neg P) = \begin{cases}0 \text{, gdw } F(P) = 1 \\ 1 \text{, gdw } F(P) = 0\end{cases}$
+\end{mdframed}
+
+
+%\fbox{\parbox[b]{8cm}{%
+%\begin{align*}
+%&\text{Eine Aussagenvariable ist eine Formel.}\\
+%&\text{Ist } F \text{ eine Formel, dann ist auch } \neg F \text{ eine Formel.}\\
+%&\text{Sind } F \text{ und } Q \text{ Formeln, dann sind}\\
+%& F \vee Q \text{ und } F \wedge Q \text{ auch Formeln.}\\
+%\end{align*}
+%}}\\
+%\newline
+Die Formel F liegt üblicherweise in Konjunktiver Normalform (KNF) vor. Eine Formel ist in konjunktiver Normalform, wenn sie eine Konjunktion von Klauseln ist. Eine Klausel ist eine Disjunktion von Literalen und ein Literal eine Formel der Form $x$ oder $\neg x$, wobei $x$ eine atomare Variable ist.\\
+\begin{align*}
 &F = \bigwedge_{i=1, \dots ,n} \bigvee_{j=1,\dots ,m_i}{l_{i,j}}\\
-\end{align}
-Eine SAT-Instanz wäre zum Beispiel $(\neg a) \wedge (b \vee \neg c \vee d) \wedge (a \vee \neg b)$  für die es folgende Lösung gibt: $a = \bot, b = \bot, c= \bot, d = \top$. Es muss eine Belegung gefunden werden, so dass jede Klausel erfüllt ist.
+\end{align*}
+Eine SAT-Instanz wäre zum Beispiel $(\neg a) \wedge (b \vee \neg c \vee d) \wedge (a \vee \neg b)$  für die es folgende Lösung gibt: $a = 0,{~} b = 0,{~} c= 0, {~} d = 1$. Es muss eine Belegung gefunden werden, so dass jede Klausel erfüllt ist.
 Eine Klausel ist eine endliche Menge von Literalen. Bei einer KNF-Formel wird die Klauselmenge M(F) wie folgt zugeordnet:\\
 \begin{itemize}
 \item $i$-te Disjunktion $\bigvee_{j=1,\dots ,m_i}{l_{i,j}}$ entspricht Klausel $C_i = \{l_{i1}, \dots, l_{im_i}\}$
 \item M(F) = $\{C_1, \dots, C_n\}$
 \end{itemize}
 \subsubsection{SAT-Solver}
-Mit einem SAT-Solver kann für eine Formel in Konjunktiver Normalform ermittelt werden, ob sie erfüllbar ist oder nicht. Zur Lösung des Erfüllbarkeitsproblems hat sich der Davis-Putnam-Logemann-Loveland-Algorithmus (kurz: DPLL) durchgesetzt, der ein chronologisches Backtracking umsetzt. Das heißt, dass eine erfüllende Variablenbelegung schrittweise konstruiert und die gegebene Formel dabei vereinfacht wird. 
-\begin{algorithm}
+Mit einem SAT-Solver kann für eine Formel in Konjunktiver Normalform ermittelt werden, ob sie erfüllbar ist oder nicht. Zur Lösung des Erfüllbarkeitsproblems hat sich der Davis-Putnam-Logemann-Loveland-Algorithmus (kurz: DPLL) durchgesetzt \cite[vgl.][]{dpll}, der ein chronologisches Backtracking umsetzt. Das heißt, dass eine erfüllende Variablenbelegung schrittweise konstruiert und die gegebene Formel dabei vereinfacht wird. 
+\FloatBarrier
+\begin{algorithm}[h]
 \caption{DPLL}
 \label{alg:dpll}
 \begin{algorithmic}
@@ -155,9 +181,10 @@ Mit einem SAT-Solver kann für eine Formel in Konjunktiver Normalform ermittelt 
 \State $\text{~~}$end function
 \end{algorithmic}
 \end{algorithm}
+\FloatBarrier
 
 Durch den DPLL-Algorithmus wird versucht Lösungen durch Zuweisungen zu finden. Es ergeben sich dadurch Teillösungen, die sich als erfolgreich oder nicht-erfolgreich erweisen können. \\
-Zum Beispiel kann die Formel $(x_1 \vee x_2 \vee x_3) \wedge (\neg x_1 \vee \neg x_4 \vee x_5) \wedge (\neg x_1 \vee x_4)$ mit $x_1=\top, x_4=\top$ belegt werden. Dann ist die zweite Klausel eine Einheitsklausel, da nur noch $x_5$ übrig bleibt. Damit die Klausel true wird, muss $x_5 = \top$ sein. \\
+Zum Beispiel kann die Formel $(x_1 \vee x_2 \vee x_3) \wedge (\neg x_1 \vee \neg x_4 \vee x_5) \wedge (\neg x_1 \vee x_4)$ mit $x_1=1, x_4=1$ belegt werden. Dann ist die zweite Klausel eine Einheitsklausel, da nur noch $x_5$ übrig bleibt. Damit die Klausel true wird, muss $x_5 = 1$ sein. \\
 Kommt es vor, dass eine Klausel durch die aktuelle Zudornung nicht true ergeben kann, wird durch Backtracking versucht eine neue Zuordnung zu finden, indem die letzte Entscheidung rückgängig gemacht wird und die Variable davor geändert wird. 
 Wenn allen Variablen ein Wert zugewiesen wurde, gibt der Algorithmus \emph{erfüllbar} zurück und ansonsten \emph{unerfüllbar}.\\
 Unit Propagation ist ein Verfahren, um aus Einheitsklauseln direkt eine Belegung zu folgern. Eine Klausel ist eine Einheitsklausel, wenn sie genau ein Literal enthält. Um eine Einheitsklausel zu erfüllen, muss die entsprechende Variable mit true beziehnugsweise false belegt werden.\\
@@ -167,17 +194,17 @@ Mit Hilfe der SAT-Solver können NP-vollständige Probleme trotzdem effizient ge
 
 %DPLL
 \subsubsection{Cardinality Constraint}
-Ein Cardinality Constraint ist eine erweiterte Klausel mit einer Einschränkung der Form 
+Ein Cardinality Constraint \cite[vgl.][]{sinz} ist eine erweiterte Klausel mit einer Einschränkung der Form 
 \begin{align*}
 &\sum l_i \leq r, \sum l_i \geq r, oder \sum l_i = r
 \end{align*}
 
 Für das Cardinality Constraint ist $r$ eine natürliche Zahl und $l_i$, das ein Literal ist. Ein Cardinality Constraint besagt, dass mindestens $r$ der Literale true sein müssen, maximal $r$ der Literale true sein dürfen, beziehungsweise genau $r$ Literale true sein müssen.\\
-Für eine Variablenzuordnung $a:V \rightarrow B$ wird der Wahrheitswert eines Constraints folgendermaßen bestimmt:
+Für eine Variablenzuordnung $a:V \rightarrow \mathbb{B}$ wird der Wahrheitswert eines Constraints folgendermaßen bestimmt:
 \begin{align*}
-a(\sum(x_1 \dots x_n ) \leq r) = \top {~~~~} gdw. {~} |\{x_i|a(x_i) = \top\}| \leq r \\
-a(\sum(x_1 \dots x_n ) \geq r) = \top {~~~~} gdw. {~} |\{x_i|a(x_i) = \top\}| \geq r \\
-a(\sum(x_1 \dots x_n ) = r) = \top {~~~~} gdw. {~} |\{x_i|a(x_i) = \top\}| = r 
+\hat{a} (\sum(x_1 \dots x_n ) \leq r) = 1 {~~~~} gdw. {~} |\{x_i|\hat{a} (x_i) = 1\}| \leq r \\
+\hat{a} (\sum(x_1 \dots x_n ) \geq r) = 1 {~~~~} gdw. {~} |\{x_i|\hat{a} (x_i) = 1\}| \geq r \\
+\hat{a} (\sum(x_1 \dots x_n ) = r) = 1 {~~~~} gdw. {~} |\{x_i|\hat{a} (x_i) = 1\}| = r 
 \end{align*}
 
 Bei diesen Ausdrücken ist $n\geq 0$ und $x_i \in V$ für $1 \leq i \leq n$.\\
@@ -193,7 +220,7 @@ Das gleiche wird auch für $=$ gemacht.
 
 
 \subsection{Tseitin-Transformation}
-Mit Hilfe der Tseitin-Transformation können beliebige aussagenlogische Formeln in Konjunktive Normalform gebracht werden. Dafür werden neue Variablen für jede Subformel hinzugefügt, so dass die resultierende KNF nicht mehr äquivalent, aber immer noch erfüllbarkeitsäquivalent ist. \\
+Mit Hilfe der Tseitin-Transformation können beliebige aussagenlogische Formeln in Konjunktive Normalform gebracht werden \cite [vgl.][]{tseitin}. Dafür werden neue Variablen für jede Subformel hinzugefügt, so dass die resultierende KNF nicht mehr äquivalent, aber immer noch erfüllbarkeitsäquivalent ist. \\
 Das bedeutet, dass zwei Formeln $\alpha$ und $\beta$ erfüllbarkeitsäquivalent sind, wenn folgendes gilt:
 $\alpha$ ist erfüllbar gdw. $\beta$ erfüllbar ist.
 
@@ -244,10 +271,22 @@ T_\beta \equiv (t_1 \vee  x_3) \wedge (t_1 \vee \neg x_4) \wedge (\neg t_1 \vee 
 \end{aligned}
 \end{align*}
 
-%\subsection{BDDs}
+\subsection{BDDs}
+Binary Decision Diagrams sind Graphen, die für die Darstellung von booleschen Funktionen benutzt werden \cite[vgl.][Seite 109, 110]{bdd}.\\
+Ein gerichteter Graph ist ein Paar $G=(V, E)$, wobei $V$ eine Menge von Knoten und $E \subseteq V x V$  eine Menge von Kanten ist. Ein Knoten wird als Punkt graphisch dargestellt und eine Kante $(v, v')$ durch einen Strich von $v$ nach $v'$ dargestellt. Die Vorgänger eines Knotens $v$ sind die Knoten $v'$ für die es Kanten $(v', v)$ gibt. Die Wurzel ist der Knoten ohne Vorgänger und die Knoten ohne Nachfolger heißen terminale Knoten oder Blätter. Sie werden mit einer $0$ oder einer $1$ markiert. Nicht terminale Knoten $v$ besitzen eine Kante zu einem low- bzw. high- Nachfolger. Sie werden mit Variablen beschriftet. Die Kante $e_1 = (v, low(v))$ nennt man low-Kante und wird mit $0$ markiert. Dies ist in der Regel die linke Kante von einem Knoten. Die high-Kante $e_2 = (v, hight(v))$ wird mit einer $1$ markiert und ist die rechte Kante.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4cm]{bdd.png}
+\caption{Binary Decision Diagram}
+\label{fig:bdd}
+\end{figure}
+
+Ein BDD repräsentiert in eindeutiger Weise eine Boolesche Funktion. Der Baum aus Abbildung \ref{fig:bdd} kann die Boolesche Funktion $f(x) = x_1x_2 + x_3$ ausdrücken. Daraus ergeben sich für die Variablen $x_1x_2x_3 = (110)$. 
+
 
 \subsection{Sorting Networks}
-Ein Sorting Network ist ein Network, das aus Comparators besteht. Das Network hat verschiedene Eingangsavariablen, die durch das Anwenden verschiedener Algorithmen mittels der Comparators sortiert werden können. Die Eingangsvariablen können oben an den Ausgängen angeordnet werden, wenn sie mit true belegt sind. Ein einzelner Comparator ist zwischen zwei verschiedenen Leitungen angeordnet. Er hat somit zwei Eingangsvariablen und zwei Ausgangsvariablen, wobei die Ausgangsvariablen so sortiert werden, dass der obere Ausgang den höheren und der untere Ausgang den niedrigeren Wert enthält.
+Ein Sorting Network ist ein Network \cite[vgl.][]{sorting}, das aus Comparators besteht. Das Network hat verschiedene Eingangsavariablen, die durch das Anwenden verschiedener Algorithmen mittels der Comparators sortiert werden können. Die Eingangsvariablen können oben an den Ausgängen angeordnet werden, wenn sie mit true belegt sind. Ein einzelner Comparator ist zwischen zwei verschiedenen Leitungen angeordnet. Er hat somit zwei Eingangsvariablen und zwei Ausgangsvariablen, wobei die Ausgangsvariablen so sortiert werden, dass der obere Ausgang den höheren und der untere Ausgang den niedrigeren Wert enthält.
 
 \begin{figure}[H]
 \centering
@@ -272,9 +311,9 @@ Für beliebige $r$ gibt es nicht nur Paare von Variablen, sondern $(r+1)$-Tupel.
 
 \textbf{Theorem 1.} Durch den folgenden Beweis kann gezeigt werden, dass die naive Kodierung für $r=1$ korrekt ist. Zu zeigen ist, dass wenn ein Constraint $C(x_1, \dots, x_n) = \sum(x_1, \dots,x_n) \leq 1$ für eine beliebige vollständige Belegung $v(x_1, \dots ,x_n)$ erfüllt wird, dann wird auch die naive Kodierung von $C(x_1, \dots, x_n)$ erfüllt.\\
 \newline
-\textit{Beweis 1.} Es wird angenommen, dass $v(x_1, \dots ,x_n)$ das Constraint $C(x_1, \dots, x_n)$ erfüllt. Das heißt, dass es maximal eine Variable $x_i$ mit $v(x_i) = \top$ gibt. Für alle anderen Variablen $x_j$ mit $i \neq j$ gilt $v(x_j) = \bot$. Durch das Encoding gibt es in jeder Klausel genau $2$ negierte Literale, somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $\bot$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
+\textit{Beweis 1.} Es wird angenommen, dass $v(x_1, \dots ,x_n)$ das Constraint $C(x_1, \dots, x_n)$ erfüllt. Das heißt, dass es maximal eine Variable $x_i$ mit $v(x_i) = 1$ gibt. Für alle anderen Variablen $x_j$ mit $i \neq j$ gilt $v(x_j) = 0$. Durch das Encoding gibt es in jeder Klausel genau $2$ negierte Literale, somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
 Außerdem ist zu zeigen, dass wenn das Constraint $C(x_1, \dots, x_n) = \sum(x_1, \dots,x_n) \leq 1$ für eine beliebige vollständige Belegung $v(x_1, \dots ,x_n)$ nicht erfüllt wird, dann wird auch die naive Kodierung von $C(x_1, \dots, x_n)$ nicht erfüllt.\\
-Es wird angenommen, dass $v(x_1, \dots ,x_n)$ das Constraint $C(x_1, \dots, x_n)$ nicht erfüllt. Somit gibt es $x_i, x_j; i \neq j$ mit $v(x_i) = v(x_j) = \top$. Durch das naive Encoding gibt es eine Klausel $(\neg x_i \vee \neg x_j)$, die nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.
+Es wird angenommen, dass $v(x_1, \dots ,x_n)$ das Constraint $C(x_1, \dots, x_n)$ nicht erfüllt. Somit gibt es $x_i, x_j; i \neq j$ mit $v(x_i) = v(x_j) = 1$. Durch das naive Encoding gibt es eine Klausel $(\neg x_i \vee \neg x_j)$, die nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.
 
 
 	\subsection{Kodierung nach Bailleux und Boufkhad}
@@ -289,11 +328,13 @@ Jedem Knoten wird eine Menge von Variablen zugeordnet. Dabei wird jedem Blatt ei
 
 Als nächster Schritt werden neue Hilfsvariablen der Form $\text{b}_j^k$ gebildet, für $1 \textless k \textless n$ und  $1 \leq j \leq t_k$. Dabei ist $t_k$ das Minimum von $r$ und der Anzahl der Blätter unter dem Knoten $k$. Bei $n=2$ und $r=2$ hat der Knoten $1$ zum Beispiel $2$ Blätter, daher ist $t_1=2$. Jedem inneren Knoten k wird die Menge der Variablen $\text{b}_j^k$ zugeordnet.\\
 Mit den neuen Variablen können folgende Klauseln gebildet werden:\\
-\textbf{1. Formel:}\\
-$ \neg \text{b}_i^{2k} \vee \neg \text{b}_j^{2k+1} \vee \neg \text{b}_{i+j}^{k}$ \\
-für $0\leq i \leq \text{t}_{2k}$, $0\leq j \leq \text{t}_{2k+1}$, $1\leq i+j \leq \text{t}_{k}+1$, $1\textless k \textless n$\\
-\textbf{2. Formel:}\\
-$ \neg \text{b}_i^2 \vee \neg \text{b}_j^3$ für $0\leq i \leq \text{t}_2$, $0\leq j \leq \text{t}_3$, $i+j = r+1$\\
+\begin{align*}
+&\textbf{1. Formel:}\\
+&\neg b_i^{2k} \vee \neg b_j^{2k+1} \vee \neg b_{i+j}^{k} \\
+&\text{für} {~} 0\leq i \leq t_{2k}, 0\leq j \leq t_{2k+1}, 1\leq i+j \leq t_{k}+1, 1\textless k \textless n\\
+&\textbf{2. Formel:}\\
+&\neg b_i^2 \vee \neg b_j^3 {~} \text{für} {~} 0\leq i \leq t_2, 0\leq j \leq t_3, i+j = r+1\\
+\end{align*}
 
 Dabei wird $\text{t}_k$ zu $1$ und $\text{b}_1^k = \text{x}_{k-n+1}$ für $n \leq k \textless 2n$. Dadurch können aus den Hilfsvariablen die entsprechenden Literale gebildet werden, die die KNF bilden.
 Aufgrund des Aufbaus der Formel können Variablen der Form $b_{r+1}^k$ nur positiv und Variablen der Form $\text{b}_0^k$ nur negativ vorkommen. Daher können diese Variablen gestrichen werden.
@@ -311,52 +352,51 @@ Für das Beispiel ist $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ interne K
 Der Knoten $1$ hat die Blätter $4,5,6$ und $7$. Der Wert von $t_1$ ist daher $min(4,r) = min(4,1) = 1$. Die weiteren Variablen $\text{t}_2$ und $\text{t}_3$ sind auch jeweils $1$ und $\text{t}_4$ bis $\text{t}_7$ sind $1$, da $\text{t}_k$ zu $1$ wird, wegen $n \leq k \textless 2n$.
 
 Dadurch ergeben sich für das Beispiel von $n=4$ folgende Variablen:\\
-\textbf{Formel 1:}\\
-$k=2$ oder $k=3$, weil $1 \textless k \textless n$.\\
-$j=0$ oder $j=1$, weil $1 \leq j \leq \text{t}_k$ und $\text{t}_k = 1$.\\
-$i=0$ oder $i=1$, weil $1\leq i+j \leq \text{t}_{k}+1$.\\
+\begin{align*}
+&\textbf{Formel 1:}\\
+&k=2 \text{ oder } k=3 \text{ , weil } 1 \textless k \textless n.\\
+&j=0 \text{ oder } j=1 \text{ , weil } 1 \leq j \leq t_k \text{ und } t_k = 1.\\
+&i=0 \text{ oder } i=1 \text{ , weil } 1\leq i+j \leq t_{k}+1.\\
+\end{align*}
 Somit ergeben sich für (i, j) die Möglichkeiten $(1,0)$, $(0,1)$ und $(1,1)$.\\
-\textbf{k = 2:}\\
-$\neg \text{b}_1^4 \vee \neg \text{b}_0^5 \vee \text{b}_1^2$\\
-$\neg \text{b}_0^4 \vee \neg \text{b}_1^5 \vee \text{b}_1^2$\\
-$\neg \text{b}_1^4 \vee \neg \text{b}_1^5 \vee \text{b}_2^2$\\
-\textbf{k = 3:}\\
-$\neg \text{b}_1^6 \vee \neg \text{b}_0^7 \vee \text{b}_1^3$\\
-$\neg \text{b}_0^6 \vee \neg \text{b}_1^7 \vee \text{b}_1^3$\\
-$\neg \text{b}_1^6 \vee \neg \text{b}_1^7 \vee \text{b}_2^3$\\
+\begin{align*}
+&\textbf{k = 2:} {~~~~~~~~~~~~~~~~~~~~~~~~~~~~} \textbf{k = 3:}\\
+&\neg b_1^4 \vee \neg b_0^5 \vee b_1^2 {~~~~~~~~~~~~~~~} \neg b_1^6 \vee \neg b_0^7 \vee b_1^3\\
+&\neg b_0^4 \vee \neg b_1^5 \vee b_1^2 {~~~~~~~~~~~~~~~} \neg b_0^6 \vee \neg b_1^7 \vee b_1^3\\
+&\neg b_1^4 \vee \neg b_1^5 \vee b_2^2 {~~~~~~~~~~~~~~~} \neg b_1^6 \vee \neg b_1^7 \vee b_2^3\\
+\end{align*}
 
-Da alle Variablen der Form $\neg \text{b}_0^k$ und $\text{b}_{r+1}^k$  gestrichen werden, bleiben nur noch diese Klauseln übrig:\\
-\textbf{k = 2:}\\
-$\neg \text{b}_1^4  \vee \text{b}_1^2$\\
-$\neg \text{b}_1^5 \vee \text{b}_1^2$\\
-$\neg \text{b}_1^4 \vee \neg \text{b}_1^5$\\
-\textbf{k = 3:}\\
-$\neg \text{b}_1^6 \vee \text{b}_1^3$\\
-$\neg \text{b}_1^7 \vee \text{b}_1^3$\\
-$\neg \text{b}_1^6 \vee \neg \text{b}_1^7 $\\
-
-$b_1^k$ wird ersetzt durch $x_{k-n+1}$:\\
-$ \neg \text{x}_1 \vee \text{b}_1^2$\\
-$\neg \text{x}_2 \vee  \text{b}_1^2$\\
-$\neg \text{x}_1 \vee \neg \text{x}_2$\\
-$\neg \text{x}_3 \vee \text{b}_1^3$\\
-$\neg \text{x}_4 \vee \text{b}_1^3$\\
-$\neg \text{x}_3 \vee \neg \text{x}_4$\\
-
-\textbf{Formel 2:}\\
-$i=1$, weil $0\leq i \leq \text{t}_2$ für $\text{t}_2 = 1$.\\
-$j=1$, weil $0\leq j \leq \text{t}_3$ für $\text{t}_3=1$.\\
-Somit ergibt sich für (i, j) die Möglichkeit $(1,1)$, so dass $i+j = r+1$ gilt.\\
-$\neg \text{b}_1^2 \vee \neg \text{b}_1^3$\\
+Da alle Variablen der Form $\neg b_0^k$ und $b_{r+1}^k$  gestrichen werden, bleiben nur noch diese Klauseln übrig:\\
+\begin{align*}
+&\textbf{k = 2:} {~~~~~~~~~~~~~~~~~~~~~~~~} \textbf{k = 3:}\\
+&\neg b_1^4  \vee b_1^2 {~~~~~~~~~~~~~~~~~~~~}\neg b_1^6 \vee b_1^3\\
+&\neg b_1^5 \vee b_1^2  {~~~~~~~~~~~~~~~~~~~~}\neg b_1^7 \vee b_1^3\\
+&\neg b_1^4 \vee \neg b_1^5 {~~~~~~~~~~~~~~~~~~}\neg b_1^6 \vee \neg b_1^7\\
+\\
+&b_1^k \text{ wird ersetzt durch } x_{k-n+1}:\\
+&\neg x_1 \vee b_1^2 {~~~~~~~~~~} \neg x_3 \vee b_1^3\\
+&\neg x_2 \vee b_1^2 {~~~~~~~~~~} \neg x_4 \vee b_1^3\\
+&\neg x_1 \vee \neg x_2 {~~~~~~~~~~} \neg x_3 \vee \neg x_4\\
+\\
+&\textbf{Formel 2:}\\
+&i=1 \text{ , weil } 0\leq i \leq t_2 \text{ für } t_2 = 1.\\
+&j=1 \text{ , weil } 0\leq j \leq t_3 \text{ für } t_3=1.\\
+&\text{Somit ergibt sich für (i, j) die Möglichkeit} (1,1) \text{ , }\\
+&\text{so dass } i+j = r+1 \text{  gilt.}\\
+&\neg b_1^2 \vee \neg b_1^3\\
+\end{align*}
 
 Es können keine Variablen gestrichen werden.\\
 
 Die vollständige KNF sieht folgendermaßen aus:\\
-($ \neg \text{x}_1 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_2 \vee \text{b}_1^2$) $\wedge$ ($\neg \text{x}_1 \vee \neg \text{x}_2$) $\wedge$ ($\neg \text{x}_3 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_4 \vee \text{b}_1^3$) $\wedge$ ($\neg \text{x}_3 \vee \neg \text{x}_4$) $\wedge$ ($\neg \text{b}_1^2 \vee \neg \text{b}_1^3$)\\
+\begin{align*}
+&(\neg x_1 \vee b_1^2) \wedge (\neg x_2 \vee b_1^2) \wedge (\neg x_1 \vee \neg x_2) \wedge (\neg x_3 \vee b_1^3)\\
+&\wedge (\neg x_4 \vee b_1^3) \wedge (\neg x_3 \vee \neg x_4) \wedge (\neg b_1^2 \vee \neg b_1^3)\\
+\end{align*}
 
 	\subsection{Kodierungen nach Sinz}
 Dieses Kapitel behandelt zwei Kodierungen nach \cite[][]{sinz}, die auf einen sequentiellen Counter und einem parallelen Counter basieren. Grundlegend bestehen diese Kodierung aus einem Schaltkreis, der die Summe der Eingangsvariablen mit Hilfe eines binären oder unären Counters bildet und das Ergebnis mit $r$ vergleicht. Die Unterschiede der Schaltkreise werden im weiteren Verlauf beschrieben.
-		\subsubsection{sequentiell}
+		\subsubsection{Sequentielle Variante}
 Die sequentlielle Variante besteht aus zwei aufeinander folgende Stufen. In der ersten Stufe werden die Inputs gezählt, die auf true gesetzt werden. In der nächsten Stufe überprüft ein Comparator, ob das Zählerergebnis kleiner oder gleich $r$ ist (siehe Abbildung \ref{fig:sinz_counter}). Der Counter besteht aus mehreren Sub-Schaltkreisen und in jedem Sub-Schaltkreis wird die nächste Eingangsvariable addiert. Daher kann die komplette Summe erst im letzten Sub-Schaltkreis berechnet werden. \\
 
 
@@ -371,47 +411,52 @@ Jeder Addierer erhält eine Eingangsvariable und $r$-viele Teilsummen als Eingä
 
 Bei dieser Variante werden erneut anhand von \cite[][]{knuth} neue Variablen eingeführt. Es werden $(n-r)*r$ neue Variablen der Form $\text{s}_j^k$ für $1 \leq j \leq n - r$ und $1 \leq k \leq r$ gebildet. \\
 Mit den neuen Variablen können folgende Klauseln erstellt werden:\\
-\textbf{1. Formel:}\\
-$(\neg \text{s}_j^k \vee \text{s}_{j+1}^k)$ für $(1 \leq j \textless n - r)$ und $(1 \leq k \leq r)$\\
-\textbf{2. Formel:}\\
-$(\neg \text{x}_{j+k} \vee \neg \text{s}_j^k \vee \text{s}_j^{k+1})$ für $1 \leq j \leq n - r$ und $0 \leq k \leq r$\\
+
+\begin{align*}
+&\textbf{1. Formel:}\\
+&(\neg s_j^k \vee s_{j+1}^k) \text{ für } (1 \leq j \textless n - r) \text{ und } (1 \leq k \leq r)\\
+&\textbf{2. Formel:}\\
+&(\neg x_{j+k} \vee \neg s_j^k \vee s_j^{k+1}) \text{ für } 1 \leq j \leq n - r \text{ und } 0 \leq k \leq r\\
+\end{align*}
 
 Die Variablen der Form  $\neg s_j^0$ können gestrichen werden. Dies ist möglich, weil sie nur in der negierten Form vorkommen. Des Weiteren dürfen Variablen der Form $\text{s}_j^{r+1}$ gestrichen werden, weil sie nur positiv vorkommen.
 
 	\subsubsection*{Beispiel für eine sequentielle Kodierung}
 Es ergeben sich für das Beispiel von $n=4$ und $r=1$ folgende Variablen:\\
-\textbf{Formel 1:}\\
-Da $1 \leq j \textless 3$ ergeben sich $1$ oder $2$ für j.\\
-Für $k$ ergibt sich $1$, da $1 \leq k \leq 1$.\\
-$\neg \text{b}_1^1 \vee \text{b}_2^1$\\
-$\neg  \text{b}_2^1 \vee \text{b}_3^1$\\
+
+\begin{align*}
+&\textbf{Formel 1:}\\
+& \text{Da } 1 \leq j \textless 3 \text{ ergeben sich } 1 \text{ oder } 2 \text{ für } j.\\
+&\text{ Für } k \text{ ergibt sich } 1 \text{ , da } 1 \leq k \leq 1.\\
+&\neg b_1^1 \vee b_2^1\\
+&\neg b_2^1 \vee b_3^1\\
+\end{align*}
 In diesem Fall können keine Variablen gestrichen werden.\\
 
-\textbf{Formel 2:}\\
-Bei dieser Formel kann j $1, 2$ oder $3$ sein, da $1 \leq j \leq 3$ . Die Variable $k$ kann $0$ oder $1$ sein, da $0 \leq k \leq 1$.\\
-\textbf{k = 0:}\\
-$\neg x_1 \vee \neg b_1^0 \vee b_1^1$\\
-$\neg x_2 \vee \neg b_2^0 \vee b_2^1$\\
-$\neg x_3 \vee \neg b_3^0 \vee b_3^1$\\
-\textbf{k =1:}\\
-$\neg x_2 \vee \neg b_1^1 \vee b_1^2$\\
-$\neg x_3 \vee \neg b_2^1 \vee b_2^2$\\
-$\neg x_4 \vee \neg b_3^1 \vee b_3^2$\\
+\begin{align*}
+&\textbf{Formel 2:}\\
+& \text{Bei dieser Formel kann } j 1, 2 \text{ oder } 3 \text{ sein, da }1 \leq j \leq 3. \\
+&\text{Die Variable } k \text{ kann } 0 \text{ oder } 1 \text{ sein, da } 0 \leq k \leq 1.\\
+&\textbf{k = 0:} {~~~~~~~~~~~~~~~~~~~~~~~~~} \textbf{k =1:}\\
+&\neg x_1 \vee \neg b_1^0 \vee b_1^1 {~~~~~~~~~~~~}\neg x_2 \vee \neg b_1^1 \vee b_1^2\\
+&\neg x_2 \vee \neg b_2^0 \vee b_2^1 {~~~~~~~~~~~~} \neg x_3 \vee \neg b_2^1 \vee b_2^2\\
+&\neg x_3 \vee \neg b_3^0 \vee b_3^1 {~~~~~~~~~~~~} \neg x_4 \vee \neg b_3^1 \vee b_3^2\\
+\end{align*}
 
 Alle trivialen Variablen werden gestrichen. Diese Klauseln bleiben bestehen:\\
-\textbf{k = 0:}\\
-$\neg x_1 \vee b_1^1$\\
-$\neg x_2 \vee b_2^1$\\
-$\neg x_3 \vee b_3^1$\\
-\textbf{k =1:}\\
-$\neg x_2 \vee \neg b_1^1 $\\
-$\neg x_3 \vee \neg b_2^1 $\\
-$\neg x_4 \vee \neg b_3^1 $\\
+\begin{align*}
+&\textbf{k = 0:} {~~~~~~~~~~~~~~~~}\textbf{k =1:}\\
+&\neg x_1 \vee b_1^1{~~~~~~~~~~~~}\neg x_2 \vee \neg b_1^1 \\
+&\neg x_2 \vee b_2^1{~~~~~~~~~~~~}\neg x_3 \vee \neg b_2^1 \\
+&\neg x_3 \vee b_3^1{~~~~~~~~~~~~}\neg x_4 \vee \neg b_3^1 \\
+\end{align*}
 
 Die vollständige KNF sieht folgendermaßen aus:\\
-$(\neg b_1^1 \vee b_2^1) \wedge (\neg b_2^1 \vee b_3^1) \wedge (\neg x_1 \vee b_1^1) \wedge (\neg x_2 \vee b_2^1) \wedge (\neg x_3 \vee b_3^1) \wedge (\neg x_2 \vee \neg b_1^1) \wedge (\neg x_3 \vee \neg b_2^1) \wedge (\neg x_4 \vee \neg b_3^1) $\\
+\begin{align*}
+&(\neg b_1^1 \vee b_2^1) \wedge (\neg b_2^1 \vee b_3^1) \wedge (\neg x_1 \vee b_1^1) \wedge (\neg x_2 \vee b_2^1)\\ &\wedge (\neg x_3 \vee b_3^1) \wedge (\neg x_2 \vee \neg b_1^1) \wedge (\neg x_3 \vee \neg b_2^1) \wedge (\neg x_4 \vee \neg b_3^1) \\
+\end{align*}
 
-		\subsubsection{parallel}
+		\subsubsection{Parallele Variante}
 Der Unterschied zum sequentiellen Counter besteht darin, dass beim parallelen Counter die Eingangsvariablen in zwei Hälften geteilt werden und durch Sub-Counter parallel verarbeitet werden können. Die erste Hälfte hat die Größe $2^m$ mit  $2^m \leq n \textless 2^{m+1}, m \in \mathtt{N}$. Damit die zweite Hälfte nie weniger Eingangsvariablen enthält als die erste, gibt es den Sonderfall, dass die zweite Hälfte keine Eingangsvariablen hat. Gibt es nur eine Eingangsvariable wird diese direkt in den Output weiter geleitet.\\
 Im nächsten Schritt wird rekursiv in den Countern berechnet wie groß die Anzahl der Eingangsvariablen ist, die auf true gesetzt werden müssen. Die Ausgangsvariable des ersten Counters wird mit der entsprechenden Ausgangsvariable des zweiten Counters durch einen Volladdierer zusammen gerechnet. Falls der zweite Counter weniger Ausgangsvariablen hat als der erste werden nur Halbaddierer benötigt. Die letzte Eingangsvariable wird als Carry-Bit in den letzten Addierer gegeben. Die Counter berechnen somit parallel die Summe von $2^m-1$ Eingangsvariablen.\\
 
@@ -436,7 +481,7 @@ Der Voll-Addierer besteht aus sieben Klauseln:
 \begin{itemize}
 \item $(a \vee b \vee \neg carryIn \vee sum)$
 \item $( a \vee \neg b \vee carryIn \vee sum)$
-\item $(\neg a \vee b \vee caaryIn \vee sum )$
+\item $(\neg a \vee b \vee carryIn \vee sum )$
 \item $(\neg a \vee \neg b \vee \neg carryIn \vee sum)$
 \item$(\neg a \vee \neg b \vee carryOut)$
 \item$(\neg a \vee \neg carryIn \vee carryOut)$
@@ -474,7 +519,7 @@ Durch die hohe Summe für die erste Hälfte der Eingangsvariablen ($\sum7$) wird
 Das Beispiel besteht aus $11$ Volladdierern sowie 6 Halbaddierern und aus $95$ Klauseln für den Schaltkreis.\\
 
 \textbf{Beispiel für den Comparator anhand von $r$}:\\
-Sei $r = 18$, in binärer Repräsenation ist dies $10010$. Daraus ergeben sich 3 Klauseln, da es drei Nullen gibt und 5 verschiedene Variablen, bei denen die Variablen mit einer $0$ nur negiert aufgeschrieben werden. Das bedeutet, dass $x_0 = \bot, x_1 = \top, x_2 = \bot, x_3 = \bot, x_4 = \top$.\\
+Sei $r = 18$, in binärer Repräsenation ist dies $10010$. Daraus ergeben sich 3 Klauseln, da es drei Nullen gibt und 5 verschiedene Variablen, bei denen die Variablen mit einer $0$ nur negiert aufgeschrieben werden. Das bedeutet, dass $x_0 = 0, x_1 = 1, x_2 = 0, x_3 = 0, x_4 = 1$.\\
 Die folgenden Klauseln können gebildet werden:\\
 \begin{itemize}
 \item $\{\neg x_0\}$ (Variale wird nur negiert aufgeschrieben)
@@ -510,7 +555,7 @@ Mit Hilfe von BDDs können Cardinality Constraints in Klauseln übersetzt werden
 \end{algorithmic}
 \end{algorithm}
 
-Beim Aufruf der Methode wird size auf die Anzah der Koeffizienten auf der linken Seite des Constraints gesetzt, sum auf $0$, material\_left ist die Summe aller Koeffizienten auf der linken Seite und memo ist eine leere Map. Für die weiteren Befehle ist sign(p) true oder false der Literale und var(p) gibt die zugrunde liegende Variable des Literals zurück.\\
+Beim Aufruf der Methode wird size auf die Anzahl der Koeffizienten auf der linken Seite des Constraints gesetzt, sum auf $0$, material\_left ist die Summe aller Koeffizienten auf der linken Seite und memo ist eine leere Map. Für die weiteren Befehle ist sign(p) true oder false der Literale und var(p) gibt die zugrunde liegende Variable des Literals zurück.\\
 
 Der Algorithmus konstruiert den BDD, indem die Variablen nacheinander abgearbeitet werden. Dann wird das ITE-Gate erstellt mit dem Literal als Knotenbeschriftung und einer low- und high-Kante unterhalb des Knotens. Durch das Hinzunehmen der Tseitin-Variablen, kann der key herausgefunden werden und damit welcher Knoten zu welchem Eltern-Knoten gehört.\\
 Eine weitere Aufgabe bestand darin, dass die ITE-Gates mit Tseitin als Konjunktive Normalform repräsentiert werden müssen (t ist dabei die Tseitin-Variable und a,b und c die unterschiedlichen Inputs). Dies kann folgendermaßen hergeleitet werden:\\
@@ -532,22 +577,22 @@ Eine weitere Aufgabe bestand darin, dass die ITE-Gates mit Tseitin als Konjunkti
 %Ein ITE-Gate sagt nichts anderes als if (a then b else c) und das bedeutet $(a \wedge b) \vee (\neg a \wedge c)$. Daher kann dies in Schritt 4 eingesetzt werden. Die Klausel $(\neg t \vee a \vee \neg a)$ kann entfernt werden, da $(a \vee \neg a)$ immer $1$ ist und somit die ganze Klausel $1$ ist. Die Klausel $(\neg t \vee b \vee c)$ wird aus Performanzgründen nicht verwendet. Dies ist erlaubt, da durch sie eine Resolvente der Klauseln ...
 
 	\subsection{naive Kodierung basierend auf Sorting Networks}
-Sorting Networks stellen einen effektiven Weg dar, um Cardinality Constraints zu implementieren. Nachdem die Eingangsvariablen durch das Sorting Network sortiert wurden, kann schnell abgelesen werden, ob das Constraint erfüllt werden kann oder nicht.
+Sorting Networks stellen einen effektiven Weg dar, um Cardinality Constraints zu implementieren \cite[vgl.][]{niklasse}. Nachdem die Eingangsvariablen durch das Sorting Network sortiert wurden, kann schnell abgelesen werden, ob das Constraint erfüllt werden kann oder nicht.
 Beim Constraint $\leq r$ dürfen nicht mehr als $r$ Ausgänge mit true belegt sein. Sind mehr als $r$ Ausgänge mit true belegt, kann der SAT-Solver schnell feststellen, dass dieses Cardinality Constraint nicht erfüllbar ist.\\
 Die Comparators können durch verschiedene Algorithmen angeordnet werden. Für die naive Variante wird der Bubble-Sort-Algorithmus verwendet. Der Aufbau des Netzes lässt sich folgendermaßen darstellen:\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=9cm]{sorting_network_bubble.png}
+\includegraphics[width=\textwidth]{sorting_network_bubble.pdf}
 \caption{Sorting Network mit Bubble-Sort}
 \label{fig:sorting_network_naiv_bsp}
 \end{figure}
 
-In Abbilung \ref{fig:sorting_network_naiv_bsp} gibt es die Eigangsvariablen $x_0$ bis $x_5$, daher ist $n=6$. Jedes Mal wenn an einem Comparator am oberen Eingang false und am unteren Eingang true anliegen, wird getauscht (siehe Abbilung \ref{fig:sorting_network_naiv_bsp1}).
+In Abbildung \ref{fig:sorting_network_naiv_bsp} gibt es die Eingangsvariablen $x_0$ bis $x_5$, daher ist $n=6$. Jedes Mal wenn an einem Comparator am oberen Eingang false und am unteren Eingang true anliegen, wird getauscht (siehe Abbilung \ref{fig:sorting_network_naiv_bsp1}).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=9cm]{sorting_network_bubble_rot.png}
+\includegraphics[width=\textwidth]{sorting_network_bubble_rot.pdf}
 \caption{Sorting Network mit Bubble-Sort und markierten Leitungen}
 \label{fig:sorting_network_naiv_bsp1}
 \end{figure}
@@ -556,11 +601,11 @@ Die folgende KNF beschreibt das Verhalten eines einzelnen Comparators:\\
 $(\neg output_2 \vee output_1) \wedge (\neg input_1 \vee \neg input_2 \vee output_2) \wedge (input_1 \vee \neg output_2) \wedge (input_2 \vee \neg output_2) \wedge (input_1 \vee input_2 \vee \neg output_1) \wedge (\neg input_1 \vee output_1) \wedge (\neg input_2 \vee output_1)$
 
 	\subsection{Sorting Networks mit Odd-Even Mergesort}
-Als Grundlage für die eigene entwickelte Kodierung dient das Sorting Network mit einem Odd-Even Mergesort. Der Unterschied zur naiven Kodierung ist der, dass nicht der Bubblesort als Sortieralgorithmus verwendet wird, sondern der Odd-Even Mergesort. Dadurch entsteht ein Netz mit anders angeordneten Comparators.
+Als Grundlage für die eigene entwickelte Kodierung dient das Sorting Network mit einem Odd-Even Mergesort \cite[vgl.][]{odd-even}. Der Unterschied zur naiven Kodierung ist der, dass nicht der Bubblesort als Sortieralgorithmus verwendet wird, sondern der Odd-Even Mergesort. Dadurch entsteht ein Netz mit anders angeordneten Comparators.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{odd-even-mergesort.png}
+\includegraphics[width=\textwidth]{sorting_network_odd_even.pdf}
 \caption{Sorting Network mit Odd-Even-Mergesort}
 \label{fig:odd-even-mergesort}
 \end{figure}
@@ -576,8 +621,8 @@ Nachdem das Odd-Even-Mergesort Network aufgebaut ist, werden diejenigen Comparat
 \item nicht mit dem relevanten Output übereinstimmen und
 \item nicht als Inputs für noch nicht gestrichene Comparators dienen
 \end{itemize}
-werden gestrichen. 
-
+werden gestrichen. \\
+Ein effizienter Weg dies zu tun, ist es, dass die entsprechende Leitung des Outputs durchgegangen wird, und alle Comparators, die an diese Leitung angrenzen, bestehen bleiben. Für alle anderen Leitungen wird geprüft, ob der Comparator der letzte in seinen beiden Leitungen ist. Wenn dies der Fall ist, kann der Comparator entfernt werden.
 
 %Zur Ideenfindung wurde das Sorting Network aufgemalt und überlegt, wie die entsprechende Leitung von $r$ Einfluss auf die Comparator haben kann. Wird $r=2$ gewählt, so entscheidet der Ausgang an der zweiten Stelle des Sorting Networks, ob eine Belegung gefunden werden kann für das Constraint oder nicht. Liegt an der zweiten Stelle eine $0$ an, dann ist es SAT. Ansonsten ist es UNSAT. Somit ist nur dieser Ausgang von Bedeutung für den SAT-Solver. Daher müssen alle anderen Ausgänge nicht entsprechend sortiert sein. Aus diesem Grund können alle Comparator eingespart werden, die nichts mit der entsprechenden Leitung zu tun haben und auch alle, bei denen die Ein- und Ausgänge der andern Comparator keinen Einfluss auf die Sortierug des zweiten Ausgangs des Sorting Networks haben. Dafür wird das Sorting Network erst einmal aufgebaut wie beim odd-even Mergesort und anschließend wird das gesamte Network mehrmals durchsucht nach Comparator, die gestrichen werden können. Dies muss mehrmals passieren, da erst im Laufe der Zeit herausgefunden werden kann, welche gelöscht werden können. Daraus ergibt sich ein Aufwand von $O(n^3)$.
 
@@ -586,24 +631,24 @@ In der folgenden Abbildung wird das Odd-Even Mergesort Network dargestellt und d
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{ownSorting_start.png}
+\includegraphics[width=\textwidth]{own_sorting_start.pdf}
 \caption{Ausgangssituation der eigenen Kodierung}
 \label{fig:ownSorting}
 \end{figure}
 
-Da die Liste der Comparators rückwärts durchlaufen wird, können nacheinander die entsprechenden Comparators entfernt werden. Abbildung \ref{fig:ownSorting1} stellt das fertige Sorting Network dar. Es werden alle Comparators entfernt, die nun keinen Einfluss mehr auf den Ausgang haben. Durch das Wegfallen der letzten drei können die nächsten beiden ebenfalls entfernt werden, da sie für das Ende nichts mehr vorsortieren müssen. Das betrifft auch alle anderen Comparator, die zusätzlich gestrichen werden. 
+Da die Liste der Comparators rückwärts durchlaufen wird, können nacheinander die entsprechenden Comparators entfernt werden. Abbildung \ref{fig:ownSorting1} stellt das fertige Sorting Network dar. Es werden alle Comparators entfernt, die nun keinen Einfluss mehr auf den Ausgang haben. Durch das Wegfallen der letzten drei können die nächsten beiden ebenfalls entfernt werden, da sie für das Ende nichts mehr vorsortieren müssen und keinen Einfluss auf die entscheidende Leitung haben. Das betrifft auch alle anderen Comparator, die zusätzlich gestrichen werden. 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{ownSorting_2.png}
+\includegraphics[width=\textwidth]{ownSorting_2.pdf}
 \caption{Entfernen der entsprechenden Comparators}
 \label{fig:ownSorting1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{ownSorting_end.png}
-\caption{Fertigiges Sorting Network mit reduzierten Comparators}
+\includegraphics[width=\textwidth]{ownSorting_end.pdf}
+\caption{Fertiges Sorting Network mit reduzierten Comparators}
 \label{fig:ownSortingEnd}
 \end{figure}
 
