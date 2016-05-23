@@ -1,16 +1,16 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_Cats;SinzParallel; 0.2;0.03;0.248;.00718;SATISFIABLE;
-DigiTomo_Cats;SinzParallel; 0.4;0.032;0.172;.04225;SATISFIABLE;
-DigiTomo_Cats;SinzParallel; 0.6;0.036;0.308;.10881;SATISFIABLE;
-DigiTomo_Cats;SinzParallel; 0.8;0.209;403.652;.21295;SATISFIABLE;
-DigiTomo_Cats;SinzParallel; 1.0;0.186;76.671;.34169;SATISFIABLE;
-DigiTomo_Cats;SinzParallel; 1.2;0.242;0;.50705;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 1.4;0.23;0;.7052;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 1.6;0.244;0;.94412;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 1.8;0.295;0;1.19618;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 2.0;0.369;0;1.49931;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 2.2;0.497;0;1.82271;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 2.4;0.603;0;2.19296;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 2.6;0.714;0;2.58966;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 2.8;1.427;0;3.01969;TIMEOUT;
-DigiTomo_Cats;SinzParallel; 3.0;0.838;0;3.47202;TIMEOUT;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_Cats;SinzParallel; 0.2;30;248;2.3944516808262164;718;2.8561244442423;SATISFIABLE;
+DigiTomo_Cats;SinzParallel; 0.4;32;172;2.2355284469075487;4225;3.625826713285711;SATISFIABLE;
+DigiTomo_Cats;SinzParallel; 0.6;36;308;2.4885507165004443;10881;4.036668810300097;SATISFIABLE;
+DigiTomo_Cats;SinzParallel; 0.8;209;403652;5.606007108651003;21295;4.328277644409767;SATISFIABLE;
+DigiTomo_Cats;SinzParallel; 1.0;186;76671;4.8846311276836465;34169;4.533632268794755;SATISFIABLE;
+DigiTomo_Cats;SinzParallel; 1.2;242;TIMEOUT;na;50705;4.705050787052112;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 1.4;230;TIMEOUT;na;70520;4.848312303627284;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 1.6;244;TIMEOUT;na;94412;4.975027197715117;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 1.8;295;TIMEOUT;na;119618;5.077796536780109;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 2.0;369;TIMEOUT;na;149931;5.175891437631554;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 2.2;497;TIMEOUT;na;182271;5.26071757626967;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 2.4;603;TIMEOUT;na;219296;5.341030710137301;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 2.6;714;TIMEOUT;na;258966;5.4132427487080195;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 2.8;1427;TIMEOUT;na;301969;5.479962360771804;TIMEOUT;
+DigiTomo_Cats;SinzParallel; 3.0;838;TIMEOUT;na;347202;5.540582218193573;TIMEOUT;

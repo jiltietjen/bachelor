@@ -1,5 +1,5 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_H-Tree;SinzParallel;5;0.035;0.193;.00581;SATISFIABLE;
-DigiTomo_H-Tree;SinzParallel;10;0.036;0.135;.03345;SATISFIABLE;
-DigiTomo_H-Tree;SinzParallel;15;0.051;0.215;.07844;SATISFIABLE;
-DigiTomo_H-Tree;SinzParallel;20;0.105;2.499;.16854;SATISFIABLE;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_H-Tree;SinzParallel;5;35;193;2.285557309007774;581;2.7641761323903307;SATISFIABLE;
+DigiTomo_H-Tree;SinzParallel;10;36;135;2.130333768495006;3345;3.524396122103842;SATISFIABLE;
+DigiTomo_H-Tree;SinzParallel;15;51;215;2.3324384599156054;7844;3.8945375849957466;SATISFIABLE;
+DigiTomo_H-Tree;SinzParallel;20;105;2499;3.39776625612645;16854;4.226702989585221;SATISFIABLE;

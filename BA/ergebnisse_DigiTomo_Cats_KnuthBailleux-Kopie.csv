@@ -1,16 +1,16 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_Cats;KnuthBailleux; 0.2;0.026;0.064;.00426;SATISFIABLE;
-DigiTomo_Cats;KnuthBailleux; 0.4;0.044;0.073;.03403;SATISFIABLE;
-DigiTomo_Cats;KnuthBailleux; 0.6;0.12;0.206;.10812;SATISFIABLE;
-DigiTomo_Cats;KnuthBailleux; 0.8;0.215;94.79;.25538;SATISFIABLE;
-DigiTomo_Cats;KnuthBailleux; 1.0;0.412;7.667;.48844;SATISFIABLE;
-DigiTomo_Cats;KnuthBailleux; 1.2;0.471;1,420.6;.79666;SATISFIABLE;
-DigiTomo_Cats;KnuthBailleux; 1.4;0.759;0;1.21982;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 1.6;1.086;0;1.79566;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 1.8;1.617;0;2.5142;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 2.0;2.156;0;3.39336;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 2.2;2.734;0;4.3802;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 2.4;4.709;0;5.54231;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 2.6;5.206;0;6.95573;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 2.8;6.588;0;8.65826;TIMEOUT;
-DigiTomo_Cats;KnuthBailleux; 3.0;8.816;0;10.63339;TIMEOUT;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_Cats;KnuthBailleux; 0.2;26;64;1.806179973983887;426;2.629409599102719;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 0.4;44;73;1.863322860120456;3403;3.531861949095809;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 0.6;120;206;2.3138672203691533;10812;4.0339060370266875;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 0.8;215;94790;4.97676252326746;25538;4.40718688263082;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 1.0;412;7667;3.8846254632562345;48844;4.688811222570019;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 1.2;471;1420600;6.152471810336036;79666;4.901273011949822;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 1.4;759;TIMEOUT;na;121982;5.086295749712313;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 1.6;1086;TIMEOUT;na;179566;5.254224108443563;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 1.8;1617;TIMEOUT;na;251420;5.40039982205382;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.0;2156;TIMEOUT;na;339336;5.530629936190905;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.2;2734;TIMEOUT;na;438020;5.641493940849616;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.4;4709;TIMEOUT;na;554231;5.743690813673591;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.6;5206;TIMEOUT;na;695573;5.842342715684627;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.8;6588;TIMEOUT;na;865826;5.937430623157651;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 3.0;8816;TIMEOUT;na;1063339;6.026671742753356;TIMEOUT;

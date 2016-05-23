@@ -1,16 +1,16 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.2;0.047;1.406;.04973;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.4;0.188;1.042;.35946;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.6;0.453;1.492;.98174;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.8;0.667;133.57;2.30856;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.0;0.967;14.005;3.27438;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.2;1.62;621.269;5.79716;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.4;2.797;1,108.058;10.44201;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.6;4.81;0;13.12967;TIMEOUT;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.8;5.969;0;15.80694;TIMEOUT;
-DigiTomo_Cats;NetworksOddEvenMergesort; 2.0;6.153;0;18.48348;TIMEOUT;
-DigiTomo_Cats;NetworksOddEvenMergesort; 2.2;9.611;0;28.58898;TIMEOUT;
-DigiTomo_Cats;NetworksOddEvenMergesort; 2.4;11.233;0;31.93911;TIMEOUT;
-DigiTomo_Cats;NetworksOddEvenMergesort; 2.6;17.319;0;49.61621;TIMEOUT;
-DigiTomo_Cats;NetworksOddEvenMergesort; 2.8;21.436;0;56.7498;TIMEOUT;
-DigiTomo_Cats;NetworksOddEvenMergesort; 3.0;23.774;0;63.88266;TIMEOUT;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.2;47;1406;3.147985320683805;4973;3.696618459232225;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.4;188;1042;3.0178677189635055;35946;4.555650569974008;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.6;453;1492;3.17376882313665;98174;4.9919964862430035;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.8;667;133570;5.125708925972653;230856;5.363341166446306;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.0;967;14005;4.146283113159587;327438;5.515129078963085;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.2;1620;621269;5.793279683784008;579716;5.763215286942823;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.4;2797;1108058;6.044562493624083;1044201;6.018784104785704;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.6;4810;TIMEOUT;na;1312967;6.118253810706381;TIMEOUT;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.8;5969;TIMEOUT;na;1580694;6.198847804800113;TIMEOUT;
+DigiTomo_Cats;NetworksOddEvenMergesort; 2.0;6153;TIMEOUT;na;1848348;6.266783741911844;TIMEOUT;
+DigiTomo_Cats;NetworksOddEvenMergesort; 2.2;9611;TIMEOUT;na;2858898;6.456198660839843;TIMEOUT;
+DigiTomo_Cats;NetworksOddEvenMergesort; 2.4;11233;TIMEOUT;na;3193911;6.504322810128257;TIMEOUT;
+DigiTomo_Cats;NetworksOddEvenMergesort; 2.6;17319;TIMEOUT;na;4961621;6.695623587043206;TIMEOUT;
+DigiTomo_Cats;NetworksOddEvenMergesort; 2.8;21436;TIMEOUT;na;5674980;6.753964335309223;TIMEOUT;
+DigiTomo_Cats;NetworksOddEvenMergesort; 3.0;23774;TIMEOUT;na;6388266;6.805382991362351;TIMEOUT;

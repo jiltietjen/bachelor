@@ -1,2 +1,2 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-SynthTests;Naiv;250;8.038;5.032;3.19371;SATISFIABLE;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+SynthTests;Naiv;250;8038;5032;3.7017406324372124;319371;5.50429547814006;SATISFIABLE;

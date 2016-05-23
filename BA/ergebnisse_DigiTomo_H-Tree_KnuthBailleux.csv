@@ -1,5 +1,5 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_H-Tree;KnuthBailleux;5;0.023;0.761;.00348;SATISFIABLE;
-DigiTomo_H-Tree;KnuthBailleux;10;0.065;0.476;.02746;SATISFIABLE;
-DigiTomo_H-Tree;KnuthBailleux;15;0.095;0.318;.07382;SATISFIABLE;
-DigiTomo_H-Tree;KnuthBailleux;20;0.161;0.999;.20329;SATISFIABLE;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_H-Tree;KnuthBailleux;5;23;761;2.8813846567705728;348;2.5415792439465807;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;10;65;476;2.677606952720493;2746;3.4387005329007363;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;15;95;318;2.5024271199844326;7382;3.8681740408596386;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;20;161;999;2.9995654882259823;20329;4.308116015865615;SATISFIABLE;

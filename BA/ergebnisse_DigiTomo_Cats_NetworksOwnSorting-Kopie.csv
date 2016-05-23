@@ -1,16 +1,16 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_Cats;NetworksOwnSorting; 0.2;0.078;0.409;.04021;SATISFIABLE;
-DigiTomo_Cats;NetworksOwnSorting; 0.4;0.162;0.445;.28022;SATISFIABLE;
-DigiTomo_Cats;NetworksOwnSorting; 0.6;0.262;0.761;.7611;SATISFIABLE;
-DigiTomo_Cats;NetworksOwnSorting; 0.8;0.554;376.416;1.80946;SATISFIABLE;
-DigiTomo_Cats;NetworksOwnSorting; 1.0;1.325;392.097;2.57858;SATISFIABLE;
-DigiTomo_Cats;NetworksOwnSorting; 1.2;2.172;278.687;4.52624;SATISFIABLE;
-DigiTomo_Cats;NetworksOwnSorting; 1.4;3.156;0;8.12683;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 1.6;4.124;0;10.26765;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 1.8;5.957;0;12.39346;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 2.0;6.278;0;14.48326;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 2.2;9.003;0;22.34344;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 2.4;11.709;0;24.95283;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 2.6;16.649;0;38.74311;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 2.8;19.147;0;44.47096;TIMEOUT;
-DigiTomo_Cats;NetworksOwnSorting; 3.0;21.328;0;50.18408;TIMEOUT;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_Cats;NetworksOwnSorting; 0.2;78;409;2.611723308007342;4021;3.604334073102911;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 0.4;162;445;2.6483600109809315;28022;4.447499128735851;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 0.6;262;761;2.8813846567705728;76110;4.8814417219413935;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 0.8;554;376416;5.575668075339775;180946;5.257548987017976;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 1.0;1325;392097;5.593393519452897;257858;5.411380609863188;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 1.2;2172;278687;5.445116710514725;452624;5.655737578322253;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 1.4;3156;TIMEOUT;na;812683;5.909921175117157;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 1.6;4124;TIMEOUT;na;1026765;6.01147105617594;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 1.8;5957;TIMEOUT;na;1239346;6.093192569421429;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 2.0;6278;TIMEOUT;na;1448326;6.160866327100054;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 2.2;9003;TIMEOUT;na;2234344;6.349150037983067;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 2.4;11709;TIMEOUT;na;2495283;6.397119807822544;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 2.6;16649;TIMEOUT;na;3874311;6.588194479615594;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 2.8;19147;TIMEOUT;na;4447096;6.648076504717712;TIMEOUT;
+DigiTomo_Cats;NetworksOwnSorting; 3.0;21328;TIMEOUT;na;5018408;6.700565966852147;TIMEOUT;

@@ -1,8 +1,8 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.2;0.047;1.406;.04973;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.4;0.188;1.042;.35946;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.6;0.453;1.492;.98174;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 0.8;0.667;133.57;2.30856;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.0;0.967;14.005;3.27438;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.2;1.62;621.269;5.79716;SATISFIABLE;
-DigiTomo_Cats;NetworksOddEvenMergesort; 1.4;2.797;1,108.058;10.44201;SATISFIABLE;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.2;47;1406;3.147985320683805;4973;3.696618459232225;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.4;188;1042;3.0178677189635055;35946;4.555650569974008;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.6;453;1492;3.17376882313665;98174;4.9919964862430035;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.8;667;133570;5.125708925972653;230856;5.363341166446306;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.0;967;14005;4.146283113159587;327438;5.515129078963085;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.2;1620;621269;5.793279683784008;579716;5.763215286942823;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.4;2797;1108058;6.044562493624083;1044201;6.018784104785704;SATISFIABLE;

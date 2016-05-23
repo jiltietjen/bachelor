@@ -680,8 +680,6 @@ In Abbildung \ref{fig:architektur} ist dargestellt, wie die grundlegende Archite
 Der Builder ist die Zwischenschicht zwischen den Problemen und den unterschiedlichen Kodierungen. Er erstellt das Encoding und ermöglicht dadurch den Aufruf verschiedener Kodierungen. In dieser Klasse werden die verschiedenen Constraints für $\leq$, 	$\geq$ und $\doteq$ gebaut und der Solver wird aufgerufen. Die Klasse Encoding dient als Oberklasse und ist abstrakt, damit die Signatur für die Unterklassen (Kodierungen) vorgegeben ist. 
 
 \section{Evaluation}
-In diesem Abschnitt werden die Ergebnisse des Benchmarks präsentiert. Es wurden alle acht Kodierungen hinsichtlich ihres Speicher- und Zeidbedarfs für die unterschiedlichen Testprobleme untersucht. Die Testprobleme sind das n-Damen-Problem, Digital-Tomographys und synthetische Testfälle.\\
-Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf einem $nxn$-Feld platziert werden, so dass in jeder vertikalen, horizontalen und diagonalen Reihe nur eine Dame zu finden ist. 
 
 \DTLloaddb{KnuthBailleux}{ergebnisse_Queensproblem_KnuthBailleux.csv}
 \DTLloaddb{KnuthSinz}{ergebnisse_Queensproblem_KnuthSinz.csv}
@@ -696,7 +694,8 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 %\DTLloaddb{test4}{ergebnisse_SynthTests_KnuthBailleux.csv}
 
 \begin{figure}[htbp]
-\DTLplot{KnuthBailleux,KnuthSinz,NiklasseBDDs,SinzParallel,NOddEven,NOwn,NNaiv,Naiv}{x=k,y=endtime,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\includegraphics[width=4cm]{Legende.png}
+\DTLplot{KnuthBailleux,KnuthSinz,NiklasseBDDs,SinzParallel,NOddEven,NOwn,NNaiv,Naiv}{x=k,y=logendtime,style=lines,xticgap=10,minx=5,maxx=70,yticpoints={2,3,4,5,6,7},yticlabels={$10^2$,$10^3$,$10^4$,$10^5$,$10^6$,$10^7$},xticpoints={5,10,20,30,40,50,60,70},xticlabels={5,10,20,30,40,50,60,70},miny=2,maxy=7,width=10cm,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Das n-Damen-Problem}
 \end{figure}
 
@@ -711,7 +710,7 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 \DTLloaddb{Naiv H-Tree}{ergebnisse_DigiTomo_H-Tree_Naiv.csv}%angepasst out of memory bei k=25
 
 \begin{figure}[htbp]
-\DTLplot{KnuthBailleux H-Tree,KnuthSinz H-Tree,NiklasseBDDs H-Tree,SinzParallel H-Tree,NOddEven H-Tree,NOwn H-Tree,NNaiv H-Tree,Naiv H-Tree}{x=k,y=endtime,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=northeast,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\DTLplot{KnuthBailleux H-Tree,KnuthSinz H-Tree,NiklasseBDDs H-Tree,SinzParallel H-Tree,NOddEven H-Tree,NOwn H-Tree,NNaiv H-Tree,Naiv H-Tree}{x=k,y=logendtime,style=lines,xticgap=5,minx=5,maxx=35,yticpoints={2,3,4,5},yticlabels={$10^2$,$10^3$,$10^4$,$10^5$},xticpoints={5,10,15,20,25,30,35},xticlabels={5,10,15,20,25,30,35},miny=2,maxy=5,width=12cm,legend=southeast,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}},legendlabels={Bailleux,SinzSeq,BDD,SinzPar,NOddEven,NOwn,NNaiv,Naiv}}
 \caption{Digital Tomography H-Tree}
 \end{figure}
 
@@ -725,7 +724,7 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 \DTLloaddb{Naiv Cats}{ergebnisse_DigiTomo_Cats_Naiv.csv}%angepasst out of memory bei k=1.0
 
 \begin{figure}[htbp]
-\DTLplot{KBailleux Cats,KSinz Cats,NikBDDs Cats,SinzParallel Cats,NOddEven Cats,NOwn Cats,NNaiv Cats,Naiv Cats}{x=k,y=endtime,style=lines,xticgap=0.2,minx=0.2,maxx=1.4,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\DTLplot{KBailleux Cats,KSinz Cats,NikBDDs Cats,SinzParallel Cats,NOddEven Cats,NOwn Cats,NNaiv Cats,Naiv Cats}{x=k,y=logendtime,style=lines,xticgap=0.4,minx=0.2,maxx=3.0,yticpoints={2,3,4,5},yticlabels={$10^2$,$10^3$,$10^4$,$10^5$},xticpoints={0.2,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.0},xticlabels={0.2,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.0},miny=2,maxy=5,width=12cm,legend=southeast,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}},legendlabels={Bailleux,SinzSeq,BDD,SinzPar,NOddEven,NOwn,NNaiv,Naiv}}
 \caption{Digital Tomography Cheshire Cats}
 \end{figure}
 
@@ -739,7 +738,8 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 \DTLloaddb{Naiv Syn}{ergebnisse_SynthTests_Naiv.csv}%angepasst out of memory bei k=500
 
 \begin{figure}[htbp]
-\DTLplot{KnuthBailleux Syn,KnuthSinz Syn,NiklasseBDDs Syn,SinzParallel Syn,NOddEven Syn,NOwn Syn,NNaiv Syn,Naiv Syn}{x=k,y=endtime,style=lines,xticgap=625,minx=625,maxx=5000,xticlabels={625,1250,1875,2500,3125,3750,4375,5000},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\includegraphics[width=4cm]{Legende.png}
+\DTLplot{KnuthBailleux Syn,KnuthSinz Syn,NiklasseBDDs Syn,SinzParallel Syn,NOddEven Syn,NOwn Syn,NNaiv Syn,Naiv Syn}{x=k,y=logendtime,style=lines,xticgap=1000,minx=1000,maxx=5000,yticpoints={2,3,4,5,6,7},yticlabels={$10^2$,$10^3$,$10^4$,$10^5$,$10^6$,$10^7$},xticpoints={1000,2000,3000,4000,5000},xticlabels={1000,2000,3000,4000,5000},miny=2,maxy=7,width=10cm,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Synthetische Testfälle}
 \end{figure}
 
@@ -756,7 +756,8 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 
 
 \begin{figure}[htbp]
-\DTLplot{KnuthBailleux Klau,KnuthSinz Klau,NiklasseBDDs Klau,SinzParallel Klau,NOddEven Klau,NOwn Klau,NNaiv Klau,Naiv Klau}{x=k,y=numClauses,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\includegraphics[width=4cm]{Legende.png}
+\DTLplot{KnuthBailleux Klau,KnuthSinz Klau,NiklasseBDDs Klau,SinzParallel Klau,NOddEven Klau,NOwn Klau,NNaiv Klau,Naiv Klau}{x=k,y=lognumClauses,style=lines,xticgap=10,minx=5,maxx=70,yticpoints={3,4,5,6,7,8},yticlabels={$10^3$,$10^4$,$10^5$,$10^6$,$10^7$,$10^8$},xticpoints={5,10,20,30,40,50,60,70},xticlabels={5,10,20,30,40,50,60,70},miny=3,maxy=8,width=10cm,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Das n-Damen-Problem mit der Anzahl der Klauseln}
 \end{figure}
 
@@ -771,7 +772,8 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 \DTLloaddb{Naiv h klau}{ergebnisse_DigiTomo_H-Tree_Naiv-Kopie.csv}
 
 \begin{figure}[htbp]
-\DTLplot{KnuthBailleux h klau,KnuthSinz h klau,NiklasseBDDs h klau,SinzParallel h klau,NOddEven h klau,NOwn h klau,NNaiv h klau,Naiv h klau}{x=k,y=numClauses,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=north,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\includegraphics[width=4cm]{Legende.png}
+\DTLplot{KnuthBailleux h klau,KnuthSinz h klau,NiklasseBDDs h klau,SinzParallel h klau,NOddEven h klau,NOwn h klau,NNaiv h klau,Naiv h klau}{x=k,y=lognumClauses,style=lines,xticgap=10,minx=5,maxx=70,yticpoints={2,3,4,5,6,7},yticlabels={$10^2$,$10^3$,$10^4$,$10^5$,$10^6$,$10^7$},xticpoints={5,10,20,30,40,50,60,70},xticlabels={5,10,20,30,40,50,60,70},miny=2,maxy=7,width=10cm,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Digital Tomography H-Tree mit der Anzahl der Klauseln}
 \end{figure}
 
@@ -785,7 +787,8 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 \DTLloaddb{Naiv C klau}{ergebnisse_DigiTomo_Cats_Naiv-Kopie.csv}
 
 \begin{figure}[htbp]
-\DTLplot{KnuthBailleux C klau,KnuthSinz C klau,NiklasseBDDs C klau,SinzParallel C klau,NOddEven C klau,NOwn C klau,NNaiv C klau,Naiv C klau}{x=k,y=numClauses,style=lines,xticgap=0.3,minx=0.6,maxx=3.0,xticlabels={0.6,0.9,1.2,1.5,1.8,2.1,2.4,2.7,3.0},legend=north,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\includegraphics[width=4cm]{Legende.png}
+\DTLplot{KnuthBailleux C klau,KnuthSinz C klau,NiklasseBDDs C klau,SinzParallel C klau,NOddEven C klau,NOwn C klau,NNaiv C klau,Naiv C klau}{x=k,y=lognumClauses,style=lines,xticgap=0.4,minx=0.2,maxx=3.0,yticpoints={2,3,4,5,6,7},yticlabels={$10^2$,$10^3$,$10^4$,$10^5$,$10^6$,$10^7$},xticpoints={0.2,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.0},xticlabels={0.2,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.0},miny=2,maxy=7,width=10cm,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Digital Tomography Cheshire Cats mit der Anzahl der Klauseln}
 \end{figure}
 
@@ -799,7 +802,8 @@ Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf 
 \DTLloaddb{Naiv S klau}{ergebnisse_SynthTests_Naiv-Kopie.csv}
 
 \begin{figure}[htbp]
-\DTLplot{KnuthBailleux S klau,KnuthSinz S klau,NiklasseBDDs S klau,SinzParallel S klau,NOddEven S klau,NOwn S klau,NNaiv S klau,Naiv S klau}{x=k,y=numClauses,style=lines,xticgap=625,minx=625,maxx=5000,xticlabels={625,1250,1875,2500,3125,3750,4375,5000},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\includegraphics[width=4cm]{Legende.png}
+\DTLplot{KnuthBailleux S klau,KnuthSinz S klau,NiklasseBDDs S klau,SinzParallel S klau,NOddEven S klau,NOwn S klau,NNaiv S klau,Naiv S klau}{x=k,y=lognumClauses,style=lines,xticgap=1000,minx=1000,maxx=5000,yticpoints={2,3,4,5,6,7},yticlabels={$10^2$,$10^3$,$10^4$,$10^5$,$10^6$,$10^7$},xticpoints={1000,2000,3000,4000,5000},xticlabels={1000,2000,3000,4000,5000},miny=2,maxy=7,width=10cm,linecolors={red,cyan,blue,orange,green,black,brown,purple},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Synthetische Testfälle mit der Anzahl der Klauseln}
 \end{figure}
 

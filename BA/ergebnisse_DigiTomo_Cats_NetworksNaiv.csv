@@ -1,6 +1,6 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_Cats;NetworksNaiv; 0.2;0.037;1.453;.02567;SATISFIABLE;
-DigiTomo_Cats;NetworksNaiv; 0.4;0.204;1.23;.25579;SATISFIABLE;
-DigiTomo_Cats;NetworksNaiv; 0.6;0.429;2.963;.9409;SATISFIABLE;
-DigiTomo_Cats;NetworksNaiv; 0.8;0.584;295.454;2.30614;SATISFIABLE;
-DigiTomo_Cats;NetworksNaiv; 1.0;1.142;195.979;4.56639;SATISFIABLE;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_Cats;NetworksNaiv; 0.2;37;1453;3.1622656142980214;2567;3.4094258686714434;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 0.4;204;1230;3.089905111439398;25579;4.40788356191859;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 0.6;429;2963;3.471731651480051;94090;4.9735434685324895;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 0.8;584;295454;5.470489874045481;230614;5.362885668692368;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 1.0;1142;195979;5.292209537311904;456639;5.659573000368161;SATISFIABLE;

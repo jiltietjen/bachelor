@@ -1,5 +1,5 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-DigiTomo_H-Tree;NetworksOwnSorting;5;0.038;2.095;.03552;SATISFIABLE;
-DigiTomo_H-Tree;NetworksOwnSorting;10;0.152;1.912;.23024;SATISFIABLE;
-DigiTomo_H-Tree;NetworksOwnSorting;15;0.147;1.372;.41084;SATISFIABLE;
-DigiTomo_H-Tree;NetworksOwnSorting;20;0.696;3.54;1.46084;SATISFIABLE;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+DigiTomo_H-Tree;NetworksOwnSorting;5;38;2095;3.3211840273023143;3552;3.5504729571065634;SATISFIABLE;
+DigiTomo_H-Tree;NetworksOwnSorting;10;152;1912;3.2814878879400813;23024;4.36218077659253;SATISFIABLE;
+DigiTomo_H-Tree;NetworksOwnSorting;15;147;1372;3.137354111370733;41084;4.613672720547386;SATISFIABLE;
+DigiTomo_H-Tree;NetworksOwnSorting;20;696;3540;3.5490032620257876;146084;5.164602651990225;SATISFIABLE;

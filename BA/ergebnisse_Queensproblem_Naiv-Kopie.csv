@@ -1,2 +1,2 @@
-Problem;Kodierung;k;middletime;endtime;numClauses;status
-Queensproblem;Naiv;5;3.564;2.802;1.8993;SATISFIABLE;
+Problem;Kodierung;k;middletime;endtime;logendtime;numClauses;lognumClauses;status
+Queensproblem;Naiv;5;3564;2802;3.4474681309497557;189930;5.278593568241133;SATISFIABLE;
