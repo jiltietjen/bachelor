@@ -1,0 +1,5 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_H-Tree;NetworksNaiv;5;0.3;0.087;.01976;SATISFIABLE;
+DigiTomo_H-Tree;NetworksNaiv;10;0.148;0.233;.18655;SATISFIABLE;
+DigiTomo_H-Tree;NetworksNaiv;15;0.381;1.025;.6286;SATISFIABLE;
+DigiTomo_H-Tree;NetworksNaiv;20;0.657;4.752;1.67665;SATISFIABLE;

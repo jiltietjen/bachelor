@@ -1,0 +1,15 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+Queensproblem;NetworksOwnSorting;5;0.041;0.102;.04742;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;10;0.17;0.351;.29308;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;15;0.296;0.95;.65674;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;20;0.671;2.195;1.7732;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;25;1.133;4.775;3.70886;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;30;1.337;8.353;3.91152;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;35;3.159;18.841;9.61504;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;40;3.526;18.508;10.30956;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;45;4.747;20.852;10.80164;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;50;7.409;55.618;21.33652;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;55;8.963;46.438;21.97728;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;60;8.647;45.436;22.44514;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;65;20.057;219.592;51.9277;SATISFIABLE;
+Queensproblem;NetworksOwnSorting;70;20.86;184.962;53.88482;SATISFIABLE;

@@ -1,0 +1,16 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_Cats;KnuthBailleux; 0.2;0.026;0.064;.00426;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 0.4;0.044;0.073;.03403;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 0.6;0.12;0.206;.10812;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 0.8;0.215;94.79;.25538;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 1.0;0.412;7.667;.48844;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 1.2;0.471;1,420.6;.79666;SATISFIABLE;
+DigiTomo_Cats;KnuthBailleux; 1.4;0.759;0;1.21982;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 1.6;1.086;0;1.79566;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 1.8;1.617;0;2.5142;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.0;2.156;0;3.39336;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.2;2.734;0;4.3802;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.4;4.709;0;5.54231;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.6;5.206;0;6.95573;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 2.8;6.588;0;8.65826;TIMEOUT;
+DigiTomo_Cats;KnuthBailleux; 3.0;8.816;0;10.63339;TIMEOUT;

@@ -1,0 +1,6 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+Queensproblem;NiklasseBDDs;5;0.035;0.105;.01752;SATISFIABLE;
+Queensproblem;NiklasseBDDs;10;0.103;0.574;.11212;SATISFIABLE;
+Queensproblem;NiklasseBDDs;15;0.818;13.37;.34372;SATISFIABLE;
+Queensproblem;NiklasseBDDs;20;0.5;60.575;.77232;SATISFIABLE;
+Queensproblem;NiklasseBDDs;25;0.727;473.409;1.45792;SATISFIABLE;

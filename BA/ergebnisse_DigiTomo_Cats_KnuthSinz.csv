@@ -1,0 +1,7 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_Cats;KnuthSinz; 0.2;0.04;0.712;.00326;SATISFIABLE;
+DigiTomo_Cats;KnuthSinz; 0.4;0.059;0.292;.02612;SATISFIABLE;
+DigiTomo_Cats;KnuthSinz; 0.6;0.102;0.244;.08613;SATISFIABLE;
+DigiTomo_Cats;KnuthSinz; 0.8;0.215;53.76;.22133;SATISFIABLE;
+DigiTomo_Cats;KnuthSinz; 1.0;0.336;1.286;.47163;SATISFIABLE;
+DigiTomo_Cats;KnuthSinz; 1.2;0.527;502.201;.80008;SATISFIABLE;

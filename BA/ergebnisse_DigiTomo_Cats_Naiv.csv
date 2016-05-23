@@ -1,0 +1,4 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_Cats;Naiv; 0.2;0.29;0.054;.00239;SATISFIABLE;
+DigiTomo_Cats;Naiv; 0.4;0.191;0.114;.08407;SATISFIABLE;
+DigiTomo_Cats;Naiv; 0.6;10.769;3.62;4.06453;SATISFIABLE;

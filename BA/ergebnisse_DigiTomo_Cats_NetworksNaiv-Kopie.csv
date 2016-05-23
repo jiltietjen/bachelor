@@ -1,0 +1,16 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_Cats;NetworksNaiv; 0.2;0.037;1.453;.02567;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 0.4;0.204;1.23;.25579;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 0.6;0.429;2.963;.9409;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 0.8;0.584;295.454;2.30614;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 1.0;1.142;195.979;4.56639;SATISFIABLE;
+DigiTomo_Cats;NetworksNaiv; 1.2;2.241;0;7.95415;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 1.4;3.347;0;12.70498;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 1.6;6.047;0;19.05342;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 1.8;8.624;0;27.21194;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 2.0;13.458;0;37.42419;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 2.2;16.678;0;49.91195;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 2.4;23.688;0;64.91078;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 2.6;28.996;0;82.65522;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 2.8;35.78;0;103.35774;TIMEOUT;
+DigiTomo_Cats;NetworksNaiv; 3.0;49.452;0;127.26199;TIMEOUT;

@@ -1,0 +1,15 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_H-Tree;KnuthBailleux;5;0.023;0.761;.00348;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;10;0.065;0.476;.02746;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;15;0.095;0.318;.07382;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;20;0.161;0.999;.20329;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;25;0.282;0;.37141;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;30;0.39;0;.55513;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;35;0.652;0;.95881;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;40;0.912;0;1.44428;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;45;1.268;0;1.94773;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;50;1.714;0;2.65171;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;55;1.981;0;3.27174;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;60;2.783;0;4.07395;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;65;4.275;0;5.4775;TIMEOUT;
+DigiTomo_H-Tree;KnuthBailleux;70;4.864;0;6.50017;TIMEOUT;

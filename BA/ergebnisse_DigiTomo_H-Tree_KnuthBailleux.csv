@@ -1,0 +1,5 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_H-Tree;KnuthBailleux;5;0.023;0.761;.00348;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;10;0.065;0.476;.02746;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;15;0.095;0.318;.07382;SATISFIABLE;
+DigiTomo_H-Tree;KnuthBailleux;20;0.161;0.999;.20329;SATISFIABLE;

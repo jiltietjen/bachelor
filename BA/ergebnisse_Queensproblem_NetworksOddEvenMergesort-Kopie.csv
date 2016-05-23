@@ -1,0 +1,13 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+Queensproblem;NetworksOddEvenMergesort;5;0.039;0.136;.05764;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;10;0.169;0.481;.38982;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;15;0.315;1.361;.88368;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;20;0.7;3.229;2.41818;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;25;1.726;6.46;4.90628;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;30;2.332;9.905;5.34638;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;35;6.309;24.304;12.7964;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;40;5.804;20.895;14.0141;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;45;6.386;32.979;15.2318;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;50;12.508;52.177;27.93878;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;55;12.641;69.142;29.15648;SATISFIABLE;
+Queensproblem;NetworksOddEvenMergesort;60;12.071;125.63;30.37418;SATISFIABLE;

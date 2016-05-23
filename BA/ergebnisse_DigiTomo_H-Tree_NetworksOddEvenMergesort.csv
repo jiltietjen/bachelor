@@ -1,0 +1,5 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_H-Tree;NetworksOddEvenMergesort;5;0.491;0.069;.0428;SATISFIABLE;
+DigiTomo_H-Tree;NetworksOddEvenMergesort;10;0.197;0.281;.29394;SATISFIABLE;
+DigiTomo_H-Tree;NetworksOddEvenMergesort;15;0.337;0.729;.55224;SATISFIABLE;
+DigiTomo_H-Tree;NetworksOddEvenMergesort;20;0.867;3.381;1.88154;SATISFIABLE;

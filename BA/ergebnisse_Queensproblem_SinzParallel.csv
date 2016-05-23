@@ -1,0 +1,15 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+Queensproblem;SinzParallel;5;0.03;0.057;.00672;SATISFIABLE;
+Queensproblem;SinzParallel;10;0.035;0.156;.03302;SATISFIABLE;
+Queensproblem;SinzParallel;15;0.071;1.608;.07798;SATISFIABLE;
+Queensproblem;SinzParallel;20;0.148;0.89;.14648;SATISFIABLE;
+Queensproblem;SinzParallel;25;0.145;1.355;.23281;SATISFIABLE;
+Queensproblem;SinzParallel;30;0.139;2.387;.33938;SATISFIABLE;
+Queensproblem;SinzParallel;35;0.221;3.742;.46844;SATISFIABLE;
+Queensproblem;SinzParallel;40;0.216;5.933;.6209;SATISFIABLE;
+Queensproblem;SinzParallel;45;0.21;9.355;.786;SATISFIABLE;
+Queensproblem;SinzParallel;50;0.254;16.019;.98042;SATISFIABLE;
+Queensproblem;SinzParallel;55;0.298;23.754;1.18586;SATISFIABLE;
+Queensproblem;SinzParallel;60;0.638;31.337;1.42225;SATISFIABLE;
+Queensproblem;SinzParallel;65;0.797;60.503;1.68;SATISFIABLE;
+Queensproblem;SinzParallel;70;0.548;65.67;1.95105;SATISFIABLE;

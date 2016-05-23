@@ -11,6 +11,10 @@
 \usepackage[nochapters]{classicthesis} % nochapters, wenn du section als oberste ebene nimmst
 \usepackage{array}
 \usepackage{mdframed}
+\usepackage{datatool}
+\usepackage{dataplot}
+
+\DTLsetseparator{;}
 \PassOptionsToPackage{big}{titlesec}
 
 \floatname{algorithm}{Algorithmus}
@@ -64,6 +68,9 @@
 \date{~}
 
 \begin{document}
+
+
+
 	\maketitle
 \thispagestyle{empty}
 \begin{center}
@@ -272,8 +279,8 @@ T_\beta \equiv (t_1 \vee  x_3) \wedge (t_1 \vee \neg x_4) \wedge (\neg t_1 \vee 
 \end{align*}
 
 \subsection{BDDs}
-Binary Decision Diagrams sind Graphen, die für die Darstellung von booleschen Funktionen benutzt werden \cite[vgl.][Seite 109, 110]{bdd}.\\
-Ein gerichteter Graph ist ein Paar $G=(V, E)$, wobei $V$ eine Menge von Knoten und $E \subseteq V x V$  eine Menge von Kanten ist. Ein Knoten wird als Punkt graphisch dargestellt und eine Kante $(v, v')$ durch einen Strich von $v$ nach $v'$ dargestellt. Die Vorgänger eines Knotens $v$ sind die Knoten $v'$ für die es Kanten $(v', v)$ gibt. Die Wurzel ist der Knoten ohne Vorgänger und die Knoten ohne Nachfolger heißen terminale Knoten oder Blätter. Sie werden mit einer $0$ oder einer $1$ markiert. Nicht terminale Knoten $v$ besitzen eine Kante zu einem low- bzw. high- Nachfolger. Sie werden mit Variablen beschriftet. Die Kante $e_1 = (v, low(v))$ nennt man low-Kante und wird mit $0$ markiert. Dies ist in der Regel die linke Kante von einem Knoten. Die high-Kante $e_2 = (v, hight(v))$ wird mit einer $1$ markiert und ist die rechte Kante.
+Binary Decision Diagrams (BDDs) sind gerichtete Graphen, die für die Darstellung von Booleschen Funktionen benutzt werden \cite[vgl.][Seite 109-110]{bdd}.\\
+Ein gerichteter Graph ist ein Paar $G=(V, E)$, wobei $V$ eine Menge von Knoten und $E \subseteq V x V$  eine Menge von Kanten ist. Ein Knoten wird als Punkt graphisch dargestellt und eine Kante $(v, v')$ durch einen Strich von $v$ nach $v'$. Die Vorgänger eines Knotens $v$ sind die Knoten $v'$ für die es Kanten $(v', v)$ gibt. Die Wurzel ist der Knoten ohne Vorgänger und die Knoten ohne Nachfolger heißen terminale Knoten oder Blätter. Sie werden mit einer $0$ oder einer $1$ markiert. Nicht terminale Knoten $v$ besitzen eine Kante zu einem low- bzw. high- Nachfolger. Sie werden mit Variablen beschriftet. Die Kante $e_1 = (v, low(v))$ nennt man low-Kante und wird mit $0$ markiert. Dies ist in der Regel die linke Kante von einem Knoten. Die high-Kante $e_2 = (v, high(v))$ wird mit einer $1$ markiert und ist die rechte Kante.
 
 \begin{figure}[H]
 \centering
@@ -282,7 +289,7 @@ Ein gerichteter Graph ist ein Paar $G=(V, E)$, wobei $V$ eine Menge von Knoten u
 \label{fig:bdd}
 \end{figure}
 
-Ein BDD repräsentiert in eindeutiger Weise eine Boolesche Funktion. Der Baum aus Abbildung \ref{fig:bdd} kann die Boolesche Funktion $f(x) = x_1x_2 + x_3$ ausdrücken. Daraus ergeben sich für die Variablen $x_1x_2x_3 = (110)$. 
+Ein BDD repräsentiert in eindeutiger Weise eine Boolesche Funktion. Der Graph aus Abbildung \ref{fig:bdd} kann die Boolesche Funktion $f(x_1,x_2,x_3) = x_1\wedge x_2 \vee x_3$ ausdrücken. Um den Wert einer Funktion für eine feste Belegung abzulesen, folgt man den entsprechenden Kanten im BDD. Zum Beispiel ist $f(1,0,1)=1$.
 
 
 \subsection{Sorting Networks}
@@ -306,14 +313,21 @@ Das Cardinalitiy Constraint ist genau dann erfüllt, wenn die aus der Kodierung 
 	\subsection{Naiver Ansatz}
 Zur Verdeutlichung der Einflüsse der weiteren Kodierungen wird als Erstes der naive Ansatz erläutert. Für den Fall $r=1$ wird aus allen möglichen Paaren von Variablen $x_i$ und $x_j$ die Klausel $\neg x_i \vee \neg x_j$ gebildet. Das bedeutet, dass beispielsweise $\sum(x,y,z)\leq1$ zu $(\neg x \vee \neg y) \wedge (\neg x \vee \neg z) \wedge (\neg z \vee \neg y)$ wird.
 Für beliebige $r$ gibt es nicht nur Paare von Variablen, sondern $(r+1)$-Tupel.\\
+\begin{align*}
+\begin{aligned}
+Nk (n, r) = \bigwedge_{\substack{M\subset \{1, \dots, n\} \\  |M|=r+1}} \bigvee_{x \in M} {\neg x}
+\end{aligned}
+\end{align*}
 
 % Um alle Möglichkeiten auch bei einer großen Anzahl von Variablen zu erfassen, wird als Grundlage die Mengenlehre angewendet. Es werden Untermengen erstellt, die sich mit folgendem System aufbauen. Das erste Element in der Menge bleibt immer gleich und für das zweite Element wird immer das nächst grössere Element ausgewählt. Eine Menge besteht immer aus den Teilmengen des ersten Index des Arrays vereinigt mit dem Element aus dem zweiten Index, aus dem dritten Index und so weiter. Dies wird rekursiv so lange fortgeführt bis alle Teilmengen erstellt sind. Die gebildete KNF kann schließlich mit $r$ verglichen werden.\\
 
-\textbf{Theorem 1.} Durch den folgenden Beweis kann gezeigt werden, dass die naive Kodierung für $r=1$ korrekt ist. Zu zeigen ist, dass wenn ein Constraint $C(x_1, \dots, x_n) = \sum(x_1, \dots,x_n) \leq 1$ für eine beliebige vollständige Belegung $v(x_1, \dots ,x_n)$ erfüllt wird, dann wird auch die naive Kodierung von $C(x_1, \dots, x_n)$ erfüllt.\\
+\textbf{Theorem 1.} Die naive Kodierung ist korrekt für $r = 1$, das heißt, $(\sum (x_1, \dots, x_n) \leq 1) \Leftrightarrow (\hat{a} (Nk(n,1)) = 1)$.\\
 \newline
-\textit{Beweis 1.} Es wird angenommen, dass $v(x_1, \dots ,x_n)$ das Constraint $C(x_1, \dots, x_n)$ erfüllt. Das heißt, dass es maximal eine Variable $x_i$ mit $v(x_i) = 1$ gibt. Für alle anderen Variablen $x_j$ mit $i \neq j$ gilt $v(x_j) = 0$. Durch das Encoding gibt es in jeder Klausel genau $2$ negierte Literale, somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
-Außerdem ist zu zeigen, dass wenn das Constraint $C(x_1, \dots, x_n) = \sum(x_1, \dots,x_n) \leq 1$ für eine beliebige vollständige Belegung $v(x_1, \dots ,x_n)$ nicht erfüllt wird, dann wird auch die naive Kodierung von $C(x_1, \dots, x_n)$ nicht erfüllt.\\
-Es wird angenommen, dass $v(x_1, \dots ,x_n)$ das Constraint $C(x_1, \dots, x_n)$ nicht erfüllt. Somit gibt es $x_i, x_j; i \neq j$ mit $v(x_i) = v(x_j) = 1$. Durch das naive Encoding gibt es eine Klausel $(\neg x_i \vee \neg x_j)$, die nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.
+\textit{Beweis 1.} Durch den folgenden Beweis kann gezeigt werden, dass die naive Kodierung für $r=1$ korrekt ist. Zu zeigen ist, dass ein Constraint $\sum(x_1, \dots,x_n) \leq 1$ für eine beliebige Belegung $a(x_1, \dots ,x_n)$ erfüllt wird genau dann wenn auch die naive Kodierung $Nk(n, 1)$ erfüllt ist.\\
+$\Rightarrow$:\\
+Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq 1$ erfüllt. Das heißt, dass es maximal eine Variable $x_i$ mit $a(x_i) = 1$ gibt. Für alle anderen Variablen $x_j$ mit $i \neq j$ gilt $a(x_j) = 0$. Durch die Kodierung gibt es in jeder Klausel genau $2$ negierte Literale, somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
+$\Leftarrow$:\\
+Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq 1$ nicht erfüllt. Somit gibt es $x_i, x_j; i \neq j$ mit $a(x_i) = a(x_j) = 1$. Durch die naive Kodierung gibt es eine Klausel $(\neg x_i \vee \neg x_j)$, die nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.
 
 
 	\subsection{Kodierung nach Bailleux und Boufkhad}
@@ -654,7 +668,6 @@ Da die Liste der Comparators rückwärts durchlaufen wird, können nacheinander 
 
 
 \section{Umsetzung}
- Als Testproblem für die unterschiedlichen Kodierungen wird das n-Damen-Problem verwendet, da dieses Problem eine wichtige Rolle in der Informatik spielt und viele Constraints abgeleitet werden können. In jeder Reihe (vertikal, horizontal und diagonal) ist nur eine Dame erlaubt. Somit ergeben sich unterschiedliche Kombinationen, die für die Belegung der Literale nur erlaubt sind. Ziel ist es eine Belegung zu finden, die alle Bedingungen erfüllt. 
 
 \begin{figure}[H]
 \centering
@@ -667,6 +680,128 @@ In Abbildung \ref{fig:architektur} ist dargestellt, wie die grundlegende Archite
 Der Builder ist die Zwischenschicht zwischen den Problemen und den unterschiedlichen Kodierungen. Er erstellt das Encoding und ermöglicht dadurch den Aufruf verschiedener Kodierungen. In dieser Klasse werden die verschiedenen Constraints für $\leq$, 	$\geq$ und $\doteq$ gebaut und der Solver wird aufgerufen. Die Klasse Encoding dient als Oberklasse und ist abstrakt, damit die Signatur für die Unterklassen (Kodierungen) vorgegeben ist. 
 
 \section{Evaluation}
+In diesem Abschnitt werden die Ergebnisse des Benchmarks präsentiert. Es wurden alle acht Kodierungen hinsichtlich ihres Speicher- und Zeidbedarfs für die unterschiedlichen Testprobleme untersucht. Die Testprobleme sind das n-Damen-Problem, Digital-Tomographys und synthetische Testfälle.\\
+Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen n-Damen auf einem $nxn$-Feld platziert werden, so dass in jeder vertikalen, horizontalen und diagonalen Reihe nur eine Dame zu finden ist. 
+
+\DTLloaddb{KnuthBailleux}{ergebnisse_Queensproblem_KnuthBailleux.csv}
+\DTLloaddb{KnuthSinz}{ergebnisse_Queensproblem_KnuthSinz.csv}
+\DTLloaddb{NiklasseBDDs}{ergebnisse_Queensproblem_NiklasseBDDs.csv} %angepasst out of memory bei k=60
+\DTLloaddb{SinzParallel}{ergebnisse_Queensproblem_SinzParallel.csv}
+\DTLloaddb{NOddEven}{ergebnisse_Queensproblem_NetworksOddEvenMergesort.csv} %angepasst out of memory bei k=65
+\DTLloaddb{NOwn}{ergebnisse_Queensproblem_NetworksOwnSorting.csv}
+\DTLloaddb{NNaiv}{ergebnisse_Queensproblem_NetworksNaiv.csv} %angepasst out of memory bei k=50, timeouts = 0
+\DTLloaddb{Naiv}{ergebnisse_Queensproblem_Naiv.csv}%angepasst out of memory bei k=10
+
+%\DTLloaddb{test3}{ergebnisse_DigiTomo_Cats_KnuthBailleux.csv}
+%\DTLloaddb{test4}{ergebnisse_SynthTests_KnuthBailleux.csv}
+
+\begin{figure}[htbp]
+\DTLplot{KnuthBailleux,KnuthSinz,NiklasseBDDs,SinzParallel,NOddEven,NOwn,NNaiv,Naiv}{x=k,y=endtime,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Das n-Damen-Problem}
+\end{figure}
+
+
+\DTLloaddb{KnuthBailleux H-Tree}{ergebnisse_DigiTomo_H-Tree_KnuthBailleux.csv}
+\DTLloaddb{KnuthSinz H-Tree}{ergebnisse_DigiTomo_H-Tree_KnuthSinz.csv}
+\DTLloaddb{NiklasseBDDs H-Tree}{ergebnisse_DigiTomo_H-Tree_NiklasseBDDs.csv}
+\DTLloaddb{SinzParallel H-Tree}{ergebnisse_DigiTomo_H-Tree_SinzParallel.csv}
+\DTLloaddb{NOddEven H-Tree}{ergebnisse_DigiTomo_H-Tree_NetworksOddEvenMergesort.csv}
+\DTLloaddb{NOwn H-Tree}{ergebnisse_DigiTomo_H-Tree_NetworksOwnSorting.csv}
+\DTLloaddb{NNaiv H-Tree}{ergebnisse_DigiTomo_H-Tree_NetworksNaiv.csv}
+\DTLloaddb{Naiv H-Tree}{ergebnisse_DigiTomo_H-Tree_Naiv.csv}%angepasst out of memory bei k=25
+
+\begin{figure}[htbp]
+\DTLplot{KnuthBailleux H-Tree,KnuthSinz H-Tree,NiklasseBDDs H-Tree,SinzParallel H-Tree,NOddEven H-Tree,NOwn H-Tree,NNaiv H-Tree,Naiv H-Tree}{x=k,y=endtime,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=northeast,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Digital Tomography H-Tree}
+\end{figure}
+
+\DTLloaddb{KBailleux Cats}{ergebnisse_DigiTomo_Cats_KnuthBailleux.csv}
+\DTLloaddb{KSinz Cats}{ergebnisse_DigiTomo_Cats_KnuthSinz.csv}
+\DTLloaddb{NikBDDs Cats}{ergebnisse_DigiTomo_Cats_NiklasseBDDs.csv}
+\DTLloaddb{SinzParallel Cats}{ergebnisse_DigiTomo_Cats_SinzParallel.csv}
+\DTLloaddb{NOddEven Cats}{ergebnisse_DigiTomo_Cats_NetworksOddEvenMergesort.csv}
+\DTLloaddb{NOwn Cats}{ergebnisse_DigiTomo_Cats_NetworksOwnSorting.csv}
+\DTLloaddb{NNaiv Cats}{ergebnisse_DigiTomo_Cats_NetworksNaiv.csv}
+\DTLloaddb{Naiv Cats}{ergebnisse_DigiTomo_Cats_Naiv.csv}%angepasst out of memory bei k=1.0
+
+\begin{figure}[htbp]
+\DTLplot{KBailleux Cats,KSinz Cats,NikBDDs Cats,SinzParallel Cats,NOddEven Cats,NOwn Cats,NNaiv Cats,Naiv Cats}{x=k,y=endtime,style=lines,xticgap=0.2,minx=0.2,maxx=1.4,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Digital Tomography Cheshire Cats}
+\end{figure}
+
+\DTLloaddb{KnuthBailleux Syn}{ergebnisse_SynthTests_KnuthBailleux.csv}
+\DTLloaddb{KnuthSinz Syn}{ergebnisse_SynthTests_KnuthSinz.csv}
+\DTLloaddb{NiklasseBDDs Syn}{ergebnisse_SynthTests_NiklasseBDDs.csv}
+\DTLloaddb{SinzParallel Syn}{ergebnisse_SynthTests_SinzParallel.csv}
+\DTLloaddb{NOddEven Syn}{ergebnisse_SynthTests_NetworksOddEvenMergesort.csv}
+\DTLloaddb{NOwn Syn}{ergebnisse_SynthTests_NetworksOwnSorting.csv}
+\DTLloaddb{NNaiv Syn}{ergebnisse_SynthTests_NetworksNaiv.csv}
+\DTLloaddb{Naiv Syn}{ergebnisse_SynthTests_Naiv.csv}%angepasst out of memory bei k=500
+
+\begin{figure}[htbp]
+\DTLplot{KnuthBailleux Syn,KnuthSinz Syn,NiklasseBDDs Syn,SinzParallel Syn,NOddEven Syn,NOwn Syn,NNaiv Syn,Naiv Syn}{x=k,y=endtime,style=lines,xticgap=625,minx=625,maxx=5000,xticlabels={625,1250,1875,2500,3125,3750,4375,5000},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Synthetische Testfälle}
+\end{figure}
+
+%Klauseln
+
+\DTLloaddb{KnuthBailleux Klau}{ergebnisse_Queensproblem_KnuthBailleux-Kopie.csv}
+\DTLloaddb{KnuthSinz Klau}{ergebnisse_Queensproblem_KnuthSinz-Kopie.csv}
+\DTLloaddb{NiklasseBDDs Klau}{ergebnisse_Queensproblem_NiklasseBDDs-Kopie.csv}
+\DTLloaddb{SinzParallel Klau}{ergebnisse_Queensproblem_SinzParallel-Kopie.csv}
+\DTLloaddb{NOddEven Klau}{ergebnisse_Queensproblem_NetworksOddEvenMergesort-Kopie.csv} 
+\DTLloaddb{NOwn Klau}{ergebnisse_Queensproblem_NetworksOwnSorting-Kopie.csv}
+\DTLloaddb{NNaiv Klau}{ergebnisse_Queensproblem_NetworksNaiv-Kopie.csv} 
+\DTLloaddb{Naiv Klau}{ergebnisse_Queensproblem_Naiv-Kopie.csv}
+
+
+\begin{figure}[htbp]
+\DTLplot{KnuthBailleux Klau,KnuthSinz Klau,NiklasseBDDs Klau,SinzParallel Klau,NOddEven Klau,NOwn Klau,NNaiv Klau,Naiv Klau}{x=k,y=numClauses,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Das n-Damen-Problem mit der Anzahl der Klauseln}
+\end{figure}
+
+
+\DTLloaddb{KnuthBailleux h klau}{ergebnisse_DigiTomo_H-Tree_KnuthBailleux-Kopie.csv}
+\DTLloaddb{KnuthSinz h klau}{ergebnisse_DigiTomo_H-Tree_KnuthSinz-Kopie.csv}
+\DTLloaddb{NiklasseBDDs h klau}{ergebnisse_DigiTomo_H-Tree_NiklasseBDDs-Kopie.csv}
+\DTLloaddb{SinzParallel h klau}{ergebnisse_DigiTomo_H-Tree_SinzParallel-Kopie.csv}
+\DTLloaddb{NOddEven h klau}{ergebnisse_DigiTomo_H-Tree_NetworksOddEvenMergesort-Kopie.csv}
+\DTLloaddb{NOwn h klau}{ergebnisse_DigiTomo_H-Tree_NetworksOwnSorting-Kopie.csv}
+\DTLloaddb{NNaiv h klau}{ergebnisse_DigiTomo_H-Tree_NetworksNaiv-Kopie.csv}
+\DTLloaddb{Naiv h klau}{ergebnisse_DigiTomo_H-Tree_Naiv-Kopie.csv}
+
+\begin{figure}[htbp]
+\DTLplot{KnuthBailleux h klau,KnuthSinz h klau,NiklasseBDDs h klau,SinzParallel h klau,NOddEven h klau,NOwn h klau,NNaiv h klau,Naiv h klau}{x=k,y=numClauses,style=lines,xticgap=10,minx=5,maxx=70,xticlabels={9,18,27,36,45,54,63,70},width=12cm,legend=north,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Digital Tomography H-Tree mit der Anzahl der Klauseln}
+\end{figure}
+
+\DTLloaddb{KnuthBailleux C klau}{ergebnisse_DigiTomo_Cats_KnuthBailleux-Kopie.csv}
+\DTLloaddb{KnuthSinz C klau}{ergebnisse_DigiTomo_Cats_KnuthSinz-Kopie.csv}
+\DTLloaddb{NiklasseBDDs C klau}{ergebnisse_DigiTomo_Cats_NiklasseBDDs-Kopie.csv}
+\DTLloaddb{SinzParallel C klau}{ergebnisse_DigiTomo_Cats_SinzParallel-Kopie.csv}
+\DTLloaddb{NOddEven C klau}{ergebnisse_DigiTomo_Cats_NetworksOddEvenMergesort-Kopie.csv}
+\DTLloaddb{NOwn C klau}{ergebnisse_DigiTomo_Cats_NetworksOwnSorting-Kopie.csv}
+\DTLloaddb{NNaiv C klau}{ergebnisse_DigiTomo_Cats_NetworksNaiv-Kopie.csv}
+\DTLloaddb{Naiv C klau}{ergebnisse_DigiTomo_Cats_Naiv-Kopie.csv}
+
+\begin{figure}[htbp]
+\DTLplot{KnuthBailleux C klau,KnuthSinz C klau,NiklasseBDDs C klau,SinzParallel C klau,NOddEven C klau,NOwn C klau,NNaiv C klau,Naiv C klau}{x=k,y=numClauses,style=lines,xticgap=0.3,minx=0.6,maxx=3.0,xticlabels={0.6,0.9,1.2,1.5,1.8,2.1,2.4,2.7,3.0},legend=north,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Digital Tomography Cheshire Cats mit der Anzahl der Klauseln}
+\end{figure}
+
+\DTLloaddb{KnuthBailleux S klau}{ergebnisse_SynthTests_KnuthBailleux-Kopie.csv}
+\DTLloaddb{KnuthSinz S klau}{ergebnisse_SynthTests_KnuthSinz-Kopie.csv}
+\DTLloaddb{NiklasseBDDs S klau}{ergebnisse_SynthTests_NiklasseBDDs-Kopie.csv}
+\DTLloaddb{SinzParallel S klau}{ergebnisse_SynthTests_SinzParallel-Kopie.csv}
+\DTLloaddb{NOddEven S klau}{ergebnisse_SynthTests_NetworksOddEvenMergesort-Kopie.csv}
+\DTLloaddb{NOwn S klau}{ergebnisse_SynthTests_NetworksOwnSorting-Kopie.csv}
+\DTLloaddb{NNaiv S klau}{ergebnisse_SynthTests_NetworksNaiv-Kopie.csv}
+\DTLloaddb{Naiv S klau}{ergebnisse_SynthTests_Naiv-Kopie.csv}
+
+\begin{figure}[htbp]
+\DTLplot{KnuthBailleux S klau,KnuthSinz S klau,NiklasseBDDs S klau,SinzParallel S klau,NOddEven S klau,NOwn S klau,NNaiv S klau,Naiv S klau}{x=k,y=numClauses,style=lines,xticgap=625,minx=625,maxx=5000,xticlabels={625,1250,1875,2500,3125,3750,4375,5000},width=12cm,legend=northwest,linecolors={red,cyan,blue,orange,green,black,brown,purple},legendlabels={KnuthBailleux,KnuthSinz,NiklasseBDD,SinzParallel,NOddEven,NOwnSort,NNaiv,Naiv}}
+\caption{Synthetische Testfälle mit der Anzahl der Klauseln}
+\end{figure}
 
 \section{Schlussfolgerung und Ausblick}
 

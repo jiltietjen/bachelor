@@ -1,0 +1,8 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.2;0.047;1.406;.04973;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.4;0.188;1.042;.35946;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.6;0.453;1.492;.98174;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 0.8;0.667;133.57;2.30856;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.0;0.967;14.005;3.27438;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.2;1.62;621.269;5.79716;SATISFIABLE;
+DigiTomo_Cats;NetworksOddEvenMergesort; 1.4;2.797;1,108.058;10.44201;SATISFIABLE;

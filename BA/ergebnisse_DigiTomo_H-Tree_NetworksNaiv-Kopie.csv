@@ -1,0 +1,15 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_H-Tree;NetworksNaiv;5;0.3;0.087;.01976;SATISFIABLE;
+DigiTomo_H-Tree;NetworksNaiv;10;0.148;0.233;.18655;SATISFIABLE;
+DigiTomo_H-Tree;NetworksNaiv;15;0.381;1.025;.6286;SATISFIABLE;
+DigiTomo_H-Tree;NetworksNaiv;20;0.657;4.752;1.67665;SATISFIABLE;
+DigiTomo_H-Tree;NetworksNaiv;25;1.117;0;3.30392;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;30;2.598;0;5.61007;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;35;4.07;0;9.33072;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;40;7.371;0;14.16285;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;45;9.905;0;19.8612;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;50;8.633;0;27.61121;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;55;12.102;0;36.29576;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;60;17.528;0;47.65077;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;65;20.969;0;61.73912;TIMEOUT;
+DigiTomo_H-Tree;NetworksNaiv;70;26.176;0;76.28967;TIMEOUT;

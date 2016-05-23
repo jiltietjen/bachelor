@@ -1,0 +1,15 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+Queensproblem;KnuthBailleux;5;0.509;0.083;.00629;SATISFIABLE;
+Queensproblem;KnuthBailleux;10;0.128;0.127;.05582;SATISFIABLE;
+Queensproblem;KnuthBailleux;15;0.183;0.427;.21103;SATISFIABLE;
+Queensproblem;KnuthBailleux;20;0.838;0.968;.60392;SATISFIABLE;
+Queensproblem;KnuthBailleux;25;1.241;2.31;1.31697;SATISFIABLE;
+Queensproblem;KnuthBailleux;30;2.067;4.976;2.56156;SATISFIABLE;
+Queensproblem;KnuthBailleux;35;5.215;10.326;4.60176;SATISFIABLE;
+Queensproblem;KnuthBailleux;40;6.923;19.604;7.97056;SATISFIABLE;
+Queensproblem;KnuthBailleux;45;12.187;28.839;11.71699;SATISFIABLE;
+Queensproblem;KnuthBailleux;50;16.629;41.732;18.08296;SATISFIABLE;
+Queensproblem;KnuthBailleux;55;26.246;100.428;27.78507;SATISFIABLE;
+Queensproblem;KnuthBailleux;60;35.408;88.363;36.21148;SATISFIABLE;
+Queensproblem;KnuthBailleux;65;47.593;126.467;48.64657;SATISFIABLE;
+Queensproblem;KnuthBailleux;70;66.839;160.135;66.51842;SATISFIABLE;

@@ -1,0 +1,6 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_Cats;NiklasseBDDs; 0.2;0.025;0.927;.01304;SATISFIABLE;
+DigiTomo_Cats;NiklasseBDDs; 0.4;0.065;0.566;.08016;SATISFIABLE;
+DigiTomo_Cats;NiklasseBDDs; 0.6;0.168;0.584;.23819;SATISFIABLE;
+DigiTomo_Cats;NiklasseBDDs; 0.8;0.271;606.552;.56055;SATISFIABLE;
+DigiTomo_Cats;NiklasseBDDs; 1.0;0.44;87.4;1.12645;SATISFIABLE;

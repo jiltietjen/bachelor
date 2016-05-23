@@ -1,0 +1,7 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_Cats;NetworksOwnSorting; 0.2;0.078;0.409;.04021;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 0.4;0.162;0.445;.28022;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 0.6;0.262;0.761;.7611;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 0.8;0.554;376.416;1.80946;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 1.0;1.325;392.097;2.57858;SATISFIABLE;
+DigiTomo_Cats;NetworksOwnSorting; 1.2;2.172;278.687;4.52624;SATISFIABLE;

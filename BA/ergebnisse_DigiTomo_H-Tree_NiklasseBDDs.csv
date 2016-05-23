@@ -1,0 +1,5 @@
+Problem;Kodierung;k;middletime;endtime;numClauses;status
+DigiTomo_H-Tree;NiklasseBDDs;5;0.081;0.05;.0116;SATISFIABLE;
+DigiTomo_H-Tree;NiklasseBDDs;10;0.094;0.163;.07295;SATISFIABLE;
+DigiTomo_H-Tree;NiklasseBDDs;15;0.14;0.336;.1744;SATISFIABLE;
+DigiTomo_H-Tree;NiklasseBDDs;20;0.291;2.64;.51779;SATISFIABLE;
