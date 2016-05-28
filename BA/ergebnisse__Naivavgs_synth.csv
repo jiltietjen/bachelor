@@ -1,0 +1,3 @@
+Problem;Kodierung;k;avgtime;logavgtime;avgclauses;logavgClauses
+SynthTests;Naiv;250;1560.2;3.1931802735653454;170068.8;5.230624647353504
+SynthTests;Naiv;500;1560.2;3.1931802735653454;170068.8;5.230624647353504
