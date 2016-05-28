@@ -110,10 +110,9 @@ Jil Tietjen
 	\clearpage
 
 \section{Einleitung}
-%zusätzlich vielleicht 2 Sätze zu den jeweiligen Kodierungen
-Ein Teilbereich der Informatik ist es, dass praktische Probleme, wie zum Beispiel im Bereich von Bio-Chips, durch Konzepte oder Methoden der Informatik gelöst werden können.
-In den letzten Jahren wurde das Interesse geweckt, diese Probleme mit Cardinality Constraints und SAT-Solvern zu behandeln. In der Vergangenheit wurden diese Kodierungen nicht oder nur begrenzt für praktische Probleme getestet. Die Cardinality Constraints können dafür allerdings nicht einfach verwendet werden. Damit sie durch den SAT-Solver verarbeitet werden können, müssen sie in die Sprache der Aussagenlogik, oder besser noch in die konjunktive Normalform kodiert werden. Es gibt jedoch noch keine allgemeine Definition über die beste Kodierung für die Cardinality Constraints. Es lässt sich nur feststellen, dass es von Vorteil ist, wenn die Formel im Hinblick auf die Anzahl der Variablen und Klauseln so klein wie möglich gehalten wird \cite[][]{einleitung}.\\
-In dieser Arbeit werden daher verschiedene Kodierungen für die Cardinality Constraints anhand von Benchmark-Problemen untersucht. Es werden das n-Damen-Problem und Digital Tomography als Testprobleme genutzt. Des Weiteren gibt es zufällig generierte Testfälle, die Cardinality Constraints unterschiedlicher Größe untersuchen. \\
+Viele praktische Probleme in der Informatik, zum Beispiel im Bereich der Bio-Chips, können durch das Umwandeln in bekannte abstrakte Probleme gelöst werden.\\
+In den letzten Jahren wurde das Interesse geweckt, diese Probleme mit Cardinality Constraints und SAT-Solvern zu behandeln. In der Vergangenheit wurden diese Kodierungen nicht oder nur begrenzt für praktische Probleme getestet. Die Cardinality Constraints können dafür nicht einfach verwendet werden. Damit sie durch den SAT-Solver verarbeitet werden können, müssen sie in die Sprache der Aussagenlogik, oder besser noch in die konjunktive Normalform kodiert werden. Es gibt jedoch noch keine allgemeine Definition über die beste Kodierung für die Cardinality Constraints. Es lässt sich nur feststellen, dass es von Vorteil ist, wenn die Formel im Hinblick auf die Anzahl der Variablen und Klauseln so klein wie möglich gehalten wird \cite[][]{einleitung}.\\
+In dieser Arbeit werden verschiedene Kodierungen für die Cardinality Constraints anhand von Benchmark-Problemen untersucht. Es werden das n-Damen-Problem und Digital Tomography als Testprobleme genutzt. Des Weiteren gibt es zufällig generierte Testfälle, die Cardinality Constraints unterschiedlicher Größe untersuchen. \\
 Die Kodierungen, die binär oder unär sind, basieren auf unterschiedlichen Methoden. Dazu gehören binäre Bäume, Schaltkreise (Addierer), Binary Decision Diagrams oder Sorting Networks mit verschiedenen Sortieralgorithmen. \\
 Außerdem wurde in dieser Arbeit eine eigene Kodierung, basierend auf Sorting Networks, entwickelt. Hier soll vor allem hinsichtlich des Speicherbedarfs eine Optimierung gegenüber anderen etablierten Verfahren erreicht werden. Dies geschieht durch das Entfernen nicht benötigter Comparators im Sorting Network. \\
 Ziel dieser Arbeit ist es, die untersuchten Kodierungen für diese praktischen Probleme zu vergleichen. Hierbei wird der Speicher- und Zeitbedarf für das Lösen der Probleme gemessen. \\
@@ -129,7 +128,7 @@ Das letzte Kapitel fasst alle Kernelemente der Arbeit zusammen und gibt einen Au
 In diesem Kapitel werden alle notwendigen Grundlagen für das Verständnis dieser Bachelorarbeit dargelegt. Es dient als Einführung in das Thema, so dass alle benutzten Kodierungen nachvollzogen werden können.
 \subsection{SAT-Problem}
 Das Satisfiability Problem (kurz: SAT) ist das Erfüllbarkeitsproblem der Aussagenlogik \cite[vgl.][]{sat-problem}. Es ist NP-vollständig und lässt sich daher vermutlich nicht in polynomieller Zeit lösen. Die Eingabe ist eine aussagenlogische Formel F, für die herausgefunden werden soll, ob sie erfüllbar ist. Es wird also eine erfüllende Belegung der Variablen mit true oder false gesucht.\\
-Eine Formel ist ein wohlgeformter Ausdruck für den folgende Regeln gelten:
+Eine Formel ist ein wohlgeformter Ausdruck, für den folgende Regeln gelten:
 
 \begin{mdframed} [linecolor=black,linewidth=2pt]
 Eine Aussagenvariable oder Konstante ist eine Formel.\\
@@ -183,8 +182,8 @@ Mit einem SAT-Solver kann für eine Formel in konjunktiver Normalform ermittelt 
 \ \\
 Durch den DPLL-Algorithmus wird versucht Lösungen durch Zuweisungen zu finden. Es ergeben sich dadurch Teillösungen, die sich als erfolgreich oder nicht-erfolgreich erweisen können. \\
 Zum Beispiel kann die Formel $(x_1 \vee x_2 \vee x_3) \wedge (\neg x_1 \vee \neg x_4 \vee x_5) \wedge (\neg x_1 \vee x_4)$ mit $x_1=1, x_4=1$ belegt werden. Dann ist die zweite Klausel eine Einheitsklausel, da nur noch $x_5$ übrig bleibt. Damit die Klausel true wird, muss $x_5 = 1$ sein. \\
-Kommt es vor, dass eine Klausel durch die aktuelle Zudornung nicht true ergeben kann, wird durch Backtracking versucht, eine neue Zuordnung zu finden, indem die letzte Entscheidung rückgängig gemacht wird und die Variable davor geändert wird. 
-Wenn allen Variablen ein Wert zugewiesen wurde, gibt der Algorithmus \emph{erfüllbar} zurück und ansonsten \emph{unerfüllbar}.\\
+Wenn eine Klausel durch die aktuelle Zuordnung nicht true ergeben kann, wird durch Backtracking versucht, eine neue Zuordnung zu finden, indem die letzte Entscheidung rückgängig gemacht wird und die Variable davor geändert wird. 
+Sobald allen Variablen ein Wert zugewiesen wurde, gibt der Algorithmus \emph{erfüllbar} zurück und ansonsten \emph{unerfüllbar}.\\
 Unit Propagation ist ein Verfahren, um aus Einheitsklauseln direkt eine Belegung zu folgern. Eine Klausel ist eine Einheitsklausel, wenn sie genau ein Literal enthält. Um eine Einheitsklausel zu erfüllen, muss die entsprechende Variable mit true beziehnugsweise false belegt werden.\\
 Der Algorithmus ist rekursiv und eliminiert in jedem Schritt mindestens eine Variable, wenn möglich durch die Elimination einer Einheitsklausel. Ansonsten wird eine Variable unter Verwendung der Fallunterscheidung mit möglicherweise zwei rekursiven Aufrufen eliminiert.\\
 Eine hilfreiche Eigenschaft von SAT-Solvern ist das Klausellernen (CDCL) \cite[][]{cdcl}. Gibt es eine Formel, die auf Grund eines Konfliktes in der Belegung der Variablen nicht erfüllbar ist, wird eine zusätzliche Klausel hinzugefügt. Die neue Klausel schließt die falsche Belegung der entsprechenden Variablen aus, so dass diese Konstellation nicht mehr zu einem Konflikt führen kann.\\
@@ -293,7 +292,7 @@ Ein Sorting Network ist ein Network \cite[vgl.][]{sorting}, das aus Comparators 
 \label{fig:network_grundlage}
 \end{figure}
 \ \\
-Die Comparators in einem Sorting Network können nach verschiednen Algorithmen angeordnet werden. Mögliche Algorithmen sind zum Beispiel der Bubble-Sort-Algorithmus, der Odd-Even-Mergesort-Algorithmus oder der Bose-Nelson-Algorithmus.
+Die Comparators in einem Sorting Network können nach verschiednen Algorithmen angeordnet werden. Mögliche Algorithmen sind zum Beispiel der Bubble-Sort Algorithmus, der Odd-Even Mergesort Algorithmus oder der Bose-Nelson Algorithmus.
 
 \section{Kodierungen}
 In diesem Kapitel werden die unterschiedlichen Kodierungen beschrieben. Das Ziel ist es, dass die Cardinality Constraints über die Menge der Boolschen Variablen in eine Konjunktive Normalform (KNF) gebracht werden. %Innerhalb der KNF gibt es Einschränkungen, die verlangen, dass höchstens $r$ der Booleschen Variablen 1 sein können. Rein in die Grundlagen
@@ -318,8 +317,7 @@ Nk (n, r) = \bigwedge_{\substack{M\subset \{1, \dots, n\} \\  |M|=r+1}} \bigvee_
 \newline
 \textit{Beweis (Theorem 1.)} Durch den folgenden Beweis kann gezeigt werden, dass die naive Kodierung korrekt ist. Zu zeigen ist, dass ein Constraint $\sum(x_1, \dots,x_n) \leq r$ für eine beliebige Belegung $a(x_1, \dots ,x_n)$ genau dann erfüllt wird, wenn auch die naive Kodierung $Nk(n, r)$ erfüllt ist.\\
 \glqq$\Rightarrow$\grqq:\\
-Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq r$ erfüllt. Das heißt, dass es maximal $r$ Variablen $x_{i_1}, \dots, x_{i_r}$ mit\\
- $a(x_{i_1}), \dots, a(x_{i_r}) = 1$ gibt. Für alle anderen Variablen $x_j$ gilt $a(x_j) = 0$. Durch die Kodierung gibt es in jeder Klausel genau $r+1$ negierte Literale. Somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
+Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq r$ erfüllt. Das heißt, dass es maximal $r$ Variablen $x_{i_1}, \dots, x_{i_r}$ mit $a(x_{i_1}), \dots ,a(x_{i_r}) = 1$ gibt. Für alle anderen Variablen $x_j$ gilt $a(x_j) = 0$. Durch die Kodierung gibt es in jeder Klausel genau $r+1$ negierte Literale. Somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
 \glqq$\Leftarrow$\grqq:\\
 Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq r$ nicht erfüllt. Somit gibt es paarweise verschiedene $x_{i_1}, \dots, x_{i_{r+1}}$ mit $a(x_{i_1}), \dots ,a(x_{i_{r+1}}) = 1$. Durch die naive Kodierung gibt es eine Klausel $\overset{r+1}{\underset{j=1}{\bigvee}} {\neg x_{i_j}}$, die nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.\\
  \qedsymbol
@@ -356,7 +354,7 @@ Dabei wird $\text{t}_k$ zu $1$ und $\text{b}_1^k = \text{x}_{k-n+1}$ für $n \le
 Aufgrund des Aufbaus der Formel können Variablen der Form $b_{r+1}^k$ nur positiv und Variablen der Form $\text{b}_0^k$ nur negativ vorkommen. Daher können diese Variablen gestrichen werden.
 
 \subsubsection*{Beispiel für die Kodierung}
-Für das Beispiel ist $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ interne Knoten, sowie 4 Blätter, die beschriftet sind mit $4$ bis $2*4-1=7$. Die Kinder von Knoten $1$  für $1 \leq 1 \textless 4$, sind die Knoten $2$ und $2*1 +1=3$. Daraus ergibt sich der binäre Baum, der in Abbildung \ref{fig:baum} zu sehen ist.
+Für das Beispiel sei $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ interne Knoten, sowie 4 Blätter, die beschriftet sind mit $4$ bis $2*4-1=7$. Die Kinder von Knoten $1$  für $1 \leq 1 \textless 4$, sind die Knoten $2$ und $2*1 +1=3$. Daraus ergibt sich der binäre Baum, der in Abbildung \ref{fig:baum} zu sehen ist.
 
 \begin{figure}[H]
 \centering
@@ -413,7 +411,7 @@ Die vollständige KNF sieht folgendermaßen aus:\\
 	\subsection{Kodierungen nach Sinz}
 Dieser Abschnitt behandelt zwei Kodierungen nach \cite[][]{sinz}, die auf einen sequentiellen Counter und einem parallelen Counter basieren. Grundlegend bestehen diese Kodierungen aus einem Schaltkreis, der die Summe der Eingangsvariablen mit Hilfe eines binären oder unären Counters bildet und das Ergebnis mit $r$ vergleicht. Die Unterschiede der Schaltkreise werden im weiteren Verlauf beschrieben.
 		\subsubsection{Sequentielle Variante}
-Die sequentlielle Variante besteht aus zwei aufeinander folgenden Stufen. In der ersten Stufe werden die Inputs gezählt, die auf true gesetzt werden. In der nächsten Stufe überprüft ein Comparator, ob das Zählerergebnis kleiner oder gleich $r$ ist (siehe Abbildung \ref{fig:sinz_counter}). Der Counter besteht aus mehreren Sub-Schaltkreisen und in jedem Sub-Schaltkreis wird die nächste Eingangsvariable addiert. Daher kann die komplette Summe erst im letzten Sub-Schaltkreis berechnet werden. \\
+Die sequentlielle Variante besteht aus zwei aufeinander folgenden Stufen. In der ersten Stufe werden die Eingangsvariablen gezählt, die auf true gesetzt werden. In der nächsten Stufe überprüft ein Comparator, ob das Zählerergebnis kleiner oder gleich $r$ ist (siehe Abbildung \ref{fig:sinz_counter}). Der Counter besteht aus mehreren Sub-Schaltkreisen und in jedem Sub-Schaltkreis wird die nächste Eingangsvariable addiert. Daher kann die komplette Summe erst im letzten Sub-Schaltkreis berechnet werden. \\
 
 
 \begin{figure}[H]
@@ -622,23 +620,23 @@ Als Grundlage für die eigene entwickelte Kodierung dient das Sorting Network mi
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{sorting_network_odd_even.pdf}
-\caption{Sorting Network mit Odd-Even-Mergesort}
+\caption{Sorting Network mit Odd-Even Mergesort}
 \label{fig:odd-even-mergesort}
 \end{figure}
 \ \\
 Durch die andere Anordnung der Comparators durch den Odd-Even Mergesort, können Comparators eingespart werden, was zu einer Performanzsteigerung führt. Beim Odd-Even Mergesort werden die Eingänge in zwei Hälften geteilt und zunächst rekursiv sortiert. Im Anschluss daran werden die beiden sortierten Hälften wieder zusammengeführt. Beim Mergen werden immer die benachbarten Elemente verglichen.\\
-Normalerweise ist $n$ beim Odd-Even-Mergesort immer eine Potenz von $2$. Dies ist nicht immer möglich, daher wird bei anderen Werten auf die entsprechende Zweierpotenz aufgerundet. Das Sorting-Network wird rekursiv aufgebaut und entsprechend vergrößert. In Abbildung \ref{fig:odd-even-mergesort} sieht man das Sorting-Network für $n=8$. Die erste Hälfte besteht aus zwei $4$-Input Merge-Sorters. Dies gilt auch für die zweite Hälfte. Nachdem die einzelnen Hälften sortiert sind, werden die beiden Hälften ab dem dritten Comparator bei der ersten Leitung gemergt. Das Ergebnis ist dann eine korrekt sortierte Folge.
+Normalerweise ist $n$ beim Odd-Even Mergesort immer eine Potenz von $2$. Dies ist nicht immer möglich, daher wird bei anderen Werten auf die entsprechende Zweierpotenz aufgerundet. Das Sorting-Network wird rekursiv aufgebaut und entsprechend vergrößert. In Abbildung \ref{fig:odd-even-mergesort} sieht man das Sorting-Network für $n=8$. Die erste Hälfte besteht aus zwei $4$-Input Merge-Sorters. Dies gilt auch für die zweite Hälfte. Nachdem die einzelnen Hälften sortiert sind, werden die beiden Hälften ab dem dritten Comparator bei der ersten Leitung gemergt. Das Ergebnis ist dann eine korrekt sortierte Folge.
 
 %TODO eigenen Namen für die Kodierung
 	\subsection{Eigene entwickelte Kodierung mit Sorting Networks}
-Das Ziel der eigenen Idee für Sorting Networks ist es, Comparators zu sparen. Daher wird als Ausgangslage der Odd-Even-Mergesort gewählt, der schon eine reduzierte Anzahl an Comparators hat. Bei der Anwendung von Cardinality Constraints ist immer nur ein einziger Output des Sorting Networks relevant. Daher sind auch nur diejenigen Comparators von Bedeutung, die einen Einfluss auf den Wert des Outputs haben.\\
-Nachdem das Odd-Even-Mergesort Network aufgebaut ist, werden diejenigen Comparators entfernt, die nicht im Cone of Influence des $(r+1)$-ten Outputs liegen. Dafür wird das gesamte Network durchsucht. Alle Comparators, deren Outputs
+Das Ziel der eigenen Idee für Sorting Networks ist es, Comparators zu sparen. Daher wird als Ausgangslage der Odd-Even Mergesort gewählt, der schon eine reduzierte Anzahl an Comparators hat. Bei der Anwendung von Cardinality Constraints ist immer nur ein einziger Output des Sorting Networks relevant. Daher sind auch nur diejenigen Comparators von Bedeutung, die einen Einfluss auf den Wert des Outputs haben.\\
+Nachdem das Odd-Even Mergesort Network aufgebaut ist, werden diejenigen Comparators entfernt, die nicht im \textit{Cone of Influence} des $(r+1)$-ten Outputs liegen, das heißt, die keinen Einfluss auf ihn haben. Dafür wird das gesamte Network durchsucht. Alle Comparators, deren Outputs
 \begin{itemize}
 \item nicht mit dem relevanten Output übereinstimmen und
 \item nicht als Inputs für noch vorhandene Comparators dienen
 \end{itemize}
 werden gestrichen. \\
-Ein effizienter Weg dies zu tun, ist es, dass die entsprechende Leitung des Outputs durchgegangen wird und alle Comparators, die an diese Leitung angrenzen, bestehen bleiben. Für alle anderen Leitungen wird geprüft, ob der Comparator der letzte in seinen beiden Leitungen ist. Wenn dies der Fall ist, kann der Comparator entfernt werden.
+Ein effizienter Weg dies zu tun, ist es, dass die entsprechende Leitung des Outputs durchgegangen wird und alle Comparators, die an diese Leitung angrenzen, bestehen bleiben. Für alle anderen Leitungen wird geprüft, ob der Comparator der letzte in seinen beiden Leitungen ist. In diesem Fall kann der Comparator entfernt werden.
 
 %Zur Ideenfindung wurde das Sorting Network aufgemalt und überlegt, wie die entsprechende Leitung von $r$ Einfluss auf die Comparator haben kann. Wird $r=2$ gewählt, so entscheidet der Ausgang an der zweiten Stelle des Sorting Networks, ob eine Belegung gefunden werden kann für das Constraint oder nicht. Liegt an der zweiten Stelle eine $0$ an, dann ist es SAT. Ansonsten ist es UNSAT. Somit ist nur dieser Ausgang von Bedeutung für den SAT-Solver. Daher müssen alle anderen Ausgänge nicht entsprechend sortiert sein. Aus diesem Grund können alle Comparator eingespart werden, die nichts mit der entsprechenden Leitung zu tun haben und auch alle, bei denen die Ein- und Ausgänge der andern Comparator keinen Einfluss auf die Sortierug des zweiten Ausgangs des Sorting Networks haben. Dafür wird das Sorting Network erst einmal aufgebaut wie beim odd-even Mergesort und anschließend wird das gesamte Network mehrmals durchsucht nach Comparator, die gestrichen werden können. Dies muss mehrmals passieren, da erst im Laufe der Zeit herausgefunden werden kann, welche gelöscht werden können. Daraus ergibt sich ein Aufwand von $O(n^3)$.
 
@@ -744,7 +742,7 @@ Die y-Achse der Graphen beschreibt die Zeit in logarithmischer Darstellung in Mi
 \label{fig:damen}
 \end{figure}
 \ \\
-In diesem Graphen werden die Ergebnisse für das $n$-Damen-Problem dargestellt. Angezeigt werden alle acht Kodierungen, die dieses Testproblem versucht haben zu lösen. Auffällig ist, dass die achte Kodierung nicht zu sehen ist. Die naive Kodierung wird nicht angezeigt, da es nur einen einzelnen Wert gibt, da die KNF bei $k=10$ zu groß für den Speicher des $Z3$-Solvers war. Am schlechtesten haben, nach der naiven Kodierung, für dieses Problem die Kodierung mit BBDs und die naive Kodierung basierend auf Sorting Networks abgeschnitten. Nach einem etwas größeren Abstand folgen die vier Kodierungen in folgender Reihenfolge: Sinz sequentiell, Sorting Networks mit eigener Sortierung, Bailleux und Sinz Parallel. Die Kodierung basierend auf Sorting Networks mit dem Sortieralgorithmus Odd-Even-Mergesort hat bei $k=65$ ebenfalls keinen Speicher mehr zur Verfügung. Von $k=40$ bis $k=65$ wechseln sich Bailleux und NOwn häufig ab. Eine weitere Besonderheit ist bei $k=5$ bis $k=15$ zu sehen, da hier nochmal eine andere Anordnung für NOddEven, Nown, SinzPar und Bailleux zu sehen ist. 
+In diesem Graphen werden die Ergebnisse für das $n$-Damen-Problem dargestellt. Angezeigt werden alle acht Kodierungen, die dieses Testproblem versucht haben zu lösen. Auffällig ist, dass die achte Kodierung nicht zu sehen ist. Die naive Kodierung wird nicht angezeigt, da es nur einen einzelnen Wert gibt, da die KNF bei $k=10$ zu groß für den Speicher des $Z3$-Solvers war. Am schlechtesten haben, nach der naiven Kodierung, für dieses Problem die Kodierung mit BBDs und die naive Kodierung basierend auf Sorting Networks abgeschnitten. Nach einem etwas größeren Abstand folgen die vier Kodierungen in folgender Reihenfolge: Sinz sequentiell, Sorting Networks mit eigener Sortierung, Bailleux und Sinz Parallel. Die Kodierung basierend auf Sorting Networks mit dem Sortieralgorithmus Odd-Even Mergesort hat bei $k=65$ ebenfalls keinen Speicher mehr zur Verfügung. Von $k=40$ bis $k=65$ wechseln sich Bailleux und NOwn häufig ab. Eine weitere Besonderheit ist bei $k=5$ bis $k=15$ zu sehen, da hier nochmal eine andere Anordnung für NOddEven, Nown, SinzPar und Bailleux zu sehen ist. 
 
 \subsubsection*{Die Cheshire Cat in Abbildung \ref{fig:cheshire}}
 
@@ -804,7 +802,7 @@ Der Solver erreicht beim H-Tree wie bei der Cheshire Cat ein Timeout, obwohl der
 \label{fig:synth}
 \end{figure}
 \ \\
-Beim Benchmark der synthetischen Testfälle wurden für jedes $k$ fünf Durchläufe gemacht. Trotzdem treten durch die hohe Varianz immer noch Schwankungen in den Ergebnissen auf. Da nach dem ersten Durchlauf des Benchmarks in den Daten zu viel Rauschen aufgetreten ist, wurde erneut ein Benchmark mit fünf Durchlaufen pro Kodierung und $k$ vorgenommen, woraus dann ein Mittelwert berechnet ist. Im Graphen ist zu sehen, dass bei SinzPar die Daten keine starken Schwankungen aufweisen und der Zeitbedarf am höchsten war. Alle anderen Kodierungen wechseln sich stark in ihrer Reihenfolge ab. Bei $k=5000$ gibt es folgende Reihenfolge: BDD, NNaiv, NOddEven und NOwn, Bailleux und als Letztes SinzSeq. Bei $k=3500$ zeigt sich noch eine ganz andere Reihenfolge (SinzPar, NNaiv, BDD, NoddEven, SinzSeq, Bailleux und NOwn). Für Naiv konnten durch einen \textit{out of memory} Fehler nur Werte für $k=250$ ermittelt werden. Aus diesem Grund ist diese Kodierung im Graphen nicht zu finden.
+Beim Benchmark der synthetischen Testfälle wurden für jedes $k$ fünf Durchläufe gemacht. Trotzdem treten durch die hohe Varianz immer noch Schwankungen in den Ergebnissen auf. Da nach dem ersten Durchlauf des Benchmarks in den Daten zu viel Rauschen aufgetreten ist, wurde erneut ein Benchmark mit fünf Durchlaufen pro Kodierung und $k$ vorgenommen, woraus dann ein Mittelwert berechnet ist. Im Graphen ist zu sehen, dass bei SinzPar die Daten keine starken Schwankungen aufweisen und der Zeitbedarf am höchsten war. Alle anderen Kodierungen wechseln sich stark in ihrer Reihenfolge ab. Bei $k=5000$ gibt es folgende Reihenfolge: BDD, NNaiv, NOddEven und NOwn, Bailleux und als Letztes SinzSeq. Bei $k=3500$ zeigt sich noch eine ganz andere Reihenfolge (SinzPar, NNaiv, BDD, NOddEven, SinzSeq, Bailleux und NOwn). Für Naiv konnten durch einen \textit{out of memory} Fehler nur Werte für $k=250$ ermittelt werden. Aus diesem Grund ist diese Kodierung im Graphen nicht zu finden.
 
 \subsection{Auswertung des Speicherbedarfs}
 Zur Auswertung des Speicherbedarfs wurden die Anzahl der benötigten Klauseln pro Kodierung und pro Testproblem gezählt. Die y-Achse der Graphen beschreibt die Klauseln in logarithmischer Darstellung und die x-Achse stellt die unterschiedlichen Werte für $k$ dar. Die Kodierungen sind in unterschiedlichen Farben (siehe Legende) als Kurven eingezeichnet.
@@ -901,10 +899,19 @@ Allgemein lässt sich feststellen, dass Kodierungen, die eine hohe Anzahl an Kla
 
 
 \section{Schlussfolgerung und Ausblick}
-Dieser Abschnitt fasst die Inhalte der Arbeit zusammen und gibt einen Überblick über mögliche Anschlussarbeiten.\\
+Dieser Abschnitt fasst die Inhalte der Bachelorarbeit zusammen und gibt einen Überblick über mögliche Anschlussarbeiten.\\
 \ \\
-In dieser Arbeit wurden acht verschiedene Kodierungen hinsichtlich ihres Zeit- und Speicherbedarfs für vier verschiedene Testprobleme untersucht.\\
-Implementiert wurden die Kodierungen und Testprobleme in Java und als Solver wurde der Z$3$-Solver eingesetzt. 
+In dieser Arbeit wurden acht verschiedene Kodierungen für Cardinality Constraints hinsichtlich ihres Zeit- und Speicherbedarfs für vier verschiedene Testprobleme untersucht.\\
+Die untersuchten Kodierungen waren eine Kodierung mit einem naiven Ansatz, eine Kodierung nach Bailleux und Boufkhad anhand von Knuth, eine sequentielle Kodierung nach Sinz anhand von Knuth und eine parallele Variante. Zusätzlich gibt es eine Kodierung aufbauend auf BDDs und mehrere Kodierungen basierend auf Sorting Networks mit unterschiedlichen Sortieralgorithmen (Bubble-Sort und Odd-Even Mergesort), sowie eine eigene Kodierung, die auf den Odd-Even Mergesort aufbaut.\\
+Angewendet wurden diese Kodierungen auf folgende Testprobleme: das n-Damen-Problem, Digital Tomography (Cheshire Cat und H-Tree) und synthetische Testfälle.\\
+Um Ergebnisse über das Zeit- und Speicherverhalten zu erheben, wurden Benchmarks vorgenommen, die die Testprobleme mit unterschiedlichen Werten testen. \\
+Die Ergenisse für den Zeit- und Speicherbedarf variieren pro Kodierung und Testproblem. Allgemein ließ sich feststellen, dass unter Berücksichtigung beider Faktoren SinzSeq die beste Kodierung für die untersuchten Testprobleme ist. Die zweite Wahl für diese Testprobleme ist Bailleux, da es ebenfalls einen geringen Zeitbedarf hat im Vergleich zu den anderen Kodierungen und gleichzeitig immer noch eine geringe Menge an Klauseln. Des Weiteren konnte herausgefunden werden, dass Kodierungen, die eine hohe Anzahl an Klauseln benötigen auch länger brauchen, um die Erfüllbarkeit zu testen. Dies deckt sich mit bisherigen Erfahrungen.\\
+Als Fazit kann festgestellt werden, dass es sinnvoll ist, mehrere Kodierungen für ein Problem auszuprobieren. Dadurch kann für das Lösen der Erfüllbarkeit die beste Kodierung ermittelt werden.\\
+\ \\
+Ein Thema, dass in einer Anschlussarbeit vertieft werden kann, ist die Verbesserung der verwendeten Kodierungen. Es kann untersucht werden, ob der Zeit- und Speicherbedarf von Bailleux oder von SinzSeq noch weiter reduziert werden kann, oder ob die Idee der eigenen Kodierung auch auf andere Sortieralgorithmen angewendet werden kann.\\
+Die bereits untersuchten Kodierungen könnten noch auf andere Testprobleme angewendet werden, die realitätsnaher sind, wie zum Beispiel das Anwendungsfeld der Bio-Chips.\\
+Weiterhin gibt es noch andere Möglichkeiten als die Tseitin-Transformation um einen BDD in eine KNF zu überführen. Diese könnten zusätzlich noch ausprobiert werden.\\
+Eine weitere Art von Constranints könnten ebenfalls neue Ergebnisse liefern. Somit könnten statt Cardinality Constraints Pseudo Boolesche Constraints benutzt werden, so dass das Verfahren aus \cite[][Seite 15,16]{niklasse} angewendet werden kann.
 
 %Sogar zitieren kann man \textbackslash o/ \cite[vgl.][]{invincible}.
 
