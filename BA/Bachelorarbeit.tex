@@ -14,6 +14,8 @@
 \usepackage{mdframed}
 \usepackage{datatool}
 \usepackage{dataplot}
+\usepackage{lscape}
+\usepackage{changepage}
 
 \DTLsetseparator{;}
 \PassOptionsToPackage{big}{titlesec}
@@ -317,7 +319,7 @@ Nk (n, r) = \bigwedge_{\substack{M\subset \{1, \dots, n\} \\  |M|=r+1}} \bigvee_
 \newline
 \textit{Beweis (Theorem 1.)} Durch den folgenden Beweis kann gezeigt werden, dass die naive Kodierung korrekt ist. Zu zeigen ist, dass ein Constraint $\sum(x_1, \dots,x_n) \leq r$ für eine beliebige Belegung $a(x_1, \dots ,x_n)$ genau dann erfüllt wird, wenn auch die naive Kodierung $Nk(n, r)$ erfüllt ist.\\
 \glqq$\Rightarrow$\grqq:\\
-Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq r$ erfüllt. Das heißt, dass es maximal $r$ Variablen $x_{i_1}, \dots, x_{i_r}$ mit $a(x_{i_1}), \dots ,a(x_{i_r}) = 1$ gibt. Für alle anderen Variablen $x_j$ gilt $a(x_j) = 0$. Durch die Kodierung gibt es in jeder Klausel genau $r+1$ negierte Literale. Somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
+Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq r$ erfüllt. Das heißt, dass es maximal $r$ Variablen $x_{i_1}, \dots, x_{i_r}$ mit $a(x_{i_1}), \dots ,a(x_{i_r}) = 1$ gibt. Für alle anderen VarTabelleniablen $x_j$ gilt $a(x_j) = 0$. Durch die Kodierung gibt es in jeder Klausel genau $r+1$ negierte Literale. Somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
 \glqq$\Leftarrow$\grqq:\\
 Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n) \leq r$ nicht erfüllt. Somit gibt es paarweise verschiedene $x_{i_1}, \dots, x_{i_{r+1}}$ mit $a(x_{i_1}), \dots ,a(x_{i_{r+1}}) = 1$. Durch die naive Kodierung gibt es eine Klausel $\overset{r+1}{\underset{j=1}{\bigvee}} {\neg x_{i_j}}$, die nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.\\
  \qedsymbol
@@ -680,7 +682,7 @@ Da die Liste der Comparators rückwärts durchlaufen wird, können nacheinander 
 %Der Builder ist die Zwischenschicht zwischen den Problemen und den unterschiedlichen Kodierungen. Er erstellt das Encoding und ermöglicht dadurch den Aufruf verschiedener Kodierungen. In dieser Klasse werden die verschiedenen Constraints für $\leq$, 	$\geq$ und $\doteq$ gebaut und der Solver wird aufgerufen. Die Klasse Encoding dient als Oberklasse und ist abstrakt, damit die Signatur für die Unterklassen (Kodierungen) vorgegeben ist. 
 
 \section{Evaluation}
-In diesem Abschnitt werden die Ergebnisse des Benchmarks präsentiert. Es wurden alle acht Kodierungen hinsichtlich ihres Speicher- und Zeitbedarfs für unterschiedliche Testprobleme untersucht. Die vollständigen Ergebnisse des Benchmarks sind im Anhang D zu finden. Die Testprobleme sind das n-Damen-Problem, Digital Tomography und synthetische Testfälle. Implementiert wurde diese Arbeit in Java und als Solver wurde der $Z3$-Solver eingesetzt.\\
+In diesem Abschnitt werden die Ergebnisse des Benchmarks präsentiert. Es wurden alle acht Kodierungen hinsichtlich ihres Speicher- und Zeitbedarfs für unterschiedliche Testprobleme untersucht. Die vollständigen Ergebnisse des Benchmarks sind im Anhang \ref{anhang} zu finden. Die Testprobleme sind das n-Damen-Problem, Digital Tomography und synthetische Testfälle. Implementiert wurde diese Arbeit in Java und als Solver wurde der $Z3$-Solver eingesetzt.\\
 Das n-Damen-Problem ist eine schachmathematische Aufgabe. Es sollen $n$ Damen auf einem $n\times n$-Feld platziert werden, so dass in jeder Reihe, Spalte und Diagonale nur eine Dame zu finden ist. Dies kann durch das $\leq$-Constraint abgebildet werden. Für jede Reihe mit den Feldern $x_{i,1}, \dots, x_{i,n}$ wird das Constraint $\sum (x_{i,1}, \dots, x_{i,n}) \leq 1$ erstellt. Für die Spalten und Diagonalen ist das Vorgehen analog. Außerdem wird das Constraint $\sum (x_{1,1}, \dots x_{n,n})=n$ hinzugefügt, um die Anzahl der Damen festzulegen.\\
 Digital Tomography bedeutet, dass binäre Bilder komprimiert werden, indem die Anzahl der schwarzen Pixel in jeder Reihe, Spalte und Diagonale gespeichert wird. Für diese Versuche wird die Cheshire Katze (siehe Abbildung \ref{fig:cheshire}) verwendet, repräsentiert durch ein $m \times n$ Array von Booleschen Variablen ($x_{i,j})$, mit $m=25$ und $n=30$. 
 
@@ -966,9 +968,358 @@ Eine weitere Art von Constranints könnten ebenfalls neue Ergebnisse liefern. So
 			\renewcommand{\section}[2]{}
 			\listoffigures
 		\endgroup
-	\section{Tabellenverzeichnis}
-		\begingroup
-			\renewcommand{\section}[2]{}
-			\listoftables
-		\endgroup
+
+\begin{landscape}
+	\section{Ergebnisse der Evaluation}\label{anhang}
+ In diesem Abschnitt werden alle erhobenen Daten präsentiert. In den folgenden Tabellen wird oom als Abkürzung für \textit{out of memory} verwendet.
+
+
+	 \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55} &\textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
+	\hline
+	Bailleux & 83 & 127 & 427 & 968 & 2310 & 4976 & 10326 & 19604 & 28839 & 41732 & 100428 & 88363 & 126467 & 160135\\
+\hline
+	SinzSeq & 2833 & 1593 & 872 & 4526 & 11819 & 39276 & 21876 & 70254 & 158792 & 112102 & 197437 & 159845 & 368742 & 281325 \\
+\hline
+	BDD & 105 & 574 & 13370 & 60575 & 473409 & Timeout & Timeout &Timeout &Timeout &Timeout & oom & oom & oom & oom\\
+\hline
+	SinzPar & 57 & 156 & 1608 & 890 & 1355 & 2387 & 3742 & 5933 & 9355 & 16019 & 23754 & 31377 & 60503 & 65670 \\
+\hline
+	NOddEven & 136 & 481 & 1361 & 3229 & 6460 & 9905 & 24304 & 20895 & 32979 & 52177& 69142 & 125630 & oom & oom\\
+\hline
+	NOwn & 102 & 351 & 950 & 2195 & 4775 & 8353& 18841 & 18508 & 20852 & 55618 & 46438 & 45436 & 219592 & 184962\\
+ \hline
+	NNaiv & 139 & 1316 & 8435 & 51171 & 82084 & 226596 & 456828 & 10514995 & Timeout & oom & oom & oom & oom & oom\\
+\hline
+	Naiv & 2802 & oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
+\hline
+       
+     \end{tabular}
+
+     \caption{n-Damen-Problem, Zeitbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=0,2} & \textbf{k=0,4} & \textbf{k=0,6} &\textbf{k=0,8} &\textbf{k=1,0} &\textbf{k=1,2} &\textbf{k=1,4} &\textbf{k=1,6} &\textbf{k=1,8} &\textbf{k=2,0} &\textbf{k=2,2} &\textbf{k=2,4} &\textbf{k=2,6} &\textbf{k=2,8} & \textbf{3,0}\\
+	\hline
+	Bailleux & 64 & 73 & 206 & 94790 & 7667 & 1420600 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout\\
+\hline
+	SinzSeq & 712 & 292 & 244 & 53760 & 1286 & 502201 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout \\
+\hline
+	BDD & 927 & 566 & 584 & 606552 & 87400 & Timeout & Timeout &Timeout &Timeout &Timeout & Timeout & Timeout & Timeout & Timeout & Timeout\\
+\hline
+	SinzPar & 248 & 172 & 308 & 403652 & 76671 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout \\
+\hline
+	NOddEven & 1406 & 1042 & 1492 & 133570 & 14005 & 621269 & 1108058 & Timeout & Timeout & Timeout& Timeout & Timeout & Timeout & Timeout & Timeout\\
+\hline
+	NOwn & 409 & 445 & 761 & 376416 & 392097 & 278687 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout &Timeout & Timeout & Timeout\\
+ \hline
+	NNaiv & 1453 & 1230 & 2963 & 295454 & 195979 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout\\
+\hline
+	Naiv & 54 & 114 &  3620 &  Timeout &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom & oom\\
+\hline
+       
+     \end{tabular}
+
+     \caption{Cheshire Cat, Zeitbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55} &\textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
+	\hline
+	Bailleux & 761 & 476 & 318 & 999 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout\\
+\hline
+	SinzSeq & 1312 & 979 & 550 & 1089 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout \\
+\hline
+	BDD & 50 & 163 & 336 & 2640 & Timeout & Timeout & Timeout &Timeout &Timeout &Timeout & Timeout & Timeout & Timeout & Timeout\\
+\hline
+	SinzPar & 193 & 135 & 215 & 2499 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout \\
+\hline
+	NOddEven & 69 & 281 & 729 & 3381 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout& Timeout & Timeout & Timeout & Timeout\\
+\hline
+	NOwn & 2095 & 1912 & 1912 & 1372 & 3540 & Timeout& Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout\\
+ \hline
+	NNaiv & 87 & 233 & 1025 & 4752 & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout & Timeout\\
+\hline
+	Naiv & 48 & 104 &  1208 &  42634 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
+\hline
+       
+     \end{tabular}
+
+     \caption{H-Tree, Zeitbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+\begin{adjustwidth*}{-4cm}{-3cm}
+\begin{flushleft}
+\begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=255} & \textbf{k=500} & \textbf{k=750} &\textbf{k=1000} &\textbf{k=1250} &\textbf{k=1500} &\textbf{k=1750} &\textbf{k=2000} &\textbf{k=2250} &\textbf{k=2500} &\textbf{k=2750} &\textbf{k=3000} &\textbf{k=3250} &\textbf{k=3500}\\
+	\hline
+	Bailleux & 4444 & 1814 & 1128 & 2086 & 2750 & 2885 & 4156 & 5275 & 5686 & 6515 & 8246 & 7451 & 8703 & 9654  \\
+\hline
+	SinzSeq & 3254 & 1762 & 1555 & 1546 & 2014 & 4142 & 4040 & 4971 & 5926 & 5930 & 8361 & 8578 & 13692 & 10482  \\
+\hline
+	BDD & 1526 & 1585 & 3316 & 5692 & 3941 &9896 &8624 &21905 & 29755 & 35520 & 51451 & 26533 & 25507 & 39739 \\
+\hline
+	SinzPar & 14331 & 12300 & 12260 & 17632 & 27716 & 38368 & 45198 & 60489 & 71140 & 86833 & 100835 & 120897 & 139426 & 169369  \\
+\hline
+	NOddEven & 604 & 902 & 1203 & 1355 & 5258 & 8251 & 3893 & 4524 & 5453 & 6724& 6365 & 7965 & 8509 & 21016 \\
+\hline
+	NOwn & 1646 & 1041 & 1351 & 1987 & 4931 & 4107 & 9275 & 6126 & 8906 & 15784 & 6640 & 17850 & 7681 & 88409\\
+ \hline
+	NNaiv & 1318 & 3626 & 12685 & 15083 & 6532 & 64024 & 36200 & 42972 & 77167 & 10762 & 11612 & 12091 & 37692 & 50240 \\
+\hline
+	Naiv & 1560 & 1560 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom \\
+\hline
+       
+     \end{tabular}
+
+     \caption{synthetische Testfälle Teil 1, Zeitbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+	\end{flushleft}
+\end{adjustwidth*}
+
+\begin{adjustwidth*}{-4cm}{-3cm}
+\begin{flushleft}
+\begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung} &\textbf{k=3750} &\textbf{k=4000} &\textbf{k=4250} &\textbf{k=4500} &\textbf{k=4750} &\textbf{k=5000}\\
+\hline
+ Bailleux & 11197 & 10060 & 7710 & 8113 & 7648 & 7261\\
+\hline
+SinzSeq & 7147 & 6361 & 5515 & 13858 & 5827 & 5886\\
+\hline
+BDD & 37569 & 59434 & 112159 & 42946 & 56959 & 49862\\
+\hline
+SinzPar & 184127 & 205549 & 243650 & 241894 & 274159 &306650\\
+\hline
+NOddEven & 20701 & 11170 & 12855 & 15460 & 15239 & 15523\\
+\hline
+NOwn  & 10218 & 18825 & 11037 & 14583 & 13595 & 1510\\
+\hline
+NNaiv & 18424 & 83909 & 21392 & 268977 & 244058 & 31425\\
+\hline
+Naiv  & oom & oom & oom & oom & oom & oom\\
+\hline
+
+ \end{tabular}
+
+     \caption{synthetische Testfälle Teil 2, Zeitbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+	\end{flushleft}
+\end{adjustwidth*}
+
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55} &\textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
+	\hline
+	Bailleux & 629 & 5582 & 21103 & 60392 & 131697 & 256156 & 460176 & 797056 & 1171699 & 1808296 & 2778507 & 3621148 & 4864657 & 6651842\\
+\hline
+	SinzSeq & 614 & 4624 & 15034 & 34844 & 67054 & 114664 & 180674 & 268084 & 379894 & 519104 & 688714 & 891724 & 1131134 & 1409944 \\
+\hline
+	BDD & 1752 & 11212 & 34372 & 77232 & 145792 & 246052 & 384012 &565672 &797032 &1084092 & 1432852 & oom & oom & oom\\
+\hline
+	SinzPar & 672 & 3302 & 7798 & 14648 & 23281 & 33938 & 46844 & 62090 & 78600 & 98042 & 118586 & 142225 & 168000 & 195105 \\
+\hline
+	NOddEven & 5764 & 38982 & 88268 & 241818 & 490628 & 534638 & 1279640 & 1401410 & 1523180 & 2793878 & 2915648 & 3037418 & oom & oom\\
+\hline
+	NOwn & 4742 & 29308 & 65674 & 177320 & 370886 & 391152 & 961504 & 1030956 & 1080164 & 2133652 & 2197728 & 2244514 & 5192270 & 5388482\\
+ \hline
+	NNaiv & 5488 & 80278 & 390618 & 1207758 & 2907948 & 5972438 & 10987478 & 18644318 & 29739208 & oom & oom & oom & oom & oom\\
+\hline
+	Naiv & 189930 & oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
+\hline
+       
+     \end{tabular}
+
+     \caption{n-Damen-Problem, Speicherbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=0,2} & \textbf{k=0,4} & \textbf{k=0,6} &\textbf{k=0,8} &\textbf{k=1,0} &\textbf{k=1,2} &\textbf{k=1,4} &\textbf{k=1,6} &\textbf{k=1,8} &\textbf{k=2,0} &\textbf{k=2,2} &\textbf{k=2,4} &\textbf{k=2,6} &\textbf{k=2,8} & \textbf{3,0}\\
+	\hline
+	Bailleux & 426 & 3404 & 10812 & 25538 & 48844 & 79666 & 121982 & 179566 & 251420 & 339336 & 438020 & 554231 & 695573 & 865826 & 1063339\\
+\hline
+	SinzSeq & 326 & 2612 & 8613 & 22133 & 47163 & 80008 & 123524 & 185499 & 271325 & 381131 & 502564 & 639788 & 815635 & 1035337 & 1290967 \\
+\hline
+	BDD & 1304 & 8016 & 23819 & 56055 & 112645 & 186460 & 282978 &417907 &601899 & 835241 & 1093432 & 1384566 & 1754439 & 2213383 & 2745573\\
+\hline
+	SinzPar & 718 & 4225 & 10881 & 21295 & 34169 & 50705 & 70520 & 94412 & 119618 & 149931 & 182271 & 219296 & 258966 & 301969  & 347202 \\
+\hline
+	NOddEven & 4973 & 35946 & 98174 & 230856 & 327438 & 579716 & 1044201 & 1312967 & 1580694 & 1848348& 2858898 & 3193911 & 4961621 & 5674980 & 5674980\\
+\hline
+	NOwn & 4021 & 28022 & 76110 & 180946 & 257858 & 452624 & 812683 & 1026765 & 1239346 & 1448326 & 2234344 & 2495283  & 3874311 & 4447096 & 5018408\\
+ \hline
+	NNaiv & 2567 & 25579 & 94090 & 230614 & 456639 & 795415 & 1270498 & 1905342 & 2721194 & 3742419 & 4991195 & 6491078 & 8265522 & 10335774 & 12726199\\
+\hline
+	Naiv & 239 & 8407 &  406453 &  23362052 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom & oom\\
+\hline
+       
+     \end{tabular}
+
+     \caption{Cheshire Cat, Speicherbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55} &\textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
+	\hline
+	Bailleux & 348 & 2746 & 7382  & 20329 & 37141 & 55513 & 95881 & 144428 & 194773 & 265171 & 327174 & 407395 & 547750 & 650017\\
+\hline
+	SinzSeq & 296 & 2489 & 6288 & 21101 & 38720 & 56049 & 110192 & 174285 & 235768 & 323093 & 396680 & 475221 & 702016 & 818337 \\
+\hline
+	BDD & 1160 & 7295 & 17440 & 51779 & 92240 & 132703 & 249584 & 387067 & 519240 & 705611 & 864080 & 1035307 & 1505232 & 1752559\\
+\hline
+	SinzPar & 581 & 3345 & 7844 & 16854 & 27078 & 38903 & 56437 & 76391 & 95215 & 120808 & 144266 & 175483 & 211507 & 243402\\
+\hline
+	NOddEven & 4280 & 29394 & 55224 & 188154 & 273028 & 350242 & 843052 & 1094922 & 1312560 & 1564886 & 1782068 & 2034394 & 4032804 & 4614594\\
+\hline
+	NOwn & 3552 & 23024 & 41084 & 146084 & 212562 & 264100 & 645568 & 854598 & 1012694 & 1220360 & 1372162 & 1558226 & 3113984 & 3525450\\
+ \hline
+	NNaiv & 1976 & 18655 & 62860 & 167665 & 330392 & 561007 & 933072 & 1416285 & 1986120 & 2761121 & 3629576 & 4765077 & 6173912 & 7628967\\
+\hline
+	Naiv & 192 & 6998 & 163246 & 7940531 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
+\hline
+       
+     \end{tabular}
+
+     \caption{H-Tree, Speicherbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+\begin{adjustwidth*}{-4cm}{-3cm}
+\begin{flushleft}
+\begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=255} & \textbf{k=500} & \textbf{k=750} &\textbf{k=1000} &\textbf{k=1250} &\textbf{k=1500} &\textbf{k=1750} &\textbf{k=2000} &\textbf{k=2250} &\textbf{k=2500} &\textbf{k=2750} &\textbf{k=3000} &\textbf{k=3250} &\textbf{k=3500}\\ 
+	\hline
+	Bailleux & 12401 & 53389 & 114680 & 195140 & 314176 & 440017 & 579900 & 766551 & 946525 & 1200260 & 1422357 & 1660465 & 1900534 & 2167129 \\
+\hline
+	SinzSeq &7701 & 33234 & 72201 & 133994 & 218676 & 316564 & 412940 & 559477 & 727808 & 920758 & 1100088 & 1287058 & 1503057 & 1783695 \\
+\hline
+	BDD & 12853 & 60298 & 124404 & 219398 & 339887 & 484386 & 648149 & 904174 & 1085873 & 1399776 & 1565504 & 1870164 & 2197063 & 2512839 \\
+\hline
+	SinzPar & 83395 & 273556 & 508820 & 799452 & 1149890 & 1536518 & 1923935 & 2410427 & 2866224 & 3447950 & 3965706 & 4511217 & 5140223 & 5728782  \\
+\hline
+	NOddEven & 28745 & 83690 & 211877 & 345498 & 508686 & 666825 & 796970 & 984421 & 1334112 & 1748379 & 2081769 & 2448279  & 2413302 & 2768766  \\
+\hline
+	NOwn & 22827 & 72745 & 174586 & 297944 & 440685 & 571683 & 698608 & 883464 & 1159534 & 1547346 & 1826852 & 2129404 & 2438826 & 2788352 \\
+ \hline
+	NNaiv & 43970 & 202598 & 444299 & 782143 & 1259416 & 1876099 & 2554786 & 3391630 & 3866207 & 4986846 & 6042371 & 6269595 & 6931336 & 7955157 \\
+\hline
+	Naiv & 170069 & 170069 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
+\hline
+       
+     \end{tabular}
+
+     \caption{synthetische Testfälle Teil 1, Speicherbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+	\end{flushleft}
+\end{adjustwidth*}
+
+\begin{adjustwidth*}{-4cm}{-3cm}
+\begin{flushleft}
+\begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung} &\textbf{k=3750} &\textbf{k=4000} &\textbf{k=4250} &\textbf{k=4500} &\textbf{k=4750} &\textbf{k=5000}\\
+\hline
+ Bailleux & 2494925 & 2822166 & 3185052 & 3585784 & 3972052 & 4376090\\
+\hline
+SinzSeq  & 2009411 & 2289805 & 2578608 & 2961126 & 3215664 & 3596719\\
+\hline
+BDD & 2889176 & 3268771 & 3734490 & 4165863 & 4550542 & 5099838\\
+\hline
+SinzPar & 6370520 & 7044922 & 7748092 & 8416433 & 9085946 & 9879617\\
+\hline
+NOddEven & 3065533 & 3346123 & 3717246 & 4051416 & 4314980 & 4718988\\
+\hline
+NOwn  & 2801789 & 3085924 & 3321086 & 3735593 & 4020664 & 4264229\\
+\hline
+NNaiv & 9017653 & 10288967 & 11826287 & 13221454 & 14674663 & 16161613\\
+\hline
+Naiv  & oom & oom & oom & oom & oom & oom\\
+\hline
+
+ \end{tabular}
+
+     \caption{synthetische Testfälle Teil 2, Speicherbedarf}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+	\end{flushleft}
+\end{adjustwidth*}
+
+\end{landscape}	
+
 \end{document}
+  
