@@ -13,16 +13,11 @@ public class Naiv extends Encoding {
 
 
   // Iterator gibt die nächste Teilmenge von der Menge 1-n
-  public void encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
+  public int encode(ArrayList<Literal> literals, int r, int counter, Solver solver, Context ctx)
       throws Z3Exception {
-    int n = literals.size();
-    if (n == r + 1) {
-      BoolExpr[] clause = new BoolExpr[r + 1];
-      for (int i = 0; i < r + 1; i++) {
-        clause[i] = ctx.mkNot(literals.get(i).toZ3(ctx));
-      }
-      solver.add(ctx.mkOr(clause));
-      return;
+
+    // binomialkoeffizient n über k
+      return nCk(n,k);
     }
 
     for (LexicographicIterator iter = new LexicographicIterator(n, r + 1); iter.hasNext();) {

@@ -11,57 +11,64 @@ public class KnuthSinz extends Encoding {
   /* Beginn Sinz nach Knuth (sequentiell)------------------------------------------------ */
 
 
-  public static void createFormulaFirst(Context ctx, Solver solver, int n, int r, int counter,
+  public static int createFormulaFirst(Context ctx, Solver solver, int n, int r, int counter,
       ArrayList<Literal> literals) throws Z3Exception {
     ArrayList<BoolExpr> variablesFirst = new ArrayList<BoolExpr>();
+
+    int nClauses=0;
     for (int k = 1; k <= r; k++) {
       for (int j = 1; j < n - r; j++) {
-        variablesFirst = new ArrayList<>();
-        BoolExpr formularFirstFVariable =
-            makeVariableSinz(k, j, ctx, solver, true, n, r, counter, literals, false);
-        BoolExpr formularFirstSVariable =
-            makeVariableSinz(k, j + 1, ctx, solver, false, n, r, counter, literals, false);
-        if (formularFirstFVariable != null) {
-          variablesFirst.add(formularFirstFVariable);
-        }
-        if (formularFirstSVariable != null) {
-          variablesFirst.add(formularFirstSVariable);
-        }
-        solver
-            .add(ctx.mkOr((BoolExpr[]) variablesFirst.toArray(new BoolExpr[variablesFirst.size()])));
+//        variablesFirst = new ArrayList<>();
+//        BoolExpr formularFirstFVariable =
+//            makeVariableSinz(k, j, ctx, solver, true, n, r, counter, literals, false);
+//        BoolExpr formularFirstSVariable =
+//            makeVariableSinz(k, j + 1, ctx, solver, false, n, r, counter, literals, false);
+//        if (formularFirstFVariable != null) {
+//          variablesFirst.add(formularFirstFVariable);
+//        }
+//        if (formularFirstSVariable != null) {
+//          variablesFirst.add(formularFirstSVariable);
+//        }
+        nClauses++;
+//        solver
+//            .add(ctx.mkOr((BoolExpr[]) variablesFirst.toArray(new BoolExpr[variablesFirst.size()])));
 
       }
     }
+    return nClauses
   }
 
 
   /* zweite Formel wird erstellt */
-  public static void createFormulaSecond(Context ctx, Solver solver, int n, int r, int counter,
+  public static int createFormulaSecond(Context ctx, Solver solver, int n, int r, int counter,
       ArrayList<Literal> literals) throws Z3Exception {
     ArrayList<BoolExpr> variablesSecond = new ArrayList<BoolExpr>();
+    int nClauses=0;
     for (int k = 0; k <= r; k++) {
       for (int j = 1; j <= n - r; j++) {
-        variablesSecond = new ArrayList<>();
-        BoolExpr formularSecondFVariable =
-            makeVariableSinz(1, j + k, ctx, solver, true, n, r, counter, literals, true);
-        BoolExpr formularSecondSVariable =
-            makeVariableSinz(k, j, ctx, solver, true, n, r, counter, literals, false);
-        BoolExpr formularSecondTVariable =
-            makeVariableSinz(k + 1, j, ctx, solver, false, n, r, counter, literals, false);
-        if (formularSecondFVariable != null) {
-          variablesSecond.add(formularSecondFVariable);
-        }
-        if (formularSecondSVariable != null) {
-          variablesSecond.add(formularSecondSVariable);
-        }
-        if (formularSecondTVariable != null) {
-          variablesSecond.add(formularSecondTVariable);
-        }
-        solver.add(ctx.mkOr((BoolExpr[]) variablesSecond.toArray(new BoolExpr[variablesSecond
-            .size()])));
+//        variablesSecond = new ArrayList<>();
+//        BoolExpr formularSecondFVariable =
+//            makeVariableSinz(1, j + k, ctx, solver, true, n, r, counter, literals, true);
+//        BoolExpr formularSecondSVariable =
+//            makeVariableSinz(k, j, ctx, solver, true, n, r, counter, literals, false);
+//        BoolExpr formularSecondTVariable =
+//            makeVariableSinz(k + 1, j, ctx, solver, false, n, r, counter, literals, false);
+//        if (formularSecondFVariable != null) {
+//          variablesSecond.add(formularSecondFVariable);
+//        }
+//        if (formularSecondSVariable != null) {
+//          variablesSecond.add(formularSecondSVariable);
+//        }
+//        if (formularSecondTVariable != null) {
+//          variablesSecond.add(formularSecondTVariable);
+//        }
+//        solver.add(ctx.mkOr((BoolExpr[]) variablesSecond.toArray(new BoolExpr[variablesSecond
+//            .size()])));
+        nClauses++;
 
       }
     }
+    return nClauses;
   }
 
   private static BoolExpr makeVariableSinz(int upperIndex, int lowerIndex, Context ctx,
@@ -98,8 +105,9 @@ public class KnuthSinz extends Encoding {
       }
       return;
     }
-    createFormulaFirst(ctx, solver, literals.size(), r, counter, literals);
-    createFormulaSecond(ctx, solver, literals.size(), r, counter, literals);
+    int a = createFormulaFirst(ctx, solver, literals.size(), r, counter, literals);
+    int b = createFormulaSecond(ctx, solver, literals.size(), r, counter, literals);
+    return a+ b
 
   }
 
