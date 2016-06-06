@@ -16,7 +16,7 @@
 \usepackage{dataplot}
 \usepackage{lscape}
 \usepackage{changepage}
-%\usepackage[options]{natbib}
+\usepackage{natbib}
 
 \DTLsetseparator{;}
 \PassOptionsToPackage{big}{titlesec}
@@ -113,10 +113,10 @@ Jil Tietjen
 	\clearpage
 
 \section{Einleitung}
-Viele praktische Probleme in der Informatik, zum Beispiel im Bereich der Bio-Chips, können durch das Umwandeln in bekannte abstrakte Probleme gelöst werden.\\
+Viele praktische Probleme in der Informatik, zum Beispiel beim Routing und bei der Synthese der Bio-Chips, können durch das Umwandeln in bekannte abstrakte Probleme gelöst werden.\\
 In den letzten Jahren wurde das Interesse geweckt, diese praktischen Probleme mit Cardinality Constraints und SAT-Solvern zu behandeln. In der Vergangenheit wurden diese Kodierungen nicht oder nur begrenzt für praktische Probleme getestet. Die Cardinality Constraints können dafür nicht einfach verwendet werden. Damit sie durch den SAT-Solver verarbeitet werden können, müssen sie in die Sprache der Aussagenlogik, oder besser noch in die konjunktive Normalform kodiert werden. Es gibt jedoch noch keine allgemeine Definition über die beste Kodierung für die Cardinality Constraints. Es lässt sich nur feststellen, dass es von Vorteil ist, wenn die Formel im Hinblick auf die Anzahl der Variablen und Klauseln so klein wie möglich gehalten wird. Außerdem sollte sie bestimmte Eigenschaften des SAT-Solvers, vor allem Unit Propagation, ausnutzen \cite[vgl.][]{einleitung}.\\
 In dieser Arbeit werden verschiedene Kodierungen für die Cardinality Constraints anhand von Benchmark-Problemen untersucht. Es werden das n-Damen-Problem und Digital Tomography als Testprobleme genutzt. Des Weiteren gibt es zufällig generierte Testfälle, die Cardinality Constraints unterschiedlicher Größe untersuchen. \\
-Die Kodierungen, die eine binäre oder unäre Zahlendarstellung als Grundlage haben, basieren auf unterschiedlichen Methoden. Dazu gehören binäre Bäume, Schaltkreise (Addierer), Binary Decision Diagrams oder Sorting Networks mit verschiedenen Sortieralgorithmen. \\
+Die Kodierungen, die eine unäre oder binäre Zahlendarstellung als Grundlage haben, basieren auf unterschiedlichen Methoden. Dazu gehören binäre Bäume, Schaltkreise (Addierer), Binary Decision Diagrams oder Sorting Networks mit verschiedenen Sortieralgorithmen. \\
 Außerdem wurde in dieser Arbeit eine eigene Kodierung, basierend auf Sorting Networks, entwickelt. Hier soll vor allem hinsichtlich des Speicherbedarfs eine Optimierung gegenüber anderen etablierten Verfahren erreicht werden. Dies geschieht durch das Entfernen nicht benötigter Comparators im Sorting Network. \\
 Ziel dieser Arbeit ist es, die untersuchten Kodierungen für diese Probleme zu vergleichen. Als Vergleichsgrößen werden der Speicher- und Zeitbedarf für das Lösen der Probleme gemessen. \\
 \newline
@@ -150,14 +150,15 @@ Die Formel F liegt üblicherweise in Konjunktiver Normalform (KNF) vor. Eine For
 \begin{align*}
 &F = \bigwedge_{i=1, \dots ,n} \bigvee_{j=1,\dots ,m_i}{l_{i,j}}\\
 \end{align*}
-Eine SAT-Instanz ist zum Beispiel $(\neg a) \wedge (b \vee \neg c \vee d) \wedge (a \vee \neg b)$ mit den Variablen $a,b,c,d$. Für sie gibt es die Lösung: $a = 0,{~} b = 0,{~} c= 0, {~} d = 1$. Es muss eine Belegung gefunden werden, so dass jede Klausel erfüllt ist.
+Eine SAT-Instanz ist zum Beispiel $(\neg a) \wedge (b \vee \neg c \vee d) \wedge (a \vee \neg b)$ mit den Variablen $a,b,c,d$. Für sie gibt es die Lösung: $a = 0,{~} b = 0,{~} c= 0, {~} d = 1$. Es muss eine Belegung gefunden werden, so dass jede Klausel erfüllt ist.\\
+\ \\
 Eine Klausel kann auch als eine endliche Menge von Literalen angesehen werden. Bei einer KNF-Formel wird die Klauselmenge M(F) wie folgt zugeordnet:\\
 \begin{itemize}
 \item $i$-te Disjunktion $\bigvee_{j=1,\dots ,m_i}{l_{i,j}}$ entspricht Klausel $C_i = \{l_{i1}, \dots, l_{im_i}\}$
 \item M(F) = $\{C_1, \dots, C_n\}$
 \end{itemize}
 \subsubsection{SAT-Solver}
-Mit einem SAT-Solver kann für eine Formel in konjunktiver Normalform ermittelt werden, ob sie erfüllbar ist oder nicht. Zur Lösung des Erfüllbarkeitsproblems hat sich der Davis-Putnam-Logemann-Loveland-Algorithmus (kurz: DPLL) durchgesetzt \cite[vgl.][]{dpll}, der ein chronologisches Backtracking umsetzt. Das heißt, dass eine erfüllende Variablenbelegung schrittweise konstruiert und die gegebene Formel dabei vereinfacht wird. Im Folgenden wird der DPLL Algorithmus vorgestellt. Die gezeigte Variante ist aus \cite[][]{algoDpll} entnommen und lehnt sich stark an \cite[][]{satisfiability} an.
+Mit einem SAT-Solver kann für eine Formel in konjunktiver Normalform ermittelt werden, ob sie erfüllbar ist oder nicht. Zur Lösung des Erfüllbarkeitsproblems hat sich der Davis-Putnam-Logemann-Loveland-Algorithmus (kurz: DPLL) durchgesetzt \cite[vgl.][]{dpll}, der ein chronologisches Backtracking umsetzt. Das heißt, dass eine erfüllende Variablenbelegung schrittweise konstruiert und die gegebene Formel dabei vereinfacht wird. Im Folgenden wird der DPLL Algorithmus vorgestellt. Die gezeigte Variante ist aus \citet[][]{algoDpll} entnommen und lehnt sich stark an \citet[][]{satisfiability} an.
 
 \FloatBarrier
 \begin{algorithm}[h]
@@ -191,7 +192,9 @@ Wenn eine Klausel durch die aktuelle Zuordnung nicht erfüllt werden kann, wird 
 Sobald allen Variablen ein Wert zugewiesen wurde, gibt der Algorithmus \emph{erfüllbar} zurück und ansonsten \emph{unerfüllbar}.\\
 Ein Verfahren, um die Performanz des DPLL-Algorithmus zu verbessern ist Unit Propagation.Unit Propagation ist ein Verfahren, um aus Einheitsklauseln direkt eine Belegung zu folgern. Eine Klausel ist eine Einheitsklausel, wenn alle Literale bis auf eines falsifiziert wurden. Um eine Einheitsklausel zu erfüllen, muss die entsprechende Variable mit true beziehungsweise false belegt werden.\\
 Der Algorithmus ist rekursiv und belegt in jedem Schritt mindestens eine Variable, wenn möglich durch die Elimination einer Einheitsklausel. Ansonsten wird eine Variable unter Verwendung der Fallunterscheidung mit bis zu zwei rekursiven Aufrufen eliminiert.\\
+\ \\
 Zum Beispiel kann die Formel $(x_1 \vee x_2 \vee x_3) \wedge (\neg x_1 \vee \neg x_4 \vee x_5) \wedge (\neg x_1 \vee x_4)$ mit $x_1=1, x_4=1$ belegt werden. Dann ist die zweite Klausel eine Einheitsklausel, da nur noch $x_5$ übrig bleibt. Damit die Klausel erfüllt wird, muss $x_5 = 1$ sein. \\
+\ \\
 Moderne SAT-Solver verwenden zusätzlich das Klausellernen (CDCL) \cite[vgl.][]{cdcl}. Gibt es eine Formel, die auf Grund eines Konfliktes in der Belegung der Variablen nicht mehr erfüllbar ist, wird eine zusätzliche Klausel hinzugefügt. Die neue Klausel schließt die falsche Belegung der entsprechenden Variablen aus, so dass diese Konstellation nicht mehr auftreten kann.\\
 Mit Hilfe der SAT-Solver können NP-vollständige Probleme trotzdem effizient gelöst werden. Durch die hohe Relevanz der Lösung von praktischen Problemen gibt es fast jedes Jahr einen Wettbewerb (\url{http://www.satcompetition.org/}), der neue oder bessere SAT-Solver hervorbringt.
 
@@ -211,6 +214,7 @@ Für eine Variablenzuordnung $a:V \rightarrow \mathbb{B}$ wird der Wahrheitswert
 \end{align*}
 \ \\
 Bei diesen Ausdrücken ist $n\geq 0$ und $x_i \in V$ für $1 \leq i \leq n$.\\
+\ \\
 Viele praktische Probleme können durch eine Menge von Cardinality Constraints ausgedrückt werden. Cardinality Constraints können in Konjunktive Normalform übersetzt werden, so dass man SAT-Solver zur Lösung verwenden kann.\\
 Im weiteren Verlauf wird nur das $\leq$-Constraint behandelt, da die anderen beiden Constraints damit ausdrückbar sind.
 \begin{align*}
@@ -228,11 +232,17 @@ Für jede Subformel $\alpha_1$ von $\alpha$, die kein Atom ist, wird ein neues A
 \ \\
 Dies sind die Regeln der Tseitin Transformation:
 \begin{align*}
-&\beta \leftrightarrow\neg \beta_1 {~~~~~~~~~~}\rightsquigarrow{~~~~~~~} (\neg t_\beta \vee \neg t_{\beta_1 }) \wedge (t_\beta \vee t_{\beta_1})\\
-&\beta \leftrightarrow \beta_1 \wedge \beta_2 {~~~~~~}\rightsquigarrow{~~~~~~} (\neg t_\beta \vee  t_{\beta_1 }) \wedge (\neg t_\beta \vee t_{\beta_2}) \wedge (t_\beta \vee \neg t_{\beta_1} \vee \neg t_{\beta_2})\\
-&\beta \leftrightarrow \beta_1 \vee \beta_2 {~~~~~~}\rightsquigarrow{~~~~~~} (t_\beta \vee  \neg t_{\beta_1 }) \wedge (t_\beta \vee \neg t_{\beta_2}) \wedge (\neg t_\beta \vee t_{\beta_1} \vee t_{\beta_2})\\
-&\beta \leftrightarrow \beta_1 \rightarrow \beta_2 {~~~~}\rightsquigarrow{~~~~~~} (t_\beta \vee  t_{\beta_1 }) \wedge (t_\beta \vee \neg t_{\beta_2}) \wedge (\neg t_\beta \vee \neg t_{\beta_1} \vee t_{\beta_2})
+&\alpha \leftrightarrow\neg \beta {~~~~~~~~~~}\rightsquigarrow{~~~~~~~} (\neg t_\alpha \vee \neg t_{\beta }) \wedge (t_\alpha \vee t_{\beta})\\
+&\alpha \leftrightarrow \beta \wedge \gamma {~~~~~~}\rightsquigarrow{~~~~~~} (\neg t_\alpha \vee  t_{\beta}) \wedge (\neg t_\alpha \vee t_{\gamma}) \wedge (t_\alpha \vee \neg t_{\beta} \vee \neg t_{\gamma})\\
+&\alpha \leftrightarrow \beta \vee \gamma {~~~~~~}\rightsquigarrow{~~~~~~} (t_\alpha \vee  \neg t_{\beta}) \wedge (t_\alpha \vee \neg t_{\gamma}) \wedge (\neg t_\alpha \vee t_{\beta} \vee t_{\gamma})\\
+&\alpha \leftrightarrow \beta \rightarrow \gamma {~~~~}\rightsquigarrow{~~~~~~} (t_\alpha \vee  t_{\beta}) \wedge (t_\alpha \vee \neg t_{\gamma}) \wedge (\neg t_\alpha \vee \neg t_{\beta} \vee t_{\gamma})
 \end{align*}
+\ \\
+Sollte in den obigen Gleichungen ein Atom auftauchen, so wird es direkt verwendet. Zum Beispiel ist:\\
+\begin{align*}
+&\alpha \leftrightarrow\neg x {~~~~~~~~~~}\rightsquigarrow{~~~~~~~} (\neg t_\alpha \vee \neg x) \wedge (t_\alpha \vee x)\\
+\end{align*}
+Die anderen Fälle werden analog behandelt.\\
 \ \\
 Beispiel: Die Formel $\beta = x_1 \vee (x_2 \wedge (x_3 \rightarrow x_4))$ soll mittels Tseitin-Transformation in eine erfüllbarkeitsäquivalente konjunktive Normalform umgewandelt werden.\\
 Es können diese Subformeln gebildet werden:\\
@@ -282,7 +292,9 @@ Ein gerichteter Graph ist ein Paar $G=(V, E)$, wobei $V$ eine Menge von Knoten u
 \label{fig:bdd}
 \end{figure}
 \ \\
-Ein BDD repräsentiert in eindeutiger Weise eine Boolesche Funktion. Der Graph aus Abbildung \ref{fig:bdd} kann die Boolesche Funktion $f(x_1,x_2,x_3) = x_1\wedge x_2 \vee x_3$ ausdrücken. Um den Wert einer Funktion für eine feste Belegung abzulesen, folgt man den entsprechenden Kanten im BDD. Zum Beispiel ist $f(1,0,1)=1$.
+Ein BDD repräsentiert in eindeutiger Weise eine Boolesche Funktion.\\
+\ \\
+Der Graph aus Abbildung \ref{fig:bdd} kann die Boolesche Funktion $f(x_1,x_2,x_3) = x_1\wedge x_2 \vee x_3$ ausdrücken. Um den Wert einer Funktion für eine feste Belegung abzulesen, folgt man den entsprechenden Kanten im BDD. Zum Beispiel ist $f(1,0,1)=1$.
 
 
 \subsection{Sorting Networks}
@@ -298,7 +310,7 @@ Ein Sorting Network ist ein Netzwerk \cite[vgl.][]{sorting}, das aus Comparators
 Die Comparators in einem Sorting Network können nach verschiednen Algorithmen angeordnet werden. Mögliche Algorithmen sind der Bubble-Sort Algorithmus, der Odd-Even Mergesort Algorithmus oder der Bose-Nelson Algorithmus.
 
 \section{Kodierungen}
-In diesem Abschnitt werden die unterschiedlichen Kodierungen von Cardianlity Constraints beschrieben. Das Ziel ist es, dass die Cardinality Constraints über die Menge der Boolschen Variablen in eine Konjunktive Normalform (KNF) gebracht werden. %Innerhalb der KNF gibt es Einschränkungen, die verlangen, dass höchstens $r$ der Booleschen Variablen 1 sein können. Rein in die Grundlagen
+In diesem Abschnitt werden die unterschiedlichen Kodierungen von Cardinality Constraints beschrieben. Das Ziel ist es, dass die Cardinality Constraints über die Menge der Boolschen Variablen in eine Konjunktive Normalform (KNF) gebracht werden. %Innerhalb der KNF gibt es Einschränkungen, die verlangen, dass höchstens $r$ der Booleschen Variablen 1 sein können. Rein in die Grundlagen
 Das Cardinality Constraint ist genau dann erfüllt, wenn die aus der Kodierung resultierende Formel erfüllt ist. Ein einzelnes Cardinality Constraint ist immer erfüllbar. Erst eine Kombination mit anderen Einschränkungen kann zu einer unerfüllbaren Formel führen.
 
 %Evaluation Alle Kodierungen werden anhand des Damen-Problems und anhand einer Tomography auf ihre Praxistauglichkeit überprüft.
@@ -308,7 +320,7 @@ Zur Verdeutlichung der Einflüsse der weiteren Kodierungen wird als Erstes der n
 Für beliebige $r$ gibt es nicht nur Paare von Variablen, sondern $(r+1)$-Tupel.\\
 \begin{align*}
 \begin{aligned}
-Nk (n, r) = \bigwedge_{\substack{M\subset \{1, \dots, n\} \\  |M|=r+1}} (\bigvee_{x \in M} {\neg x})
+Nk (n, r) = \bigwedge_{\substack{M\subseteq \{1, \dots, n\} \\  |M|=r+1}} (\bigvee_{x \in M} {\neg x})
 \end{aligned}
 \end{align*}
 
@@ -322,10 +334,10 @@ Nk (n, r) = \bigwedge_{\substack{M\subset \{1, \dots, n\} \\  |M|=r+1}} (\bigvee
 \glqq$\Rightarrow$\grqq:\\
 Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n)\allowbreak \leq r$ erfüllt. Das heißt, dass es maximal $r$ Variablen $x_{i_1}, \dots, x_{i_r}$ mit $a(x_{i_1}) =\allowbreak \dots = a(x_{i_r}) = 1$ gibt. Für alle anderen Variablen $x_j$ gilt $a(x_j) = 0$. Durch die Kodierung gibt es in jeder Klausel genau $r+1$ negierte Literale. Somit gibt es in jeder Klausel mindestens eine Variable mit dem Wert $0$. Daraus folgt, dass jede Klausel erfüllt ist. Somit ist auch die gesamte KNF erfüllt.\\
 \glqq$\Leftarrow$\grqq:\\
-Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n)\allowbreak \leq r$ nicht erfüllt. Somit gibt es paarweise verschiedene $x_{i_1}, \dots, x_{i_{r+1}}$ mit $a(x_{i_1}), \dots ,a(x_{i_{r+1}}) = 1$. Durch die naive Kodierung gibt es eine Klausel $\overset{r+1}{\underset{j=1}{\bigvee}} {\neg x_{i_j}}$, welche diese Variablen verwendet und nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.\\
- \qedsymbol
-
-
+Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_n)\allowbreak \leq r$ nicht erfüllt. Somit gibt es mindestens $r+1$ Variablen, die den Wert $1$ annehmen. Durch die naive Kodierung gibt es eine Klausel $\overset{r+1}{\underset{j=1}{\bigvee}} {\neg x_{i_j}}$, welche diese Variablen verwendet und nicht erfüllt wird. Somit ist auch die gesamte KNF nicht erfüllt.\\
+ \qedsymbol \\
+\ \\
+In den weiteren Kodierungen sind die Korrektheitsbeweise in den jeweiligen Originalquellen zu finden.
 
 %\textbf{Theorem 1.} Die naive Kodierung ist korrekt für $r = 1$, das heißt, $(\sum (x_1, \dots, x_n) \leq 1) \Leftrightarrow (\hat{a} (Nk(n,1)) = 1)$.\\
 %\newline
@@ -337,13 +349,27 @@ Es wird angenommen, dass $a(x_1, \dots ,x_n)$ das Constraint $\sum(x_1, \dots,x_
 % \qedsymbol
 
 	\subsection{Kodierung nach Bailleux und Boufkhad}
-Im Folgenden wird die Kodierung aus \cite[][]{bailleux} vorgestellt. Im weiteren Verlauf werden zusätzlich Formeln aus \cite[][]{knuth} hinzugezogen.\\
+Im Folgenden wird die Kodierung aus \citet[][]{bailleux} vorgestellt. Im weiteren Verlauf wird aber die Formulierung aus \citet[][]{knuth} hinzugezogen.\\
 %Diese Kodierung ist, laut Bailleux, effizient mit Berücksichtigung der Unit Propagation, die in den meisten Sat-Solvern verwendet wird. Es werden O(n log (n)) Variablen und O($\text{n}^2$) Klauseln gefordert, die aus mindestens 3 Literalen bestehen. Bei dieser Kodierung ist das Besondere, dass es eine einstellige Darstellung von Integer-Variablen gibt, die nicht nur den Wert an sich repräsentieren, sondern auch einem Intervall zugeordnet werden kann. Zum Beispiel gilt die Variable c nur, wenn das Intervall der Variablen ($a + b$) c erfüllt. Dadurch erhält man eine KNF. Die Kodierung muss korrekt sein, wenn es eine wahre Zuordnung gibt die unter der Berücksichtigung der Constraints erfüllbar ist.
 %n erklären in den Grundlagen
 Bei dieser Kodierung wird ein binärer Baum aufgebaut. Die Wurzelknoten sind je einer Eingangsvariable zugeordnet. Die inneren Knoten addieren die Werte beider Kindsknoten, so dass in der Wurzel die Summe aller Eingangsvariablen gebildet wird. Durch die unäre Darstellung der Variablen ist die Addition von zwei Werten besonders einfach. Durch das Wegstreichen von trivialen Variablen bleiben am Ende einige Klauseln mit zwei Literalen übrig. Hier kann häufiger Unit Propagation angewendet werden. Dies steigert die Effizienz der Kodierung.\\
 Der Baum wird iterativ aufgebaut und beginnt mit einem Wurzelknoten, der mit $1$ betitelt wird. Insgesamt gibt es $n-1$ innere Knoten, sowie $n$ Blätter, die von $n$ bis $2n-1$ beschriftet werden. Die Kinder von Knoten $k$  für $1 \leq k \textless n$ sind die Knoten $2k$ und $2k +1$.\\
+\ \\
+Für das Beispiel sei $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ innere Knoten sowie 4 Blätter, die beschriftet sind mit $4$ bis $2\cdot4-1=7$. Die Kinder von Knoten $1$ sind die Knoten $2\cdot1=2$ und $2\cdot1 +1=3$. Daraus ergibt sich der binäre Baum, der in Abbildung \ref{fig:baum} zu sehen ist.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm]{bailleux.png}
+\caption{Binärer Baum nach Bailleux}
+\label{fig:baum}
+\end{figure}
+\ \\
 Jedem Knoten wird eine Menge von Variablen zugeordnet. Dabei wird jedem Blatt eine Eingangsvariable und dem Wurzelknoten die Menge der Ausgangsvariablen zugeordnet. Nun wird die Kodierung so aufgebaut, dass die Variablen eines inneren Knotens die Summe der Variablen seiner Kindsknoten repräsentieren. Daraus ergibt sich ein Wurzelknoten, dessen Variablen mit $r$ verglichen werden können, da sie die Summe aller Eingangsvariablen repräsentieren.\\
-Als nächster Schritt werden neue Hilfsvariablen der Form $\text{b}_j^k$ gebildet, für $1 \textless k \textless n$ und  $1 \leq j \leq t_k$. Dabei ist $t_k$ das Minimum von $r$ und der Anzahl der Blätter unter dem Knoten $k$. Bei $n=2$ und $r=2$ hat der Knoten $1$ zum Beispiel $2$ Blätter, daher ist $t_1=2$. Jedem inneren Knoten k wird die Menge der Variablen $\text{b}_j^k$ zugeordnet.\\
+Als nächster Schritt werden neue Hilfsvariablen der Form $\text{b}_j^k$ gebildet, für $1 \textless k \textless n$ und  $1 \leq j \leq t_k$. Dabei ist $t_k$ das Minimum von $r$ und der Anzahl der Blätter unter dem Knoten $k$.\\
+ Bei $n=2$ und $r=2$ hat der Knoten $1$ zum Beispiel $2$ Blätter, daher ist $t_1=2$. Jedem inneren Knoten k wird die Menge der Variablen $\text{b}_j^k$ zugeordnet.\\
+\ \\
+Für das Beispiel $n=4$ und $r =1$ hat der Knoten $1$ die Blätter $4,5,6$ und $7$. Der Wert von $t_1$ ist daher $min(4,r) = min(4,1) = 1$. Die weiteren Variablen $\text{t}_k$ sind ebenfalls $1$.\\
+\ \\
 Mit den neuen Variablen können folgende Klauseln gebildet werden:\\
 \begin{align*}
 &\textbf{1. Formel:}\\
@@ -354,19 +380,7 @@ Mit den neuen Variablen können folgende Klauseln gebildet werden:\\
 \end{align*}
 \ \\
 Dabei wird $\text{t}_k$ zu $1$ und $\text{b}_1^k = \text{x}_{k-n+1}$ für $n \leq k \textless 2n$. Dadurch können aus den Hilfsvariablen die entsprechenden Literale gebildet werden, die die KNF bilden.
-Aufgrund des Aufbaus der Formel können Variablen der Form $b_{r+1}^k$ nur positiv und Variablen der Form $\text{b}_0^k$ nur negativ vorkommen. Daher können diese Variablen gestrichen werden.
-
-\subsubsection*{Beispiel für die Kodierung}
-Für das Beispiel sei $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ innere Knoten sowie 4 Blätter, die beschriftet sind mit $4$ bis $2\cdot4-1=7$. Die Kinder von Knoten $1$ sind die Knoten $2\cdot1=2$ und $2\cdot1 +1=3$. Daraus ergibt sich der binäre Baum, der in Abbildung \ref{fig:baum} zu sehen ist.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=9cm]{bailleux.png}
-\caption{Binärer Baum nach Bailleux}
-\label{fig:baum}
-\end{figure}
-\ \\
-Der Knoten $1$ hat die Blätter $4,5,6$ und $7$. Der Wert von $t_1$ ist daher $min(4,r) = min(4,1) = 1$. Die weiteren Variablen $\text{t}_k$ sind ebenfalls $1$.
+Aufgrund des Aufbaus der Formel können Variablen der Form $b_{r+1}^k$ nur positiv und Variablen der Form $\text{b}_0^k$ nur negativ vorkommen. Daher können diese Variablen gestrichen werden.\\
 \ \\
 Dadurch ergeben sich für das Beispiel von $n=4$ folgende Variablen:\\
 \begin{align*}
@@ -382,7 +396,6 @@ Somit ergeben sich für (i, j) die Möglichkeiten $(1,0)$, $(0,1)$ und $(1,1)$.\
 &\neg b_0^4 \vee \neg b_1^5 \vee b_1^2 {~~~~~~~~~~~~~~~} \neg b_0^6 \vee \neg b_1^7 \vee b_1^3\\
 &\neg b_1^4 \vee \neg b_1^5 \vee b_2^2 {~~~~~~~~~~~~~~~} \neg b_1^6 \vee \neg b_1^7 \vee b_2^3\\
 \end{align*}
-
 Da alle Variablen der Form $\neg b_0^k$ und $b_{r+1}^k$  gestrichen werden, bleiben nur noch diese Klauseln übrig:\\
 \begin{align*}
 &\textbf{k = 2:} {~~~~~~~~~~~~~~~~~~~~~~~~} \textbf{k = 3:}\\
@@ -404,30 +417,86 @@ $\text{Somit ergibt sich für (i, j) die Möglichkeit} (1,1) \text{, }\text{so d
 \begin{align*}
 &\neg b_1^2 \vee \neg b_1^3\\
 \end{align*}
-
+\ \\
 Es können keine Variablen gestrichen werden.\\
-
 Die vollständige KNF sieht folgendermaßen aus:\\
 \begin{align*}
 &(\neg x_1 \vee b_1^2) \wedge (\neg x_2 \vee b_1^2) \wedge (\neg x_1 \vee \neg x_2) \wedge (\neg x_3 \vee b_1^3)\\
 &\wedge (\neg x_4 \vee b_1^3) \wedge (\neg x_3 \vee \neg x_4) \wedge (\neg b_1^2 \vee \neg b_1^3)\\
 \end{align*}
 
+%\subsubsection*{Beispiel für die Kodierung}
+%Für das Beispiel sei $n=4$ und $r =1$. Der binäre Baum hat $4-1 = 3$ innere Knoten sowie 4 Blätter, die beschriftet sind mit $4$ bis $2\cdot4-1=7$. Die Kinder von Knoten $1$ sind die Knoten $2\cdot1=2$ und $2\cdot1 +1=3$. Daraus ergibt sich der binäre Baum, der in Abbildung \ref{fig:baum} zu sehen ist.
+%
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=9cm]{bailleux.png}
+%\caption{Binärer Baum nach Bailleux}
+%\label{fig:baum}
+%\end{figure}
+%\ \\
+%Der Knoten $1$ hat die Blätter $4,5,6$ und $7$. Der Wert von $t_1$ ist daher $min(4,r) = min(4,1) = 1$. Die weiteren Variablen $\text{t}_k$ sind ebenfalls $1$.
+%\ \\
+%Dadurch ergeben sich für das Beispiel von $n=4$ folgende Variablen:\\
+%\begin{align*}
+%&\textbf{Formel 1:}\\
+%&k=2 \text{ oder } k=3 \text{ , weil } 1 \textless k \textless n.\\
+%&j=0 \text{ oder } j=1 \text{ , weil } 1 \leq j \leq t_k \text{ und } t_k = 1.\\
+%&i=0 \text{ oder } i=1 \text{ , weil } 1\leq i+j \leq t_{k}+1.\\
+%\end{align*}
+%Somit ergeben sich für (i, j) die Möglichkeiten $(1,0)$, $(0,1)$ und $(1,1)$.\\
+%\begin{align*}
+%&\textbf{k = 2:} {~~~~~~~~~~~~~~~~~~~~~~~~~~~~} \textbf{k = 3:}\\
+%&\neg b_1^4 \vee \neg b_0^5 \vee b_1^2 {~~~~~~~~~~~~~~~} \neg b_1^6 \vee \neg b_0^7 \vee b_1^3\\
+%&\neg b_0^4 \vee \neg b_1^5 \vee b_1^2 {~~~~~~~~~~~~~~~} \neg b_0^6 \vee \neg b_1^7 \vee b_1^3\\
+%&\neg b_1^4 \vee \neg b_1^5 \vee b_2^2 {~~~~~~~~~~~~~~~} \neg b_1^6 \vee \neg b_1^7 \vee b_2^3\\
+%\end{align*}
+%
+%Da alle Variablen der Form $\neg b_0^k$ und $b_{r+1}^k$  gestrichen werden, bleiben nur noch diese Klauseln übrig:\\
+%\begin{align*}
+%&\textbf{k = 2:} {~~~~~~~~~~~~~~~~~~~~~~~~} \textbf{k = 3:}\\
+%&\neg b_1^4  \vee b_1^2 {~~~~~~~~~~~~~~~~~~~~}\neg b_1^6 \vee b_1^3\\
+%&\neg b_1^5 \vee b_1^2  {~~~~~~~~~~~~~~~~~~~~}\neg b_1^7 \vee b_1^3\\
+%&\neg b_1^4 \vee \neg b_1^5 {~~~~~~~~~~~~~~~~~~}\neg b_1^6 \vee \neg b_1^7\\
+%\end{align*}
+%$b_1^k \text{ wird ersetzt durch } x_{k-n+1}$:
+%\begin{align*}
+%&\neg x_1 \vee b_1^2 {~~~~~~~~~~} \neg x_3 \vee b_1^3\\
+%&\neg x_2 \vee b_1^2 {~~~~~~~~~~} \neg x_4 \vee b_1^3\\
+%&\neg x_1 \vee \neg x_2 {~~~~~~~~~~} \neg x_3 \vee \neg x_4\\
+%\\
+%&\textbf{Formel 2:}\\
+%&i=1 \text{ , weil } 0\leq i \leq t_2 \text{ für } t_2 = 1.\\
+%&j=1 \text{ , weil } 0\leq j \leq t_3 \text{ für } t_3=1.\\
+%\end{align*}
+%$\text{Somit ergibt sich für (i, j) die Möglichkeit} (1,1) \text{, }\text{so dass } i+j = r+1 \text{  gilt.}$
+%\begin{align*}
+%&\neg b_1^2 \vee \neg b_1^3\\
+%\end{align*}
+%
+%Es können keine Variablen gestrichen werden.\\
+%
+%Die vollständige KNF sieht folgendermaßen aus:\\
+%\begin{align*}
+%&(\neg x_1 \vee b_1^2) \wedge (\neg x_2 \vee b_1^2) \wedge (\neg x_1 \vee \neg x_2) \wedge (\neg x_3 \vee b_1^3)\\
+%&\wedge (\neg x_4 \vee b_1^3) \wedge (\neg x_3 \vee \neg x_4) \wedge (\neg b_1^2 \vee \neg b_1^3)\\
+%\end{align*}
+
 	\subsection{Kodierungen nach Sinz}
-Dieser Abschnitt behandelt zwei Kodierungen nach \cite[][]{sinz}, die auf einem sequentiellen Counter und einem parallelen Counter basieren. Grundlegend bestehen diese Kodierungen aus einer konjunktiven Normalform, die aus einem Schaltkreis gewonnen wurde. Der Schaltkreis bildet die Summe der Eingangsvariablen mit Hilfe eines unären oder binären Counters und vergleicht das Ergebnis mit $r$. Die Unterschiede der Schaltkreise werden im weiteren Verlauf beschrieben.
+Dieser Abschnitt behandelt zwei Kodierungen nach \citet[][]{sinz}, die auf einem sequentiellen Counter und einem parallelen Counter basieren. Grundlegend bestehen diese Kodierungen aus einer konjunktiven Normalform, die aus einem Schaltkreis gewonnen wurde. Der Schaltkreis bildet die Summe der Eingangsvariablen mit Hilfe eines unären oder binären Counters und vergleicht das Ergebnis mit $r$. Die Unterschiede der Schaltkreise werden im weiteren Verlauf beschrieben.
 		\subsubsection{Sequentielle Variante}
-Die sequentlielle Variante verwendet eine unäre Darstellung. Es werden die Eingangsvariablen gezählt, die auf true gesetzt werden. Mit Hilfe von Overflow-Bits wird überprüft, ob das Zählerergebnis kleiner oder gleich $r$ ist (siehe Abbildung \ref{fig:sinz_counter}). Der Counter besteht aus mehreren hintereiander geschachtelten Sub-Schaltkreisen, die jeweils die Summe der vorherigen Sub-Schaltkreise und der nächsten Eingangsvariablen berechnen. Daher kann die komplette Summe erst im letzten Sub-Schaltkreis berechnet werden. \\
+Die sequentlielle Variante verwendet eine unäre Darstellung. Es werden die Eingangsvariablen gezählt, die auf true gesetzt werden. Mit Hilfe von Overflow-Bits wird überprüft, ob das Zählerergebnis kleiner oder gleich $r$ ist (siehe Abbildung \ref{fig:sinz_counter}). Der Counter besteht aus mehreren hintereinander geschachtelten Sub-Schaltkreisen, die jeweils die Summe der vorherigen Sub-Schaltkreise und der nächsten Eingangsvariablen berechnen. Daher kann die komplette Summe erst im letzten Sub-Schaltkreis berechnet werden. \\
 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{sinz_seq.pdf}
-\caption{Sequentieller Counter von Sinz in Anlehnung an \cite[][] {sinz}. Berechnet die Teilsummen $\sum_{j=1}^{n}x_j$}.
+\caption{Sequentieller Counter von Sinz in Anlehnung an \citet[][] {sinz}. Berechnet die Teilsummen $\sum_{j=1}^{n}x_j$}.
 \label{fig:sinz_counter}
 \end{figure}
 \ \\
 Es gibt $n$ Addierer. Jeder Addierer erhält eine Eingangsvariable und $r$-viele Teilsummen als Eingänge. Die Ausgänge sind die neue Teilsumme sowie ein Overflow-Bit. Die entstehenden Überträge der einzelnen Addierer werden auf true gesetzt, wenn die Teilsumme größer als $r$ ist. Damit die Cardinality Constraints erfüllbar sein können, sind keine Überträge erlaubt. Wäre der Wert eines Übertrages $1$, hieße das, dass eine Teilsumme größer als $r$ ist. Es wird ausgenutzt, dass $\neg \text{overflow}_i$ für $1 \leq i \leq n$ gelten muss, um die konjunktive Normalform zu vereinfachen. Daraus ergibt sich dann eine Menge von Klauseln.\\
-Bei dieser Variante werden erneut nach \cite[][]{knuth} neue Variablen eingeführt. Es werden $(n-r)\cdot r$ neue Variablen der Form $\text{s}_j^k$ für $1 \leq j \leq n - r$ und $1 \leq k \leq r$ gebildet. \\
+In \citet[][]{knuth} wurde eine verbesserte Variante vorgestellt, die vom eigentlichen Schaltkreis abstrahiert. Im Folgenden werden die Formeln von Knuth verwendet. Es werden $(n-r)\cdot r$ neue Variablen der Form $\text{s}_j^k$ für $1 \leq j \leq n - r$ und $1 \leq k \leq r$ gebildet. \\
 Mit den neuen Variablen können folgende Klauseln erstellt werden:\\
 
 \begin{align*}
@@ -437,11 +506,9 @@ Mit den neuen Variablen können folgende Klauseln erstellt werden:\\
 &(\neg x_{j+k} \vee \neg s_j^k \vee s_j^{k+1}) \text{ für } 1 \leq j \leq n - r \text{ und } 0 \leq k \leq r\\
 \end{align*}
 \ \\
-Die Variablen der Form  $\neg s_j^0$ können gestrichen werden. Dies ist möglich, weil sie nur in der negierten Form vorkommen. Des Weiteren dürfen Variablen der Form $\text{s}_j^{r+1}$ gestrichen werden, weil sie nur positiv vorkommen.
-
-	\subsubsection*{Beispiel für die sequentielle Kodierung}
+Die Variablen der Form  $\neg s_j^0$ können gestrichen werden. Dies ist möglich, weil sie nur in der negierten Form vorkommen. Des Weiteren dürfen Variablen der Form $\text{s}_j^{r+1}$ gestrichen werden, weil sie nur positiv vorkommen.\\
+\ \\
 Es ergeben sich für das Beispiel von $n=4$ und $r=1$ folgende Variablen:\\
-
 \begin{align*}
 &\textbf{Formel 1:}\\
 & \text{Da } 1 \leq j \textless 3 \text{ ergeben sich } 1 \text{ oder } 2 \text{ für } j.\\
@@ -475,8 +542,8 @@ Die vollständige KNF sieht folgendermaßen aus:\\
 \end{align*}
 
 		\subsubsection{Parallele Variante}
-Der Unterschied zum sequentiellen Counter besteht darin, dass beim parallelen Counter die Eingangsvariablen in zwei Hälften geteilt werden und durch Sub-Counter parallel verarbeitet werden können. Außerdem wird eine binäre Darstellung der Variablen verwendet. Die erste Hälfte hat die Größe $2^{m}-1$, wobei $m$ durch $2^m \leq n \textless 2^{m+1}$ ($m \in \mathbb{N}$) ermittelt wird. Durch die Wahl der ersten Hälfte mit $2^{m}-1$ Bits wird sichergestellt, dass die Darstellung binär ist. Damit die zweite Hälfte nie weniger Eingangsvariablen enthält als die erste, gibt es den Sonderfall, dass die zweite Hälfte keine Eingangsvariablen hat. Gibt es nur eine Eingangsvariable, wird diese direkt in den Output weitergeleitet.\\
-Im nächsten Schritt wird rekursiv in den Countern berechnet, wie groß die Anzahl der Eingangsvariablen ist, die auf true gesetzt werden müssen. Die Ausgangsvariable des ersten Counters wird mit der entsprechenden Ausgangsvariable des zweiten Counters durch einen Volladdierer zusammengerechnet. Durch die Volladdierer werden die Werte propagiert.\\
+Der Unterschied zum sequentiellen Counter besteht darin, dass beim parallelen Counter die Eingangsvariablen in zwei Hälften geteilt werden und durch Sub-Counter parallel verarbeitet werden können. Außerdem wird eine binäre Darstellung der Variablen verwendet. Die erste Hälfte hat die Größe $2^{m}-1$, wobei $m$ durch $2^m \leq n \textless 2^{m+1}$ ($m \in \mathbb{N}$) ermittelt wird. Durch die Wahl der ersten Hälfte mit $2^{m}-1$ Bits wird sichergestellt, dass die Darstellung binär ist. Damit die zweite Hälfte weniger Eingangsvariablen enthält als die erste, gibt es den Sonderfall, dass die zweite Hälfte keine Eingangsvariablen hat. Gibt es nur eine Eingangsvariable, wird diese direkt in den Output weitergeleitet.\\
+Im nächsten Schritt wird rekursiv in den Countern berechnet, wie groß die Anzahl der Eingangsvariablen ist, die auf true gesetzt sind. Die Ausgangsvariable des ersten Counters wird mit der entsprechenden Ausgangsvariable des zweiten Counters durch einen Volladdierer zusammengerechnet. Durch die Volladdierer werden die Werte propagiert.\\
 Falls der zweite Counter weniger Ausgangsvariablen hat als der erste, werden nur Halbaddierer benötigt. Die letzte Eingangsvariable wird als Carry-Bit in den letzten Addierer gegeben. Die Counter berechnen somit parallel die Summe von $2^m-1$ Eingangsvariablen.\\
 
 \begin{figure}[H]
@@ -488,7 +555,27 @@ Falls der zweite Counter weniger Ausgangsvariablen hat als der erste, werden nur
 \ \\
 Es wird ausgenutzt, dass Volladdierer drei Inputs, aber nur zwei Outputs haben. Dadurch können Leitungen reduziert werden. Des Weiteren kann durch die Anzahl der Eingangsvariablen ($n$) und den $m+1$ Outputs gesagt werden, dass der Schaltkreis aus $n-(m+1)$ Volladdierern besteht. Die Anzahl der Halbaddierer ist kleiner oder gleich $m$.\\
 \ \\
-Der Halb-Addierer und Voll-Addierer kann folgendermaßen als KNF ausgedrückt werden:\\
+Für dieses Beispiel wird $n=9$ gesetzt, so dass $2^3 \leq 9 \textless 2^4$ ist. Der Aufbau der Schaltkreise ist rekursiv und spaltet sich immer weiter auf. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{bsp_Sinz_grob.pdf}
+\caption{Paralleler Counter von Sinz für $n=9$}
+\label{fig:sinz_counter_para_bsp}
+\end{figure}
+\ \\
+Durch die hohe Summe für die erste Hälfte der Eingangsvariablen ($\sum 7$) muss der Schaltkreis weiter unterteilt werden.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{bsp_Sinz_fein.pdf}
+\caption{Paralleler Counter von Sinz für $n=7$}
+\label{fig:sinz_counter_para_bsp}
+\end{figure}
+\ \\
+Das Beispiel besteht aus $11$ Volladdierern sowie 6 Halbaddierern und aus $95$ Klauseln für den Schaltkreis.\\
+\ \\
+Der Halb-Addierer und Voll-Addierer kann allgemein folgendermaßen als KNF ausgedrückt werden:\\
 \ \\
 Der Halb-Addierer besteht aus drei Klauseln:
 \begin{itemize}
@@ -508,38 +595,16 @@ Der Voll-Addierer besteht aus sieben Klauseln:
 \item[] $(\neg b \vee carryIn \vee carryOut)$
 \end{itemize}
 \ \\
-Zum Schluss wird noch ein Comparator benötigt, damit die Summe mit $r$ verglichen werden kann. Es werden rekursiv die Klauseln für den Comparator generiert.
+Zum Schluss wird die Summe mit $r$ verglichen. Es werden rekursiv die Klauseln generiert.
 \begin{align*}
 &L(k_0) = \begin{cases} \{\{\neg s_0\}\} & if{~}k_0 = 0\\ \emptyset & if{~}k_0=1\end{cases}\\
 &L(k_i \dots k_0) = \begin{cases} \{\{\neg s_i\}\}\cup L(k_{i-1} \dots k_0) & if{~}k_i = 0\\  \{\{\neg s_i\}\}\otimes L(k_{i-1} \dots k_0) & if{~}k_i = 1\end{cases}
 \end{align*}
 \ \\
 Hierbei bedeutet $\otimes$ die Klauseldistribution, das heißt $A \otimes B = \{x \cup y|x \in A, y \in B\}$ für zwei Klauselmengen A und B. $L(k_{m} \dots k_0)$ ist die Menge an Klauseln, die sicher stellt, dass der Output des Counters kleiner oder gleich $r$ ist. Für jede $0$ in der binären Repräsentation wird eine neue Klausel generiert.
-Die Repräsentation von $r$ ist binär, so dass die Belegung der Outputs mit der binären Repräsentation von $r$ verglichen werden kann.
-
-\subsubsection*{Beispiel für eine parallele Kodierung}
-Für dieses Beispiel wird $n=9$ gesetzt, so dass $2^3 \leq 9 \textless 2^4$ ist. Der Aufbau der Schaltkreise ist rekursiv und splittet sich immer weiter auf. Zur Verdeutlichung werden  in den folgenden Abbildungen zwei Schaltkreise dargestellt, wobei der zweite Schaltkreis (Abbildung \ref{fig:sinz_counter_para_bsp}) den Schaltkreis mit der ($\sum 7$) weiter aufgesplittet zeigt.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{bsp_Sinz_grob.pdf}
-\caption{Paralleler Counter von Sinz für $n=9$}
-\label{fig:sinz_counter_para_bsp}
-\end{figure}
+Die Repräsentation von $r$ ist binär, so dass die Belegung der Outputs mit der binären Repräsentation von $r$ verglichen werden kann. \\
 \ \\
-Durch die hohe Summe für die erste Hälfte der Eingangsvariablen ($\sum 7$) wird der Schaltkreis weiter unterteilt dargestellt.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{bsp_Sinz_fein.pdf}
-\caption{Paralleler Counter von Sinz für $n=7$}
-\label{fig:sinz_counter_para_bsp}
-\end{figure}
-\ \\
-Das Beispiel besteht aus $11$ Volladdierern sowie 6 Halbaddierern und aus $95$ Klauseln für den Schaltkreis.\\
-\ \\
-\textbf{Beispiel für den Comparator anhand von $r$}:\\
-Sei $r = 18$, in binärer Repräsenation ist dies $10010$. Da es drei Nullen gibt und 5 verschiedene Variablen, bei denen die Variablen mit einer $0$ nur negiert aufgeschrieben werden, ergeben sich 3 Klauseln. Das bedeutet, dass $r_0 = 0, r_1 = 1, r_2 = 0, r_3 = 0, r_4 = 1$ ist.\\
+Dazu gibt es ein Beispiel, für dass $r = 18$ ist. In binärer Repräsenation ist dies $10010$. Da es drei Nullen gibt und 5 verschiedene Variablen, bei denen die Variablen mit einer $0$ nur negiert aufgeschrieben werden, ergeben sich 3 Klauseln. Das bedeutet, dass $r_0 = 0, r_1 = 1, r_2 = 0, r_3 = 0, r_4 = 1$ ist.\\
 Die folgenden Klauseln können gebildet werden:\\
 \begin{itemize}
 \item $ L_{(r_0)}=\{\neg x_0\}$ (Variable wird nur negiert aufgeschrieben)
@@ -554,28 +619,29 @@ Die folgenden Klauseln können gebildet werden:\\
 Mit Hilfe von BDDs \cite[vgl.][]{bddkod} können Cardinality Constraints in Klauseln übersetzt werden. Dafür werden die Constraints in den BDDs dargestellt und aus dem BDD können die Klauseln erstellt werden. Der BDD kann einfach als ein Schaltkreis von if-then-else Gattern angesehen werden, der durch die Tseitin Transformation zu Klauseln übersetzt wird. In dieser Arbeit \cite[][Seite 11]{niklasse} wird der allgemeinere Fall $\sum a_i x_i \geq r$ behandelt. Deshalb wurden für diese Bachelorarbeit alle $a_i$ auf $1$ gesetzt und der Algorithmus so angepasst, dass er $\leq$ berechnet.
 
 \begin{algorithm}
-\caption{buildBDD (vec<int> Cs, vec<signal> ps, int rhs, int size, int sum, int material\_left, map<pair<int,int>, signal> memo)}
+\caption{buildBDD (vec<int> Cs, vec<signal> ps, int rhs, int size, int sum, int nVars, map<pair<int,int>, signal> memo)}
 \label{alg:buildBDD}
 \begin{algorithmic}
 
 \State $\text{}if (sum \leq rhs)$
 \State $\text{~~return } TRUE$
-\State $\text{}else if (sum + material\_left \textless rhs)$
+\State $\text{}else if (sum + nVars \textless rhs)$
 \State $\text{~~return } FALSE$
 \State $\text{} key = (size, sum)$
 \State $\text{}if (memo[key] == UNDEF) \{$
 \State $\text{~~} size\text{-{}-}$
-\State $\text{~~} material\_left \text{-{}-}$
+\State $\text{~~} nVars \text{-{}-}$
 \State $\text{~~} hi\_sum = sign(ps[size]) {~} ? {~} sum : sum + 1$
 \State $\text{~~} hi\_sum = sign(ps[size]) {~} ? {~} sum + 1 : sum$
-\State $\text{~~} hi\_result = buildBDD(ps , rhs, size, hi\_sum, material\_left, memo)$
-\State $\text{~~} lo\_result = buildBDD(ps , rhs, size, lo\_sum, material\_left, memo)$
-\State $\text{~~} memo[key] = ITE(var(ps[size]), lo\_result, hi\_result)\}$
+\State $\text{~~} hi\_result = buildBDD(ps , rhs, size, hi\_sum, nVars, memo)$
+\State $\text{~~} lo\_result = buildBDD(ps , rhs, size, lo\_sum, nVars, memo)$
+\State $\text{~~} memo[key] = ITE(var(ps[size]), lo\_result, hi\_result)$
+\State $\text{} \}$
 \State $\text{return }memo[key]$
 \end{algorithmic}
 \end{algorithm}
 \ \\
-Beim Erstellen der ITE-Gates wurden hi\_result und lo\_result vertauscht. Beim initialen Aufruf der Methode wird size auf die Anzahl der Variablen des Constraints gesetzt, sum auf $0$, material\_left ist ebenfalls die Anzahl aller Variablen und memo ist eine leere Map. Für die weiteren Befehle ist sign(p) das Vorzeichen der Literale und var(p) gibt die zugrunde liegende Variable des Literals zurück.\\
+Beim Erstellen der ITE-Gates wurden hi\_result und lo\_result vertauscht. Beim initialen Aufruf der Methode wird size auf die Anzahl der Variablen des Constraints gesetzt, sum auf $0$, nVars ist ebenfalls die Anzahl aller Variablen und memo ist eine leere Map. Für die weiteren Befehle ist sign(p) das Vorzeichen der Literale und var(p) gibt die zugrunde liegende Variable des Literals zurück.\\
 \ \\
 Der Algorithmus konstruiert den BDD, indem die Variablen nacheinander abgearbeitet werden. Dann wird das ITE-Gate erstellt mit dem Literal als Knotenbeschriftung und einer low- und high-Kante unterhalb des Knotens. Der Key repräsentiert in eindeutiger Weise einen Knoten, wodurch Duplikate vermieden werden.\\
 Eine weitere Aufgabe bestand darin, dass die ITE-Gates mit Tseitin Transformation als konjunktive Normalform repräsentiert werden müssen (t ist dabei die Tseitin-Variable und a,b und c die unterschiedlichen Inputs). Dies kann folgendermaßen hergeleitet werden:\\
@@ -599,7 +665,7 @@ Eine weitere Aufgabe bestand darin, dass die ITE-Gates mit Tseitin Transformatio
 	\subsection{Naive Kodierung basierend auf Sorting Networks}
 Sorting Networks stellen einen effektiven Weg dar, um Cardinality Constraints zu implementieren \cite[vgl.][]{niklasse}. Nachdem die Eingangsvariablen durch das Sorting Network sortiert wurden, kann schnell abgelesen werden, ob das Constraint erfüllt werden kann oder nicht.
 Beim Constraint $\leq r$ dürfen nicht mehr als $r$ Ausgänge mit true belegt sein. Sind mehr als $r$ Ausgänge mit true belegt, kann der SAT-Solver schnell feststellen, dass dieses Cardinality Constraint nicht erfüllbar ist.\\
-Sorting Networks können auf unterschiedliche Weisen erzeugt werden.
+Die Grundidee ist mit Hilfe so genannter Comparators \cite[vgl.][]{algoDpll} Schaltkreise zu bauen, welche auf unterschiedliche Weisen erzeugt werden. Ein Comparator arbeitet dabei wie folgt: Er hat zwei Eingänge, die verglichen und gegebenenfalls getauscht werden. Am oberen Ausgang liegt der höhere und am unteren der niedrigere Wert an.
 %Die Comparators können durch verschiedene Algorithmen angeordnet werden. 
 Für die naive Variante wird der Bubble-Sort-Algorithmus \cite[vgl.][]{bubble} verwendet. Der Aufbau des Netzes lässt sich folgendermaßen darstellen:\\
 
@@ -623,7 +689,7 @@ Die folgende KNF beschreibt das Verhalten eines einzelnen Comparators:\\
 $(\neg out_2 \vee out_1) \wedge (\neg in_1 \vee \neg in_2 \vee out_2) \wedge (in_1 \vee \neg out_2) \wedge (in_2 \vee \neg out_2) \wedge (in_1 \vee in_2 \vee \neg out_1) \wedge (\neg in_1 \vee out_1) \wedge (\neg in_2 \vee out_1)$
 
 	\subsection{Sorting Networks mit Odd-Even Mergesort}
-Als Grundlage für die eigene entwickelte Kodierung dient das Sorting Network mit einem Odd-Even Mergesort \cite[vgl.][]{odd-even}. Der Unterschied zur naiven Kodierung ist der, dass nicht der Bubblesort als Sortieralgorithmus verwendet wird, sondern der Odd-Even Mergesort. Dadurch entsteht ein Netz mit anders angeordneten Comparators.
+Als Grundlage für diese Kodierung dient das Sorting Network mit einem Odd-Even Mergesort \cite[vgl.][]{odd-even}. Der Unterschied zur naiven Kodierung ist der, dass nicht der Bubblesort als Sortieralgorithmus verwendet wird, sondern der Odd-Even Mergesort. Dadurch entsteht ein Netz mit anders angeordneten Comparators.
 
 \begin{figure}[H]
 \centering
@@ -633,7 +699,7 @@ Als Grundlage für die eigene entwickelte Kodierung dient das Sorting Network mi
 \end{figure}
 \ \\
 Durch die andere Anordnung der Comparators durch den Odd-Even Mergesort können Comparators eingespart werden, was zu einer Performanzsteigerung führt. Beim Odd-Even Mergesort werden die Eingänge in zwei Hälften geteilt und zunächst rekursiv sortiert. Im Anschluss daran werden die beiden sortierten Hälften wieder zusammengeführt. Beim Mergen werden immer die benachbarten Elemente verglichen.\\
-Normalerweise ist $n$ beim Odd-Even Mergesort immer eine Potenz von $2$. Dies ist nicht immer möglich, daher wird bei anderen Werten auf die entsprechende Zweierpotenz aufgerundet. Das Sorting-Network wird rekursiv aufgebaut und entsprechend vergrößert. In Abbildung \ref{fig:odd-even-mergesort} sieht man das Sorting-Network für $n=8$. Die erste Hälfte besteht aus zwei $4$-Input Merge-Sorters. Dies gilt auch für die zweite Hälfte. Nachdem die einzelnen Hälften sortiert sind, werden die beiden Hälften ab dem dritten Comparator bei der ersten Leitung gemergt. Das Ergebnis ist dann eine korrekt sortierte Folge.
+Normalerweise ist $n$ beim Odd-Even Mergesort immer eine Potenz von $2$. Dies ist nicht immer möglich, daher wird bei anderen Werten auf die entsprechende Zweierpotenz aufgerundet. Das Sorting-Network wird rekursiv aufgebaut und entsprechend vergrößert. In Abbildung \ref{fig:odd-even-mergesort} sieht man das Sorting-Network für $n=8$. Die erste Hälfte besteht aus zwei $4$-Input Merge-Sorters (siehe Abbdilung \ref{fig:odd-even-mergesort}). Dies gilt auch für die zweite Hälfte. Nachdem die einzelnen Hälften sortiert sind, werden die beiden Hälften ab dem dritten Comparator bei der ersten Leitung gemergt. Das Ergebnis ist dann eine korrekt sortierte Folge.
 
 %TODO eigenen Namen für die Kodierung
 	\subsection{Eigene entwickelte Kodierung mit Sorting Networks}
@@ -644,11 +710,9 @@ Nachdem das Odd-Even Mergesort Network aufgebaut ist, werden diejenigen Comparat
 \item nicht als Inputs für noch vorhandene Comparators dienen
 \end{itemize}
 werden gestrichen. \\
-Ein effizienter Weg dies zu tun, ist es, dass die entsprechende Leitung des Outputs durchgegangen wird und alle Comparators, die an diese Leitung angrenzen, bestehen bleiben. Für alle anderen Leitungen wird geprüft, ob der Comparator der letzte in seinen beiden Leitungen ist. In diesem Fall kann der Comparator entfernt werden.
-
+Ein effizienter Weg dies zu tun, ist es, dass die entsprechende Leitung des Outputs durchgegangen wird und alle Comparators, die an diese Leitung angrenzen, bestehen bleiben. Für alle anderen Leitungen wird geprüft, ob der Comparator der letzte in seinen beiden Leitungen ist. In diesem Fall kann der Comparator entfernt werden.\\
+\ \\
 %Zur Ideenfindung wurde das Sorting Network aufgemalt und überlegt, wie die entsprechende Leitung von $r$ Einfluss auf die Comparator haben kann. Wird $r=2$ gewählt, so entscheidet der Ausgang an der zweiten Stelle des Sorting Networks, ob eine Belegung gefunden werden kann für das Constraint oder nicht. Liegt an der zweiten Stelle eine $0$ an, dann ist es SAT. Ansonsten ist es UNSAT. Somit ist nur dieser Ausgang von Bedeutung für den SAT-Solver. Daher müssen alle anderen Ausgänge nicht entsprechend sortiert sein. Aus diesem Grund können alle Comparator eingespart werden, die nichts mit der entsprechenden Leitung zu tun haben und auch alle, bei denen die Ein- und Ausgänge der andern Comparator keinen Einfluss auf die Sortierug des zweiten Ausgangs des Sorting Networks haben. Dafür wird das Sorting Network erst einmal aufgebaut wie beim odd-even Mergesort und anschließend wird das gesamte Network mehrmals durchsucht nach Comparator, die gestrichen werden können. Dies muss mehrmals passieren, da erst im Laufe der Zeit herausgefunden werden kann, welche gelöscht werden können. Daraus ergibt sich ein Aufwand von $O(n^3)$.
-
-\subsubsection*{Beispiel für die eigene Kodierung}
 In der folgenden Abbildung wird das Odd-Even Mergesort Network dargestellt. Daran wird das Entfernen der Comparators beschrieben. Hierbei ist $r=7$, daher ist der letzte Ausgang vom Sorting Network entscheidend.
 
 \begin{figure}[H]
@@ -695,7 +759,7 @@ Digital Tomography bedeutet, dass binäre Bilder komprimiert werden, indem die A
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{cheshire.png}
-\caption{Digital Tomography der Cheshire Cat \cite[aus][Seite 25]{Knuth}}
+\caption{Digital Tomography der Cheshire Cat \cite[aus][Seite 25]{knuth}}
 \label{fig:cheshire}
 \end{figure}
 \ \\
@@ -720,9 +784,9 @@ Eine weitere Abbildung für Digital Tomography ist der H-Tree. Es ist ein rekurs
 \ \\
 Die synthetischen Testfälle sind zufällige Testfälle mit bis zu $5000$ Variablen. Die Größe der Constraints für die synthetischen Testfälle reichen von $0,5\cdot \sqrt{n}$ bis $1,5\cdot \sqrt{n}$. Das $k$ variiert zwischen $0$ bis zu der Größe des Constraints und das Constraint beinhaltet zufällige Variablen.\\
 Für einige Variablen $x_i$ wird die Klausel $\neg x_i$ hinzugefügt, um einen Wert von $0$ zu erzwingen. Dadurch ergibt sich, dass nur einige der Testfälle erfüllbar sind.\\
-Insgesamt sollen ungefähr 5000 Variablen bei jeder Kodierung und jedem Testproblem mit ähnlichen Abständen getestet werden. Dafür werden unterschiedliche Werte für $k$ eingesetzt. Beim Damen-Problem wird die Größe des Feldes und die Anzahl der Damen angegeben. Da die Anzahl der Variablen quadratisch ansteigt, gibt es für $k$ Werte von $5-70$, die in $5$-er Schritten ansteigen.\\
-Bei der Cheshire Cat wird ihre Größe durch $k$ festgelegt und beim H-Tree die Größe des Bildes als $k \times k$. Da die Ceshire Cat aufgrund ihrer Pixelanzahl merhmals hintereinander angezeigt wird, gehen die Werte von $k$ von $0,2$ bis $3,0$ in $0,2$-er Intervallen. Für den H-Tree ergeben sich dieselben Werte für $k$ wie beim Damen-Problem.
-Die synthetischen Testfälle beinhalten für $k$ die Anzahl der Variablen. Hier gehen die Werte von $250-5000$ in $250$-er Schritten.\\
+Insgesamt sollen ungefähr 5000 Variablen bei jeder Kodierung und jedem Testproblem mit ähnlichen Abständen getestet werden. Dafür werden unterschiedliche Werte für $k$ eingesetzt. Beim Damen-Problem wird die Größe des Feldes und die Anzahl der Damen angegeben. Da die Anzahl der Variablen quadratisch ansteigt, gibt es für $k$ Werte von $5$ bis $70$, die in $5$-er Schritten ansteigen.\\
+Bei der Cheshire Cat wird ihre Größe durch $k$ festgelegt und beim H-Tree die Größe des Bildes als $k \times k$. Da die Ceshire Cat aufgrund ihrer Pixelanzahl mehrmals hintereinander angezeigt wird, gehen die Werte von $k$ von $0,2$ bis $3,0$ in $0,2$-er Intervallen. Für den H-Tree ergeben sich dieselben Werte für $k$ wie beim Damen-Problem.
+Die synthetischen Testfälle beinhalten für $k$ die Anzahl der Variablen. Hier gehen die Werte von $250$ bis $5000$ in $250$-er Schritten.\\
 Alle $\geq$- und $=$-Constraints werden wie in Abschnitt \ref{baseCad} erläutert in $\leq$-Constraints umgeformt.\\
 Ausgeführt wurden die Benchmarks auf einem Rechner mit einem Intel Xeon CPU E$3$-$1240$ V$2$ mit 3,40 GHz Taktfrequenz und einem 32 GB Arbeitsspeicher. Die Java Virtual Machine hatte einen Speicher von 8GB zur Verfügung.\\
 Im Folgenden werden die Ergebnisse als Graphen dargestellt, unterteilt nach Zeitbedarf und Speicherbedarf pro Testproblem.
@@ -731,6 +795,7 @@ Im Folgenden werden die Ergebnisse als Graphen dargestellt, unterteilt nach Zeit
 
 Der Zeitbedarf gibt die benötigte Zeit für das Lösen durch den SAT-Solver an. Als Timeout wurden hierfür 30 Minuten pro Testproblem und pro Kodierung für unterschiedliche $k$ gewählt, damit die Benchmarks nicht zu viel Zeit in Anspruch nehmen. Die Zeit für das Bilden der konjunktiven Normalform ist im Vergleich hierzu gering und wird daher nicht weiter betrachtet.\\
 Die y-Achse der Graphen beschreibt die Zeit in logarithmischer Darstellung in Millisekunden und die x-Achse stellt die unterschiedlichen Werte für $k$ dar. Die Kodierungen sind in unterschiedlichen Farben (siehe Legende) als Linien eingezeichnet.
+
 
 \subsubsection*{Das n-Damen-Problem}
 
@@ -744,14 +809,16 @@ Die y-Achse der Graphen beschreibt die Zeit in logarithmischer Darstellung in Mi
 \DTLloaddb{Naiv}{ergebnisse_Queensproblem_Naiv.csv}%angepasst out of memory bei k=10
 
 
-\begin{figure}[htbp]
+\begin{figure}[htbp!]
 \includegraphics[width=3.3cm]{legende.png}
 \DTLplot{KnuthBailleux,KnuthSinz,NiklasseBDDs,SinzParallel,NOddEven,NOwn,NNaiv,Naiv}{x=k,y=logendtime,style=lines,xticgap=10,minx=5,maxx=70,yticpoints={1,2,3,4,5,6,7},yticlabels={$10^1$,$10^2$,$10^3$,$10^4$,$10^5$,$10^6$,$10^7$},xlabel={k},ylabel={ms},xticpoints={5,10,20,30,40,50,60,70},xticlabels={5,10,20,30,40,50,60,70},miny=1,maxy=7,width=8.7cm,linecolors={red,cyan,blue,orange,green,black,ForestGreen,magenta},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Zeitbedarf beim n-Damen-Problem}
 \label{fig:damen}
 \end{figure}
 \ \\
-In diesem Graphen (siehe Abbildung \ref{fig:damen}) werden die Ergebnisse für das $n$-Damen-Problem dargestellt. Angezeigt werden alle acht Kodierungen, die dieses Testproblem gelöst haben. Auffällig ist, dass die achte Kodierung nicht zu sehen ist. Die naive Kodierung wird nicht angezeigt, da es nur einen einzelnen Wert gibt, da die KNF bei $k=10$ zu groß für den Speicher des $Z3$-Solvers war. Am schlechtesten haben, nach der naiven Kodierung, für dieses Problem die Kodierung mit BBDs und die naive Kodierung basierend auf Sorting Networks abgeschnitten. Nach einem etwas größeren Abstand folgen die vier Kodierungen in folgender Reihenfolge: Sinz sequentiell, Sorting Networks mit eigener Sortierung, Bailleux und Sinz Parallel. Die Kodierung basierend auf Sorting Networks mit dem Sortieralgorithmus Odd-Even Mergesort hat bei $k=65$ ebenfalls keinen Speicher mehr zur Verfügung. Von $k=40$ bis $k=65$ wechseln sich Bailleux und NOwn häufig ab. Eine weitere Besonderheit ist bei $k=5$ bis $k=15$ festzustellen, da hier nochmal eine andere Anordnung für NOddEven, Nown, SinzPar und Bailleux zu sehen ist. 
+In diesem Graphen (siehe Abbildung \ref{fig:damen}) werden die Ergebnisse für das $n$-Damen-Problem dargestellt. Angezeigt werden alle acht Kodierungen, die dieses Testproblem gelöst haben. Auffällig ist, dass die achte Kodierung nicht zu sehen ist. Die naive Kodierung wird nicht angezeigt, da es nur einen einzelnen Wert gibt, weil die KNF bei $k=10$ zu groß für den Speicher des $Z3$-Solvers war. Am schlechtesten haben, nach der naiven Kodierung, für dieses Problem die Kodierung mit BBDs und die naive Kodierung basierend auf Sorting Networks abgeschnitten. Nach einem etwas größeren Abstand folgen die vier Kodierungen in folgender Reihenfolge: Sinz sequentiell, Sorting Networks mit eigener Sortierung, Bailleux und Sinz Parallel. Die Kodierung basierend auf Sorting Networks mit dem Sortieralgorithmus Odd-Even Mergesort hat bei $k=65$ ebenfalls keinen Speicher mehr zur Verfügung. Von $k=40$ bis $k=65$ wechseln sich Bailleux und NOwn häufig ab. Eine weitere Besonderheit ist bei $k=5$ bis $k=15$ festzustellen, da hier noch einmal eine andere Anordnung für NOddEven, Nown, SinzPar und Bailleux zu sehen ist. 
+
+\FloatBarrier
 
 \subsubsection*{Die Cheshire Cat}
 
@@ -764,14 +831,15 @@ In diesem Graphen (siehe Abbildung \ref{fig:damen}) werden die Ergebnisse für d
 \DTLloaddb{NNaiv Cats}{ergebnisse_DigiTomo_Cats_NetworksNaiv.csv}
 \DTLloaddb{Naiv Cats}{ergebnisse_DigiTomo_Cats_Naiv.csv}%angepasst out of memory bei k=1.0
 
-\begin{figure}[htbp]
+\begin{figure}[htbp!]
 \includegraphics[width=3.3cm]{legende.png}
 \DTLplot{KBailleux Cats,KSinz Cats,NikBDDs Cats,SinzParallel Cats,NOddEven Cats,NOwn Cats,NNaiv Cats,Naiv Cats}{x=k,y=logendtime,style=lines,xticgap=0.4,minx=0.2,maxx=1.6,yticpoints={1,2,3,4,5},yticlabels={$10^1$,$10^2$,$10^3$,$10^4$,$10^5$},xlabel={k},ylabel={ms},xticpoints={0.2,0.4,0.8,1.2,1.6},xticlabels={0.2,0.4,0.8,1.2,1.6},miny=1,maxy=5,width=8.7cm,linecolors={red,cyan,blue,orange,green,black,ForestGreen,magenta},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Zeitbedarf bei Digital Tomography Cheshire Cats}
 \label{fig:cheshire}
 \end{figure}
 \ \\
-Als Erstes lässt sich feststellen (siehe Abbildung \ref{fig:cheshire}), dass bei dem Testproblem der Cheshire Cat jede Kodierung ein Timeout erreicht hat, da sie eine unregelmäßige Aufteilung der schwarzen Pixel hat und der Solver sehr viel Zeit zum Lösen der KNF benötigt. Die Kodierungen nehmen bis zur Darstellung einer vollständigen Katze an Zeit zu und benötigen weiter für die Darstellung einer halben oder einer drittel Katze weniger Zeit. Naiv bildet eine steil ansteigende Gerade. Bailleux beansprucht für $k=0,8$ die meiste Zeit, dicht gefolgt von SinzSeq. Bei $k=1$ benötigen die beiden Kodierungen weniger Zeit als bei $k=0,8$. Dicht hintereinander sind als nächstes BDDs und SinzPar. Die beste Kodierung bei $k=0,8$ ist NOddEven. Die Kodierung mit der eigenen Sortierung erreicht hier sehr früh ein Timeout, wie auch NNaiv und Naiv. 
+Als Erstes lässt sich feststellen, dass bei dem Testproblem der Cheshire Cat (siehe Abbildung \ref{fig:cheshire}) jede Kodierung ein Timeout erreicht hat, da sie eine unregelmäßige Aufteilung der schwarzen Pixel hat und der Solver sehr viel Zeit zum Lösen der KNF benötigt. Die Kodierungen nehmen bis zur Darstellung einer vollständigen Katze an Zeit zu und benötigen weiter für die Darstellung einer halben oder einer drittel Katze weniger Zeit. Naiv bildet eine steil ansteigende Gerade. Bailleux beansprucht für $k=0,8$ die meiste Zeit, dicht gefolgt von SinzSeq. Bei $k=1$ benötigen die beiden Kodierungen weniger Zeit als bei $k=0,8$. Dicht hintereinander sind als nächstes BDDs und SinzPar. Die beste Kodierung bei $k=0,8$ ist NOddEven. Die Kodierung mit der eigenen Sortierung erreicht hier sehr früh ein Timeout, wie auch NNaiv und Naiv. 
+
 
 \subsubsection*{Der H-Tree}
 
@@ -811,10 +879,10 @@ Der Solver erreicht beim H-Tree (siehe Abbildung \ref{fig:h}) wie bei der Cheshi
 \label{fig:synth}
 \end{figure}
 \ \\
-Beim Benchmark der synthetischen Testfälle (siehe Abbildung \ref{fig:synth}) wurden für jedes $k$ fünf Durchläufe gemacht. Trotzdem treten durch die hohe Varianz immer noch Schwankungen in den Ergebnissen auf, woraus dann ein Mittelwert berechnet ist. Im Graphen ist zu sehen, dass bei SinzPar die Daten keine starken Schwankungen aufweisen und der Zeitbedarf am höchsten war. Alle anderen Kodierungen wechseln sich stark in ihrer Reihenfolge ab. Bei $k=5000$ gibt es folgende Reihenfolge: BDD, NNaiv, NOddEven und NOwn, Bailleux und als Letztes SinzSeq. Bei $k=3500$ zeigt sich noch eine ganz andere Reihenfolge (SinzPar, NNaiv, BDD, NOddEven, SinzSeq, Bailleux und NOwn). Für Naiv konnten durch einen \textit{out of memory} Fehler nur Werte für $k=250$ ermittelt werden. Aus diesem Grund ist diese Kodierung im Graphen nicht zu finden.
+Beim Benchmark der synthetischen Testfälle (siehe Abbildung \ref{fig:synth}) wurden für jedes $k$ fünf Durchläufe gemacht. Trotzdem treten durch die hohe Varianz immer noch Schwankungen in den Ergebnissen auf, woraus dann ein Mittelwert berechnet wurde. Im Graphen ist zu sehen, dass bei SinzPar die Daten keine starken Schwankungen aufweisen und der Zeitbedarf am höchsten war. Alle anderen Kodierungen wechseln sich stark in ihrer Reihenfolge ab. Bei $k=5000$ gibt es folgende Reihenfolge: BDD, NNaiv, NOddEven und NOwn, Bailleux und als Letztes SinzSeq. Bei $k=3500$ zeigt sich noch eine ganz andere Reihenfolge (SinzPar, NNaiv, BDD, NOddEven, SinzSeq, Bailleux und NOwn). Für Naiv konnten durch einen \textit{out of memory} Fehler nur Werte für $k=250$ ermittelt werden. Aus diesem Grund ist diese Kodierung im Graphen nicht zu finden.
 
 \subsection{Auswertung des Speicherbedarfs}
-Zur Auswertung des Speicherbedarfs wurde die Anzahl der benötigten Klauseln pro Kodierung und pro Testproblem gezählt. Die y-Achse der Graphen beschreibt die Klauseln in logarithmischer Darstellung und die x-Achse stellt die unterschiedlichen Werte für $k$ dar. Die Kodierungen sind in unterschiedlichen Farben (siehe Legende) als Kurven eingezeichnet.
+Zur Auswertung des Speicherbedarfs wurde die Anzahl der benötigten Klauseln pro Kodierung und pro Testproblem gezählt. Die y-Achse der Graphen beschreibt die Klauseln in logarithmischer Darstellung. Die x-Achse stellt die unterschiedlichen Werte für $k$ dar. Die Kodierungen sind in unterschiedlichen Farben (siehe Legende) als Kurven eingezeichnet.
 
 %Klauseln
 
@@ -837,7 +905,7 @@ Zur Auswertung des Speicherbedarfs wurde die Anzahl der benötigten Klauseln pro
 \label{fig:queens}
 \end{figure}
 \ \\
-Da Naiv bei $k=10$ einen \textit{out of memory} Fehler hatte, wird es auch hier nicht im Graphen (siehe Abbildung \ref{fig:queens}) dargestellt. Zusätzlich haben die Kodierungen NNaiv ($k=50$), NOddEven ($k=65$) und BDD ($k=60$) das Speicherlimit überschritten. Bei $k=70$ hat SinzPar am wenigsten Klauseln benötigt. Danach folgen SinzSeq, NOwn und Bailleux. 
+Bei $k=70$ hat SinzPar (siehe Abbildung \ref{fig:queens}) am wenigsten Klauseln benötigt. Danach folgen die Kodierungen  SinzSeq, BDD, NOwn, Bailleux, NOddEven und Naiv. Die Kodierung NOwn ist dabei immer unterhalb der Kodierung NOddEven. Bailleux kreuzt deren Anzahl an Klauseln bei $k=45$. Die Kodierungen Naiv und NNaiv benötigen mit Abstand die meisten Klauseln.
 
 \subsubsection*{Die Cheshire Cat}
 
@@ -857,7 +925,7 @@ Da Naiv bei $k=10$ einen \textit{out of memory} Fehler hatte, wird es auch hier 
 \label{fig:cat}
 \end{figure}
 \ \\
-Naiv verzeichnet wieder ein \textit{out of memory} bei $k=1,0$ und bricht daher im Graphen (siehe Abbildung \ref{fig:cat}) ab. Alle anderen Kodierungen konnten bis $k=3,0$ die Anzahl der Klauseln ausgeben. Folgende Reihenfolge lässt sich hier feststellen: NNaiv, NOddEven, NOwn, BDD, SinzSeq, Bailleux und SinzPar. Die Reihenfolge bleibt ab $k=1,6$ bestehen. Davor schwanken NNaiv, NOddEven und NOwn, sowie Bailleux, SinzSeq und SinzPar.
+Bei der Cheshire Cat (siehe Abbildung \ref{fig:cat}) lässt sich folgende Reihenfolge bei $k=3,0$ feststellen: Naiv, NNaiv, NOddEven, NOwn, BDD, SinzSeq, Bailleux und SinzPar. Die Reihenfolge bleibt ab $k=1,6$ bestehen. Davor schwanken NNaiv, NOddEven und NOwn, sowie Bailleux, SinzSeq und SinzPar.
 
 \subsubsection*{Der H-Tree}
 
@@ -877,7 +945,7 @@ Naiv verzeichnet wieder ein \textit{out of memory} bei $k=1,0$ und bricht daher 
 \label{fig:tree}
 \end{figure}
 \ \\
-Da sich der H-Tree (siehe Abbildung \ref{fig:tree}) und die Cheshire Cat ähneln, gibt es dieselbe Reihenfolge für die Anzahl der Klauseln ab $k=20$. Auch die Schwankungen verhalten sich ähnlich wie bei der Cheshire Cat.
+Da sich der H-Tree (siehe Abbildung \ref{fig:tree}) und die Cheshire Cat ähneln, ergibt sich dieselbe Reihenfolge für die Anzahl der Klauseln ab $k=20$. Auch die Schwankungen verhalten sich ähnlich wie bei der Cheshire Cat.
 
 \subsubsection*{Die synthetischen Testfälle}
 
@@ -892,21 +960,22 @@ Da sich der H-Tree (siehe Abbildung \ref{fig:tree}) und die Cheshire Cat ähneln
 
 \begin{figure}[htbp]
 \includegraphics[width=3.3cm]{legende.png}
-\DTLplot{KnuthBailleux S klau,KnuthSinz S klau,NiklasseBDDs S klau,SinzParallel S klau,NOddEven S klau,NOwn S klau,NNaiv S klau,Naiv S klau}{x=k,y=logavgClauses,style=lines,xticgap=1000,minx=1000,maxx=5000,yticpoints={4,5,6,7,8},yticlabels={$10^4$,$10^5$,$10^6$,$10^7$,$10^8$},xlabel={k},ylabel={Klauseln},xticpoints={1000,2000,3000,4000,5000},xticlabels={1000,2000,3000,4000,5000},miny=4,maxy=8,width=8.7cm,linecolors={red,cyan,blue,orange,green,black,ForestGreen,magenta},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
+\DTLplot{KnuthBailleux S klau,KnuthSinz S klau,NiklasseBDDs S klau,SinzParallel S klau,NOddEven S klau,NOwn S klau,NNaiv S klau,Naiv S klau}{x=k,y=logavgClauses,style=lines,xticgap=1000,minx=250,maxx=5000,yticpoints={4,5,6,7,8},yticlabels={$10^4$,$10^5$,$10^6$,$10^7$,$10^8$},xlabel={k},ylabel={Klauseln},xticpoints={1000,2000,3000,4000,5000},xticlabels={1000,2000,3000,4000,5000},miny=3.8,maxy=8,width=8.7cm,linecolors={red,cyan,blue,orange,green,black,ForestGreen,magenta},lines={\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt},\pgfsetdash{}{0pt}}}
 \caption{Synthetische Testfälle mit der Anzahl der Klauseln}
 \label{fig:syn}
 \end{figure}
 \ \\
-Bei den synthetischen Testfällen (siehe Abbildung \ref{fig:syn}) zeigt sich eine andere Reihenfolge der Kodierung anhand der Anzahl der Klauseln. Hier ist die Reihenfolge NNaiv, SinzPar, BDD, NOddEven, Bailleux, NOwn und SinzSeq. Ab $k=3000$ steigt die Anzahl der Klauseln bei NOwn langsamer als bei den restlichen Kodierungen. Naiv kann auf Grund des \textit{out of memory} Fehlers nicht im Graphen verzeichnet werden.
+Bei den synthetischen Testfällen (siehe Abbildung \ref{fig:syn}) zeigt sich anhand der Anzahl der Klauseln eine andere Reihenfolge der Kodierung. Hier ist die Reihenfolge Naiv, NNaiv, SinzPar, BDD, NOddEven, Bailleux, NOwn und SinzSeq. Ab $k=3000$ steigt die Anzahl der Klauseln bei NOwn langsamer als bei den restlichen Kodierungen. 
 
 \subsection{Auswertung der Ergebnisse}
-Als Erstes ist grundlegend festzustellen, dass die naive Kodierung einen sehr großen Speicherbedarf benötigt und daher wenige Ergebnisse für den Zeitbedarf gemessen werden konnten. Eine Ausnahme bildet hier der H-Tree. Die Kodierung nach Bailleux ist bei den Messungen des Zeitbedarfs immer in einem Bereich, der weniger Zeit gebraucht hat im Gegensatz zu den Kodierungen Naiv, BDD, NOwn und NOddEven. Die Kodierung SinzSeq ist immer in der Nähe der Kodierung nach Bailleux zu finden, mit Ausnahme des Damen-Problems. Außer beim H-Tree benötigt die BDD-Kodierung mehr Zeit, um die Erfüllbarkeit zu testen. Die Kodieurng SinzPar teilt sich genau auf. Beim Damen-Problem und beim H-Tree ist die Kodierung ziemlich schnell und bei der Cheshire Cat und bei den synthetischen Testfällen ist sie langsamer. Die Kodierungen NOddEven und NOwn sind oft nah beieinander. Das liegt daran, dass NOwn auf NOddEven aufbaut. Diese beiden Kodierungen bilden das Mittelfeld. Die Kodierung NNaiv ist in der Regel langsam, da der Bubblesort-Algorithmus ein unnötig großes Sorting Network generiert. Abschließend lässt sich sagen, dass man mit den Kodierungen Bailleux oder SinzSeq ein gutes Ergebnis hinsichtlich des Zeitbedarfs erzielen kann und mit den Kodierungen BDD oder NNaiv nicht so ein gutes Ergebnis erwarten kann. Trotzdem macht es Sinn bei verschiedenen Testproblemen mehrere Kodierungen zu testen.\\
+Als Erstes ist grundlegend festzustellen, dass die naive Kodierung einen sehr großen Speicherbedarf benötigt und daher wenige Ergebnisse für den Zeitbedarf gemessen werden konnten. Eine Ausnahme bildet hier der H-Tree. Die Kodierung nach Bailleux ist bei den Messungen des Zeitbedarfs immer in einem Bereich, der weniger Zeit gebraucht hat im Gegensatz zu den Kodierungen Naiv, BDD, NOwn und NOddEven. Die Kodierung SinzSeq ist immer in der Nähe der Kodierung nach Bailleux zu finden, mit Ausnahme des Damen-Problems. Außer beim H-Tree benötigt die BDD-Kodierung mehr Zeit, um die Erfüllbarkeit zu testen. Die Kodierung SinzPar teilt sich genau auf. Beim Damen-Problem und beim H-Tree ist die Kodierung ziemlich schnell und bei der Cheshire Cat und bei den synthetischen Testfällen ist sie langsamer. Die Kodierungen NOddEven und NOwn sind oft nah beieinander. Das liegt daran, dass NOwn auf NOddEven aufbaut. Diese beiden Kodierungen bilden das Mittelfeld. Die Kodierung NNaiv ist in der Regel langsam, da der Bubblesort-Algorithmus ein unnötig großes Sorting Network generiert. Abschließend lässt sich sagen, dass man mit den Kodierungen Bailleux oder SinzSeq ein gutes Ergebnis hinsichtlich des Zeitbedarfs erzielen kann und mit den Kodierungen BDD oder NNaiv nicht so ein gutes Ergebnis erwarten kann. Trotzdem ist es sinnvoll bei verschiedenen Testproblemen mehrere Kodierungen zu testen.\\
 \ \\
-Beim Speicherbedarf schwankt die Reihenfolge der Kodierungen nicht so stark wie beim Zeitbedarf. Die naive Kodierung benötigt mit Abstand am meisten Klauseln, oder kann auf Grund eines \textit{out of memory} nicht erzeugt werden. Die zweite Kodierung mit der höchsten Anzahl an Klauseln ist NNaiv. Danach wechseln sich die Kodierungen BDD, NOddEven und NOwn ab. Wie zu erwarten, benötigt die Kodierung NOwn weniger Klauseln als NOddEven. Somit ist das Streichen der Comparators für jedes Testproblem von Erfolg gekrönt, da die Kodierung NOwn nie die Anzahl der Klauseln von NOddEven überschreitet. Dies erfüllt das Ziel der eigenen Kodierung. Bei den synthetischen Testfällen schaffte es NOwn sogar auf den $2.$ Platz von allen Kodierungen und kann eine eindeutige Steigerung im Vergleich zu NOddEven verzeichnen.\\
-Die Kodierung SinzSeq weist eine geringere Klauselmenge auf, gefolgt von den Kodierungen Bailleux und SinzPar. Die Kodierung SinzPar ist eine gute Wahl beim H-Tree oder bei der Cheshire Cat. Hingegen bei den synthetischen Testfällen sollte SinzSeq in Hinsicht auf den Speicherbedarf gewählt werden. Bei dem Damen-Problem ist die Kodierung SinzPar die beste Wahl. \\
+Beim Speicherbedarf schwankt die Reihenfolge der Kodierungen nicht so stark, wie beim Zeitbedarf. Die beiden Kodierungen mit der höchsten Anzahl an Klauseln sind Naiv und NNaiv. Danach wechseln sich die Kodierungen BDD, NOddEven und NOwn ab. Wie zu erwarten, benötigt die Kodierung NOwn weniger Klauseln als NOddEven. Somit ist das Streichen der Comparators für jedes Testproblem von Erfolg gekrönt, da die Kodierung NOwn nie die Anzahl der Klauseln von NOddEven überschreitet. Dies erfüllt das Ziel der eigenen Kodierung. Bei den synthetischen Testfällen schaffte es NOwn sogar auf den $2.$ Platz von allen Kodierungen und kann eine eindeutige Steigerung im Vergleich zu NOddEven verzeichnen.\\
+Die Kodierung SinzSeq weist eine geringere Klauselmenge auf, gefolgt von den Kodierungen Bailleux und SinzPar. Die Kodierung SinzPar ist eine gute Wahl beim H-Tree oder bei der Cheshire Cat. Hingegen bei den synthetischen Testfällen sollte, in Hinsicht auf den Speicherbedarf,  SinzSeq  gewählt werden. Bei dem Damen-Problem ist die Kodierung SinzPar die beste Wahl. \\
 Unter Berücksichtigung beider Faktoren ist SinzSeq die beste Kodierung für die untersuchten Testprobleme. Die zweite Wahl für diese Testprobleme ist Bailleux, da sie ebenfalls einen geringen Zeitbedarf hat im Vergleich zu den anderen Kodierungen und gleichzeitig immer noch eine geringe Menge an Klauseln.\\
 \ \\
-Mit wenigen Ausnahmen lässt sich sagen: je mehr Klauseln, desto länger die benötigte Zeit, um die Erfüllbarkeit zu testen (zum Beispiel bei NNaiv und NOddEven). Interessant ist die Kodierung nach Bailleux beim Damen-Problem. Denn diese Kodierung schafft die Lösung des Problems in kurzer Zeit, obwohl eine große Anzahl an Klauseln gebildet werden. Die Kodierung SinzSeq benötigt eine geringe Zeit und hat ebenfalls nur wenige Klauseln, die gelöst werden müssen. Somit lässt sich im Wesentlichen sagen: je weniger Klauseln, desto schneller geht in der Regel das Testen der Erfüllbarkeit (zum Beispiel bei Bailleux). 
+Allgemein lässt sich feststellen, dass Kodierungen, die eine hohe Anzahl an Klauseln benötigen, im Normalfall auch länger brauchen, um die Erfüllbarkeit zu testen (zum Beispiel bei NNaiv und NOddEven). Interessant ist die Kodierung nach Bailleux beim Damen-Problem, denn diese Kodierung schafft die Lösung des Problems in kurzer Zeit, obwohl eine große Anzahl an Klauseln gebildet werden. Die Kodierung SinzSeq benötigt eine geringe Zeit und hat ebenfalls nur wenige Klauseln, die gelöst werden müssen. Somit lässt sich im Wesentlichen sagen: je weniger Klauseln, desto schneller geht in der Regel das Testen der Erfüllbarkeit. 
+% noch ein Satz zu Naiv und NNaiv?
 
 
 \section{Schlussfolgerung und Ausblick}
@@ -916,13 +985,13 @@ In dieser Arbeit wurden acht verschiedene Kodierungen für Cardinality Constrain
 Die untersuchten Kodierungen waren eine mit einem naiven Ansatz, eine nach Bailleux, Boufkhad und Knuth, eine sequentielle nach Sinz und Knuth und eine parallele Variante. Zusätzlich gibt es eine Kodierung aufbauend auf BDDs und mehrere basierend auf Sorting Networks mit unterschiedlichen Sortieralgorithmen (Bubble-Sort und Odd-Even Mergesort), sowie eine eigene Kodierung, die auf den Odd-Even Mergesort aufbaut.\\
 Angewendet wurden diese Kodierungen auf folgende Testprobleme: das n-Damen-Problem, Digital Tomography (Cheshire Cat und H-Tree) und synthetische Testfälle.\\
 Um Ergebnisse über das Zeit- und Speicherverhalten zu erheben, wurden Benchmarks vorgenommen, die die Testprobleme mit unterschiedlichen Werten testen. \\
-Die Ergebnisse für den Zeit- und Speicherbedarf variieren pro Kodierung und Testproblem. Allgemein ließ sich feststellen, dass unter Berücksichtigung beider Faktoren SinzSeq die beste Kodierung für die untersuchten Testprobleme ist. Die zweite Wahl für diese Testprobleme ist Bailleux, da es ebenfalls einen geringen Zeitbedarf hat im Vergleich zu den anderen Kodierungen und gleichzeitig immer noch eine geringe Menge an Klauseln. Des Weiteren konnte herausgefunden werden, dass Kodierungen, die eine hohe Anzahl an Klauseln benötigen, üblicherweise auch länger brauchen, um die Erfüllbarkeit zu testen. Dies deckt sich mit bisherigen Erfahrungen.\\
+Die Ergebnisse für den Zeit- und Speicherbedarf variieren pro Kodierung und Testproblem. Allgemein ließ sich feststellen, dass unter Berücksichtigung beider Faktoren SinzSeq die beste Kodierung für die untersuchten Testprobleme ist. Die zweite Wahl für diese Testprobleme ist Bailleux, da es im Vergleich zu den anderen Kodierungen ebenfalls einen geringen Zeitbedarf hat und gleichzeitig immer noch eine geringe Menge an Klauseln. Des Weiteren konnte herausgefunden werden, dass Kodierungen, die eine hohe Anzahl an Klauseln benötigen, üblicherweise auch länger brauchen, um die Erfüllbarkeit zu testen. Dies deckt sich mit bisherigen Erfahrungen.\\
 Es kann festgestellt werden, dass es sinnvoll ist, mehrere Kodierungen für ein Problem auszuprobieren. Dadurch kann für das Lösen der Erfüllbarkeit die beste Kodierung ermittelt werden.\\
 \ \\
 Ein Thema, dass in einer Anschlussarbeit vertieft werden kann, ist die Verbesserung der verwendeten Kodierungen. Es kann untersucht werden, ob der Zeit- und Speicherbedarf von Bailleux oder von SinzSeq noch weiter reduziert werden kann, oder ob die Anwendung der eigenen Kodierung auf andere Sortieralgorithmen einen größeren Vorteil bringt.\\
 Die bereits untersuchten Kodierungen könnten noch auf andere Testprobleme angewendet werden, die realitätsnaher sind, wie zum Beispiel das Anwendungsfeld der Bio-Chips.\\
-Weiterhin gibt es noch andere Möglichkeiten als die Tseitin Transformation, um einen BDD in eine KNF zu überführen. Diese könnten zusätzlich noch ausprobiert werden.\\
-Eine weitere Art von Constraints könnten ebenfalls neue Ergebnisse liefern. Somit könnten statt Cardinality Constraints Pseudo Boolesche Constraints benutzt werden, so dass das Verfahren aus \cite[][Seite 15,16]{niklasse} angewendet werden kann.
+Weiterhin gibt es noch andere Möglichkeiten als die Tseitin Transformation, um einen BDD in eine KNF zu überführen. Diese könnten zusätzlich ausprobiert werden.\\
+Eine weitere Art von Constraints könnten ebenfalls neue Ergebnisse liefern. Somit könnten statt Cardinality Constraints Pseudo Boolesche Constraints benutzt werden, so dass das Verfahren aus \citet[][Seite 15,16]{niklasse} angewendet werden kann.
 
 %Sogar zitieren kann man \textbackslash o/ \cite[vgl.][]{invincible}.
 
@@ -979,7 +1048,7 @@ Eine weitere Art von Constraints könnten ebenfalls neue Ergebnisse liefern. Som
 		\endgroup
 
 \begin{landscape}
-	\section{Ergebnisse der Evaluation}\label{anhang}
+	\section{Detailergebnisse}\label{anhang}
  In diesem Abschnitt werden alle erhobenen Daten präsentiert. In den folgenden Tabellen wird oom als Abkürzung für \textit{out of memory} verwendet.
 
 
@@ -1161,128 +1230,229 @@ Naiv  & oom & oom & oom & oom & oom & oom\\
     \small
     \setlength{\tabcolsep}{0.11cm}
      \centering
-     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|}
 	\hline
-       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55} &\textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
+       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55}\\
 	\hline
 	\hline
-	Bailleux & 629 & 5582 & 21103 & 60392 & 131697 & 256156 & 460176 & 797056 & 1171699 & 1808296 & 2778507 & 3621148 & 4864657 & 6651842\\
+	Bailleux & 629 & 5582 & 21103 & 60392 & 131697 & 256156 & 460176 & 797056 & 1171699 & 1808296 & 2778507 \\
 \hline
-	SinzSeq & 614 & 4624 & 15034 & 34844 & 67054 & 114664 & 180674 & 268084 & 379894 & 519104 & 688714 & 891724 & 1131134 & 1409944 \\
+	SinzSeq & 614 & 4624 & 15034 & 34844 & 67054 & 114664 & 180674 & 268084 & 379894 & 519104 & 688714  \\
 \hline
-	BDD & 1752 & 11212 & 34372 & 77232 & 145792 & 246052 & 384012 &565672 &797032 &1084092 & 1432852 & oom & oom & oom\\
+	BDD & 1752 & 11212 & 34372 & 77232 & 145792 & 246052 & 384012 &565672 &797032 &1084092 & 1432852 \\
 \hline
-	SinzPar & 672 & 3302 & 7798 & 14648 & 23281 & 33938 & 46844 & 62090 & 78600 & 98042 & 118586 & 142225 & 168000 & 195105 \\
+	SinzPar & 672 & 3302 & 7798 & 14648 & 23281 & 33938 & 46844 & 62090 & 78600 & 98042 & 118586 \\
 \hline
-	NOddEven & 5764 & 38982 & 88268 & 241818 & 490628 & 534638 & 1279640 & 1401410 & 1523180 & 2793878 & 2915648 & 3037418 & oom & oom\\
+	NOddEven & 5764 & 38982 & 88368 & 241818 & 490628 & 534638 & 1279640 & 1401410 & 1523180 & 2793878 & 2915648\\
 \hline
-	NOwn & 4742 & 29308 & 65674 & 177320 & 370886 & 391152 & 961504 & 1030956 & 1080164 & 2133652 & 2197728 & 2244514 & 5192270 & 5388482\\
+	NOwn & 4742 & 29308 & 65674 & 177320 & 370886 & 391152 & 961504 & 1030956 & 1080164 & 2133652 & 2197728 \\
  \hline
-	NNaiv & 5488 & 80278 & 390618 & 1207758 & 2907948 & 5972438 & 10987478 & 18644318 & 29739208 & oom & oom & oom & oom & oom\\
+	NNaiv & 5488 & 80278 & 390618 & 1207758 & 2907948 & 5972438 & 10987478 & 18644318 & 29739208 & 45173398 & 65953138\\
 \hline
-	Naiv & 189930 & oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
+	Naiv & 189930 & $1,43 \cdot 10^{14}$ &  $1,20 \cdot 10^{24}$ &  $5,06 \cdot 10^{34}$ & $7,23 \cdot 10^{45}$ &  $2,75 \cdot 10^{57}$ &  $2,38 \cdot 10^{69}$ &  $4,17 \cdot 10^{81}$ &  $1,35 \cdot 10^{94}$ &  $1,61 \cdot 10^{106}$ &  $7,02 \cdot 10^{119}$\\
 \hline
        
      \end{tabular}
 
-     \caption{n-Damen-Problem, Speicherbedarf}
+     \caption{n-Damen-Problem, Speicherbedarf Teil 1}
      \label{tbl:beispieltabelle}
      % Verweis im Text mittels \ref{tbl:beispieltabelle}
-
-   \end{table}
- \begin{table}[h!]
-    \small
-    \setlength{\tabcolsep}{0.11cm}
-     \centering
-     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
-	\hline
-       \textbf{Kodierung}  & \textbf{k=0,2} & \textbf{k=0,4} & \textbf{k=0,6} &\textbf{k=0,8} &\textbf{k=1,0} &\textbf{k=1,2} &\textbf{k=1,4} &\textbf{k=1,6} &\textbf{k=1,8} &\textbf{k=2,0} &\textbf{k=2,2} &\textbf{k=2,4} &\textbf{k=2,6} &\textbf{k=2,8} & \textbf{3,0}\\
-	\hline
-	\hline
-	Bailleux & 426 & 3404 & 10812 & 25538 & 48844 & 79666 & 121982 & 179566 & 251420 & 339336 & 438020 & 554231 & 695573 & 865826 & 1063339\\
-\hline
-	SinzSeq & 326 & 2612 & 8613 & 22133 & 47163 & 80008 & 123524 & 185499 & 271325 & 381131 & 502564 & 639788 & 815635 & 1035337 & 1290967 \\
-\hline
-	BDD & 1304 & 8016 & 23819 & 56055 & 112645 & 186460 & 282978 &417907 &601899 & 835241 & 1093432 & 1384566 & 1754439 & 2213383 & 2745573\\
-\hline
-	SinzPar & 718 & 4225 & 10881 & 21295 & 34169 & 50705 & 70520 & 94412 & 119618 & 149931 & 182271 & 219296 & 258966 & 301969  & 347202 \\
-\hline
-	NOddEven & 4973 & 35946 & 98174 & 230856 & 327438 & 579716 & 1044201 & 1312967 & 1580694 & 1848348& 2858898 & 3193911 & 4961621 & 5674980 & 5674980\\
-\hline
-	NOwn & 4021 & 28022 & 76110 & 180946 & 257858 & 452624 & 812683 & 1026765 & 1239346 & 1448326 & 2234344 & 2495283  & 3874311 & 4447096 & 5018408\\
- \hline
-	NNaiv & 2567 & 25579 & 94090 & 230614 & 456639 & 795415 & 1270498 & 1905342 & 2721194 & 3742419 & 4991195 & 6491078 & 8265522 & 10335774 & 12726199\\
-\hline
-	Naiv & 239 & 8407 &  406453 &  23362052 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom & oom\\
-\hline
-       
-     \end{tabular}
-
-     \caption{Cheshire Cat, Speicherbedarf}
-     \label{tbl:beispieltabelle}
-     % Verweis im Text mittels \ref{tbl:beispieltabelle}
-
-   \end{table}
-
- \begin{table}[h!]
-    \small
-    \setlength{\tabcolsep}{0.11cm}
-     \centering
-     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
-	\hline
-       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55} &\textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
-	\hline
-	\hline
-	Bailleux & 348 & 2746 & 7382  & 20329 & 37141 & 55513 & 95881 & 144428 & 194773 & 265171 & 327174 & 407395 & 547750 & 650017\\
-\hline
-	SinzSeq & 296 & 2489 & 6288 & 21101 & 38720 & 56049 & 110192 & 174285 & 235768 & 323093 & 396680 & 475221 & 702016 & 818337 \\
-\hline
-	BDD & 1160 & 7295 & 17440 & 51779 & 92240 & 132703 & 249584 & 387067 & 519240 & 705611 & 864080 & 1035307 & 1505232 & 1752559\\
-\hline
-	SinzPar & 581 & 3345 & 7844 & 16854 & 27078 & 38903 & 56437 & 76391 & 95215 & 120808 & 144266 & 175483 & 211507 & 243402\\
-\hline
-	NOddEven & 4280 & 29394 & 55224 & 188154 & 273028 & 350242 & 843052 & 1094922 & 1312560 & 1564886 & 1782068 & 2034394 & 4032804 & 4614594\\
-\hline
-	NOwn & 3552 & 23024 & 41084 & 146084 & 212562 & 264100 & 645568 & 854598 & 1012694 & 1220360 & 1372162 & 1558226 & 3113984 & 3525450\\
- \hline
-	NNaiv & 1976 & 18655 & 62860 & 167665 & 330392 & 561007 & 933072 & 1416285 & 1986120 & 2761121 & 3629576 & 4765077 & 6173912 & 7628967\\
-\hline
-	Naiv & 192 & 6998 & 163246 & 7940531 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
-\hline
-       
-     \end{tabular}
-
-     \caption{H-Tree, Speicherbedarf}
-     \label{tbl:beispieltabelle}
-     % Verweis im Text mittels \ref{tbl:beispieltabelle}
-
-   \end{table}
-
+\end{table}
 
 \begin{table}[h!]
     \small
     \setlength{\tabcolsep}{0.11cm}
      \centering
-     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|}
 	\hline
-       \textbf{Kodierung}  & \textbf{k=255} & \textbf{k=500} & \textbf{k=750} &\textbf{k=1000} &\textbf{k=1250} &\textbf{k=1500} &\textbf{k=1750} &\textbf{k=2000} &\textbf{k=2250} &\textbf{k=2500} &\textbf{k=2750} &\textbf{k=3000} &\textbf{k=3250} &\textbf{k=3500}\\ 
+       \textbf{Kodierung}  & \textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
 	\hline
 	\hline
-	Bailleux & 12401 & 53389 & 114680 & 195140 & 314176 & 440017 & 579900 & 766551 & 946525 & 1200260 & 1422357 & 1660465 & 1900534 & 2167129 \\
+	Bailleux & 3621148 & 4864657 & 6651842\\
 \hline
-	SinzSeq &7701 & 33234 & 72201 & 133994 & 218676 & 316564 & 412940 & 559477 & 727808 & 920758 & 1100088 & 1287058 & 1503057 & 1783695 \\
+	SinzSeq & 891724 & 1131134 & 1409944 \\
 \hline
-	BDD & 12853 & 60298 & 124404 & 219398 & 339887 & 484386 & 648149 & 904174 & 1085873 & 1399776 & 1565504 & 1870164 & 2197063 & 2512839 \\
+	BDD & 1849312 & 2339472 & 2909332\\
 \hline
-	SinzPar & 83395 & 273556 & 508820 & 799452 & 1149890 & 1536518 & 1923935 & 2410427 & 2866224 & 3447950 & 3965706 & 4511217 & 5140223 & 5728782  \\
+	SinzPar & 142225 & 168000 & 195105 \\
 \hline
-	NOddEven & 28745 & 83690 & 211877 & 345498 & 508686 & 666825 & 796970 & 984421 & 1334112 & 1748379 & 2081769 & 2448279  & 2413302 & 2768766  \\
+	NOddEven & 3037418 & 6734548 & 7058878\\
 \hline
-	NOwn & 22827 & 72745 & 174586 & 297944 & 440685 & 571683 & 698608 & 883464 & 1159534 & 1547346 & 1826852 & 2129404 & 2438826 & 2788352 \\
+	NOwn & 2244514 & 5192270 & 5388482\\
  \hline
-	NNaiv & 43970 & 202598 & 444299 & 782143 & 1259416 & 1876099 & 2554786 & 3391630 & 3866207 & 4986846 & 6042371 & 6269595 & 6931336 & 7955157 \\
+	NNaiv & 93189678 & 128099268 & 172003158\\
 \hline
-	Naiv & 170069 & 170069 &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom &  oom\\
+	Naiv &  $1,02 \cdot 10^{133}$ &  $2,22 \cdot 10^{146}$ &  $7,13 \cdot 10^{159}$\\
+\hline
+       
+     \end{tabular}
+
+     \caption{n-Damen-Problem, Speicherbedarf Teil 2}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+
+   \end{table}
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=0,2} & \textbf{k=0,4} & \textbf{k=0,6} &\textbf{k=0,8} &\textbf{k=1,0} &\textbf{k=1,2} &\textbf{k=1,4} &\textbf{k=1,6} &\textbf{k=1,8} &\textbf{k=2,0} &\textbf{k=2,2} &\textbf{k=2,4}\\
+	\hline
+	\hline
+	Bailleux & 426 & 3404 & 10812 & 25538 & 48844 & 79666 & 121982 & 179566 & 251420 & 339336 & 438020 & 554231 \\
+\hline
+	SinzSeq & 326 & 2612 & 8613 & 22133 & 47163 & 80008 & 123524 & 185499 & 271325 & 381131 & 502564 & 639788 \\
+\hline
+	BDD & 1304 & 8016 & 23819 & 56055 & 112645 & 186460 & 282978 &417907 &601899 & 835241 & 1093432 & 1384566\\
+\hline
+	SinzPar & 718 & 4225 & 10881 & 21295 & 34169 & 50705 & 70520 & 94412 & 119618 & 149931 & 182271 & 219296 \\
+\hline
+	NOddEven & 4973 & 35946 & 98174 & 230856 & 327438 & 579716 & 1044201 & 1312967 & 1580694 & 1848348& 2858898 & 3193911\\
+\hline
+	NOwn & 4021 & 28022 & 76110 & 180946 & 257858 & 452624 & 812683 & 1026765 & 1239346 & 1448326 & 2234344 & 2495283\\
+ \hline
+	NNaiv & 2567 & 25579 & 94090 & 230614 & 456639 & 795415 & 1270498 & 1905342 & 2721194 & 3742419 & 4991195 & 6491078\\
+\hline
+	Naiv & 239 & 8407 &  406453 &  23362052 &  $1505784591$ &  $7,16 \cdot 10^{10}$ &  $4,26 \cdot 10^{12}$ &  $3,48 \cdot 10^{14}$ &  $2,10 \cdot 10^{16}$ &  $1,19 \cdot 10^{18}$ & $ 5,53 \cdot 10^{19}$ &  $3,85 \cdot 10^{21}$ \\
+\hline
+       
+     \end{tabular}
+
+     \caption{Cheshire Cat, Speicherbedarf Teil 1}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|}
+	\hline
+       \textbf{Kodierung} &\textbf{k=2,6} &\textbf{k=2,8} & \textbf{3,0}\\
+	\hline
+	\hline
+	Bailleux & 695573 & 865826 & 1063339\\
+\hline
+	SinzSeq &  815635 & 1035337 & 1290967 \\
+\hline
+	BDD & 1754439 & 2213383 & 2745573\\
+\hline
+	SinzPar & 258966 & 301969  & 347202 \\
+\hline
+	NOddEven & 4961621 & 5674980 & 5674980\\
+\hline
+	NOwn &  3874311 & 4447096 & 5018408\\
+ \hline
+	NNaiv &  8265522 & 10335774 & 12726199\\
+\hline
+	Naiv &  $2,91 \cdot 10^{23}$ &  $1,82 \cdot 10^{25}$ & $1,01 \cdot 10^{27}$\\
+\hline
+       
+     \end{tabular}
+
+     \caption{Cheshire Cat, Speicherbedarf Teil 2}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=5} & \textbf{k=10} & \textbf{k=15} &\textbf{k=20} &\textbf{k=25} &\textbf{k=30} &\textbf{k=35} &\textbf{k=40} &\textbf{k=45} &\textbf{k=50} &\textbf{k=55}\\
+	\hline
+	\hline
+	Bailleux & 348 & 2746 & 7382  & 20329 & 37141 & 55513 & 95881 & 144428 & 194773 & 265171 & 327174\\
+\hline
+	SinzSeq & 296 & 2489 & 6288 & 21101 & 38720 & 56049 & 110192 & 174285 & 235768 & 323093 & 396680 \\
+\hline
+	BDD & 1160 & 7295 & 17440 & 51779 & 92240 & 132703 & 249584 & 387067 & 519240 & 705611 & 864080 \\
+\hline
+	SinzPar & 581 & 3345 & 7844 & 16854 & 27078 & 38903 & 56437 & 76391 & 95215 & 120808 & 144266\\
+\hline
+	NOddEven & 4280 & 29394 & 55224 & 188154 & 273028 & 350242 & 843052 & 1094922 & 1312560 & 1564886 & 1782068\\
+\hline
+	NOwn & 3552 & 23024 & 41084 & 146084 & 212562 & 264100 & 645568 & 854598 & 1012694 & 1220360 & 1372162 \\
+ \hline
+	NNaiv & 1976 & 18655 & 62860 & 167665 & 330392 & 561007 & 933072 & 1416285 & 1986120 & 2761121 & 3629576 \\
+\hline
+	Naiv & 192 & 6998 & 163246 & 7940531 &  275764481 &  $7,23 \cdot 10^9 $&  $1,98 \cdot 10^{11}$ &  $8,68 \cdot 10^{12}$ &  $3,40 \cdot 10^{14}$ &  $1,08 \cdot 10^{16}$ &  $3,74 \cdot 10^{17}$ \\
+\hline
+       
+     \end{tabular}
+
+     \caption{H-Tree, Speicherbedarf Teil 1}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+ \begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|}
+	\hline
+       \textbf{Kodierung}  &\textbf{k=60} &\textbf{k=65} &\textbf{k=70}\\
+	\hline
+	\hline
+	Bailleux &  407395 & 547750 & 650017\\
+\hline
+	SinzSeq & 475221 & 702016 & 818337 \\
+\hline
+	BDD & 1035307 & 1505232 & 1752559\\
+\hline
+	SinzPar & 175483 & 211507 & 243402\\
+\hline
+	NOddEven & 2034394 & 4032804 & 4614594\\
+\hline
+	NOwn & 1558226 & 3113984 & 3525450\\
+ \hline
+	NNaiv &  4765077 & 6173912 & 7628967\\
+\hline
+	Naiv & $1,05 \cdot 10^{19}$ &  $1,95 \cdot 10^{20}$ &  $6,59 \cdot 10^{21}$\\
+\hline
+       
+     \end{tabular}
+
+     \caption{H-Tree, Speicherbedarf Teil 2}
+     \label{tbl:beispieltabelle}
+     % Verweis im Text mittels \ref{tbl:beispieltabelle}
+
+   \end{table}
+
+\begin{table}[h!]
+    \small
+    \setlength{\tabcolsep}{0.11cm}
+     \centering
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+       \textbf{Kodierung}  & \textbf{k=255} & \textbf{k=500} & \textbf{k=750} &\textbf{k=1000} &\textbf{k=1250} &\textbf{k=1500} &\textbf{k=1750} &\textbf{k=2000} &\textbf{k=2250} &\textbf{k=2500} &\textbf{k=2750} &\textbf{k=3000}\\ 
+	\hline
+	\hline
+	Bailleux & 12401 & 53389 & 114680 & 195140 & 314176 & 440017 & 579900 & 766551 & 946525 & 1200260 & 1422357 & 1660465  \\
+\hline
+	SinzSeq &7701 & 33234 & 72201 & 133994 & 218676 & 316564 & 412940 & 559477 & 727808 & 920758 & 1100088 & 1287058  \\
+\hline
+	BDD & 12853 & 60298 & 124404 & 219398 & 339887 & 484386 & 648149 & 904174 & 1085873 & 1399776 & 1565504 & 1870164  \\
+\hline
+	SinzPar & 83395 & 273556 & 508820 & 799452 & 1149890 & 1536518 & 1923935 & 2410427 & 2866224 & 3447950 & 3965706 & 4511217   \\
+\hline
+	NOddEven & 28745 & 83690 & 211877 & 345498 & 508686 & 666825 & 796970 & 984421 & 1334112 & 1748379 & 2081769 & 2448279 \\
+\hline
+	NOwn & 22827 & 72745 & 174586 & 297944 & 440685 & 571683 & 698608 & 883464 & 1159534 & 1547346 & 1826852 & 2129404 \\
+ \hline
+	NNaiv & 43970 & 202598 & 444299 & 782143 & 1259416 & 1876099 & 2554786 & 3391630 & 3866207 & 4986846 & 6042371 & 6269595 \\
+\hline
+	Naiv & 332309 & 713000420 &  $4,61 \cdot 10^{10}$ &  $7,05 \cdot 10^{12}$ &  $7,38 \cdot 10^{14}$ &  $1,54 \cdot 10^{16}$ &  $4,80 \cdot 10^{16}$ &  $8,67 \cdot 10^{18}$ & $1,37 \cdot 10^{19}$ & $2,35 \cdot 10^{21}$ &  $2,07 \cdot 10^{22}$ & $5,95 \cdot 10^{22}$\\
 \hline
        
      \end{tabular}
@@ -1299,26 +1469,26 @@ Naiv  & oom & oom & oom & oom & oom & oom\\
     \small
     \setlength{\tabcolsep}{0.11cm}
      \centering
-     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|}
+     \begin{tabular}[width=\textwidth]{|l||l|l|l|l|l|l|l|l|}
 	\hline
-       \textbf{Kodierung} &\textbf{k=3750} &\textbf{k=4000} &\textbf{k=4250} &\textbf{k=4500} &\textbf{k=4750} &\textbf{k=5000}\\
+       \textbf{Kodierung} &\textbf{k=3250} &\textbf{k=3500} &\textbf{k=3750} &\textbf{k=4000} &\textbf{k=4250} &\textbf{k=4500} &\textbf{k=4750} &\textbf{k=5000}\\
 	\hline
 	\hline
- Bailleux & 2494925 & 2822166 & 3185052 & 3585784 & 3972052 & 4376090\\
+ Bailleux & 1900534 & 2167129 & 2494925 & 2822166 & 3185052 & 3585784 & 3972052 & 4376090\\
 \hline
-SinzSeq  & 2009411 & 2289805 & 2578608 & 2961126 & 3215664 & 3596719\\
+SinzSeq  & 1503057 & 1783695 & 2009411 & 2289805 & 2578608 & 2961126 & 3215664 & 3596719\\
 \hline
-BDD & 2889176 & 3268771 & 3734490 & 4165863 & 4550542 & 5099838\\
+BDD & 2197063 & 2512839 & 2889176 & 3268771 & 3734490 & 4165863 & 4550542 & 5099838\\
 \hline
-SinzPar & 6370520 & 7044922 & 7748092 & 8416433 & 9085946 & 9879617\\
+SinzPar & 5140223 & 5728782& 6370520 & 7044922 & 7748092 & 8416433 & 9085946 & 9879617\\
 \hline
-NOddEven & 3065533 & 3346123 & 3717246 & 4051416 & 4314980 & 4718988\\
+NOddEven & 2413302 & 2768766  & 3065533 & 3346123 & 3717246 & 4051416 & 4314980 & 4718988\\
 \hline
-NOwn  & 2801789 & 3085924 & 3321086 & 3735593 & 4020664 & 4264229\\
+NOwn  & 2438826 & 2788352 & 2801789 & 3085924 & 3321086 & 3735593 & 4020664 & 4264229\\
 \hline
-NNaiv & 9017653 & 10288967 & 11826287 & 13221454 & 14674663 & 16161613\\
+NNaiv  & 6931336 & 7955157 & 9017653 & 10288967 & 11826287 & 13221454 & 14674663 & 16161613\\
 \hline
-Naiv  & oom & oom & oom & oom & oom & oom\\
+Naiv  & $1,77 \cdot 10^{24}$ & $2,64 \cdot 10^{25}$ & $1,77 \cdot 10^{26}$ & $1,21 \cdot 10^{27}$ & $7,49 \cdot 10^{27}$ & $9,44 \cdot 10^{28}$ & $2,34 \cdot 10^{29}$ & $3,02 \cdot 10^{30}$\\
 \hline
 
  \end{tabular}
