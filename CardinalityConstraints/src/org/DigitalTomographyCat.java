@@ -6,6 +6,12 @@ import org.Constraint.Type;
 
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Ist eines der Testprobleme - die Cheshire Cat
+ * 
+ * @author Tietjen
+ * 
+ */
 public class DigitalTomographyCat {
 
 

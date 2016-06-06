@@ -2,6 +2,12 @@ package org;
 
 import java.util.ArrayList;
 
+/**
+ * Datentyp Constraint
+ * 
+ * @author Tietjen
+ * 
+ */
 public class Constraint {
   public enum Type {
     EQUALS, SMALLEREQUALS, GREATEREQUALS

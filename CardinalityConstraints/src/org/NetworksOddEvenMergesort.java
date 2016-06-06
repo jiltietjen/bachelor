@@ -7,6 +7,12 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Kodierung Sorting Networks mit Odd-Even-Mergesort
+ * 
+ * @author Tietjen
+ * 
+ */
 public class NetworksOddEvenMergesort extends Encoding {
 
   // Comparators aufrufen und die inputs zu den comparators sortieren
@@ -123,10 +129,9 @@ public class NetworksOddEvenMergesort extends Encoding {
       outputs.add(ctx.mkBoolConst("b_output_" + i + "_NetworksMerge_" + counter));
     }
 
-    // Todo n nimmt er nicht
+
     ArrayList<NetworkComparator> comparators =
         makeSortingNetwork(ctx, inputs, outputs, counter, solver);
-    // System.out.println(comparators);
     for (int i = 0; i < comparators.size(); i++) {
       comparators.get(i).toZ3(ctx, solver);
     }

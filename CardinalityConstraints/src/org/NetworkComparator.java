@@ -5,6 +5,12 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Benötigt für die Sorting Networks. Definiert einen Comparator.
+ * 
+ * @author Tietjen
+ * 
+ */
 public class NetworkComparator {
 
   private BoolExpr input1;

@@ -4,6 +4,12 @@ import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * neuer Datentyp Literal
+ * 
+ * @author Tietjen
+ * 
+ */
 public class Literal {
 
   private int index;
@@ -14,7 +20,7 @@ public class Literal {
     this.positive = positive;
   }
 
-  // copy constructor
+  // kopiert Konstruktor
   public Literal(Literal other) {
     this.index = other.index;
     this.positive = other.positive;

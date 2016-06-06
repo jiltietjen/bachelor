@@ -11,6 +11,12 @@ import javafx.stage.Stage;
 
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * GUI für die Cheshire Cat. Nicht benutzt für den Benchmark
+ * 
+ * @author Tietjen
+ * 
+ */
 public class TomographyGUICat extends Application {
 
   // Bildgrösse
@@ -69,7 +75,7 @@ public class TomographyGUICat extends Application {
   public static void main(String[] args) throws Z3Exception {
 
     try {
-      picture = DigitalTomographyCat.getCat(0.2);
+      picture = DigitalTomographyCat.getCat(1.4);
       result = DigitalTomographyCat.solve(picture, new KnuthBailleux());
     } catch (Z3Exception e) {
       // TODO Auto-generated catch block

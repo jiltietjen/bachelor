@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Ist eines der Testprobleme.
+ * 
+ * @author Tietjen
+ * 
+ */
 public class DamenProblem {
-
-
-  /*
-   * public static void main(String[] args) { try { solve(4); } catch (Z3Exception e) { // TODO
-   * Auto-generated catch block e.printStackTrace(); } }
-   */
 
   /*
    * Feld wird durchlaufen und einzelne Variablen werden vergeben. Es wird dann an den Solver
@@ -76,9 +76,7 @@ public class DamenProblem {
     constraints.add(new Constraint(Constraint.Type.EQUALS, literals, k));
 
     Builder builder = new Builder();
-    return builder.solve(constraints, k * k, encoding); // TODO zurückübersetzen für die Belegung
-                                                        // des
-    // Damenfeldes
+    return builder.solve(constraints, k * k, encoding);
   }
 
 }

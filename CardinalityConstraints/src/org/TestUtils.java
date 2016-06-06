@@ -8,9 +8,14 @@ import com.microsoft.z3.Expr;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * einige Methoden ausgelagert für das Testen der Kodierungen
+ * 
+ * @author Tietjen
+ * 
+ */
 public class TestUtils {
 
-  // ausgelagert für die verschiedenen Kodierungen
   public static Solver makeEncoding(int n, int r, Encoding encoding, Context ctx)
       throws Z3Exception {
     ArrayList<Literal> literals = new ArrayList<>();

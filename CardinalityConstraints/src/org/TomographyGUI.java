@@ -11,6 +11,12 @@ import javafx.stage.Stage;
 
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * GUI für den H-Tree. Nicht benutzt für den Benchmark
+ * 
+ * @author Tietjen
+ * 
+ */
 public class TomographyGUI extends Application {
 
   // Bildgrösse
@@ -109,9 +115,9 @@ public class TomographyGUI extends Application {
 
     try {
       // Grösse
-      picture = new boolean[20][16];
+      picture = new boolean[10][8];
       // hTree(lineSize, depthRecursion, maxX, maxY, centerX, centerY, picture)
-      DigitalTomography.hTree(10, TOMOGRAPHY, 20, 16, 10, 8, picture);
+      DigitalTomography.hTree(5, TOMOGRAPHY, 10, 8, 5, 4, picture);
       result = DigitalTomography.solve(picture, new KnuthBailleux());
     } catch (Z3Exception e) {
       // TODO Auto-generated catch block

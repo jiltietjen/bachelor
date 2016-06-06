@@ -12,7 +12,6 @@ import com.microsoft.z3.Z3Exception;
 public class NiklasseBDDsTest {
 
 
-  // Todo in die anderen kopieren
   @Test
   public void testVariablesSAT() throws Z3Exception {
     Context ctx = new Context();

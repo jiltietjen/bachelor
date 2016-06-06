@@ -7,10 +7,15 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Kodierung Sinz sequentiell nach Knuth
+ * 
+ * @author Tietjen
+ * 
+ */
 public class KnuthSinz extends Encoding {
-  /* Beginn Sinz nach Knuth (sequentiell)------------------------------------------------ */
 
-
+  // erstellt die erste Formel von Knuth
   public static void createFormulaFirst(Context ctx, Solver solver, int n, int r, int counter,
       ArrayList<Literal> literals) throws Z3Exception {
     ArrayList<BoolExpr> variablesFirst = new ArrayList<BoolExpr>();
@@ -102,8 +107,5 @@ public class KnuthSinz extends Encoding {
     createFormulaSecond(ctx, solver, literals.size(), r, counter, literals);
 
   }
-
-
-  /* Ende Sinz nach Knuth ------------------------------------------------------------- */
 
 }

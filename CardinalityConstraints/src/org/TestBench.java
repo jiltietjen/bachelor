@@ -7,6 +7,12 @@ import java.util.ArrayList;
 
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Alle Kodierungen für alle Testprobleme für die Benchmarks. Ergebnisse werden in txt geschrieben
+ * 
+ * @author Tietjen
+ * 
+ */
 public class TestBench {
 
   private static boolean[][] picture;
@@ -19,13 +25,11 @@ public class TestBench {
     ArrayList<Encoding> encodings = new ArrayList<>();
     encodings.add(new KnuthBailleux());
     encodings.add(new KnuthSinz());
-    // NetworksNaiv out of memory Dame k =50
-    encodings.add(new NetworksNaiv());
     encodings.add(new NetworksOddEvenMergesort());
     encodings.add(new NetworksOwnSorting());
     encodings.add(new NiklasseBDDs());
     encodings.add(new SinzParallel());
-    // k=10 kracht bei Dame
+    encodings.add(new NetworksNaiv());
     encodings.add(new Naiv());
     int counter = 0;
     try {
@@ -33,7 +37,7 @@ public class TestBench {
         // k-damen
         counter++;
         if (counter >= startingPoint) {
-          for (int k = 15; k <= 70; k += 5) {
+          for (int k = 5; k <= 70; k += 5) {
             file("Queensproblem; k = " + k + "; Encoding = "
                 + encodings.get(i).getClass().getSimpleName());
             DamenProblem.solve(k, encodings.get(i));
@@ -65,11 +69,13 @@ public class TestBench {
         }
         counter++;
         if (counter >= startingPoint) {
-          for (int k = 250; k <= 5000; k += 250) {
-            file("SynthTests; k = " + k + "; Encoding = "
-                + encodings.get(i).getClass().getSimpleName());
-            SynthetischeTestfaelle.solve(k, encodings.get(i));
-            file("-----------------------------------------------------");
+          for (int j = 0; j <= 500; j++) {
+            for (int k = 250; k <= 5000; k += 250) {
+              file("SynthTests; k = " + k + "; Encoding = "
+                  + encodings.get(i).getClass().getSimpleName());
+              SynthetischeTestfaelle.solve(k, encodings.get(i));
+              file("-----------------------------------------------------");
+            }
           }
         }
       }
@@ -98,4 +104,6 @@ public class TestBench {
   public static void measureTime() {
     file("Timestamp: " + Long.toString(System.currentTimeMillis()));
   }
+
+
 }

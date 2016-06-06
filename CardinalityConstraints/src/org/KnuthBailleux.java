@@ -8,10 +8,14 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Kodierung Bailleux nach Knuth und Subklasse von Encoding
+ * 
+ * @author Tietjen
+ * 
+ */
 public class KnuthBailleux extends Encoding {
 
-
-  /* Beginn Bailleux nach Knuth (sequentiell)---------------------------------------------- */
 
   /* Zählt die Blätter unter den jeweiligen Knoten t */
   public static int calcT(int t, int n) {
@@ -146,8 +150,6 @@ public class KnuthBailleux extends Encoding {
       return ctx.mkBoolConst("b" + upperIndex + "_" + lowerIndex + "_Bailleux_" + counter);
     }
   }
-
-  /* Ende Bailleux nach Knuth --------------------------------------------------------- */
 
 
   @Override

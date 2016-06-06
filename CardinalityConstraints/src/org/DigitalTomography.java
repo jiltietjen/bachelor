@@ -6,6 +6,12 @@ import org.Constraint.Type;
 
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Ist eines der Testprobleme - der H-Tree
+ * 
+ * @author Tietjen
+ * 
+ */
 public class DigitalTomography {
 
 

@@ -7,6 +7,13 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Eigene Kodierung bei der nicht benötigte Comparator gestrichen werden. Basiert auf Sorting
+ * Networks mit Odd-Even-Mergesort
+ * 
+ * @author Tietjen
+ * 
+ */
 public class NetworksOwnSorting extends Encoding {
 
 
@@ -97,6 +104,7 @@ public class NetworksOwnSorting extends Encoding {
     return result;
   }
 
+  // entfernt den Comparator, falls er nicht benätigt wird
   private void filterComparators(ArrayList<NetworkComparator> oldResult, int relevantRow,
       int[] countComp) {
     for (int i = oldResult.size() - 1; i >= 0; i--) {
@@ -106,7 +114,7 @@ public class NetworksOwnSorting extends Encoding {
     }
   }
 
-  // TODO: Performanz verbessern
+  // überprüft, ob der Comparator für den entsprechenden Ausgang gebraucht wird.
   private boolean isUsed(NetworkComparator current, ArrayList<NetworkComparator> allComparators,
       int relevantRow, int[] countComp) {
     int row1 = current.getI1Row();
@@ -156,10 +164,8 @@ public class NetworksOwnSorting extends Encoding {
       outputs.add(ctx.mkBoolConst("b_output_" + i + "_OwnNetworksMerge_" + counter));
     }
 
-    // Todo n nimmt er nicht
     ArrayList<NetworkComparator> comparators =
         makeSortingNetwork(ctx, inputs, outputs, counter, solver, r);
-    // System.out.println(comparators);
     for (int i = 0; i < comparators.size(); i++) {
       comparators.get(i).toZ3(ctx, solver);
     }

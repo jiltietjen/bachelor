@@ -7,9 +7,15 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Kodierung Sinz Parallel
+ * 
+ * @author Tietjen
+ * 
+ */
 public class SinzParallel extends Encoding {
 
-  /* Sinz parallel --------------------------------------------------------------------- */
+
   private ArrayList<BoolExpr> makeCounter(Context ctx, Solver solver, int counter,
       int circuitCounter, ArrayList<BoolExpr> literals) throws Z3Exception {
     int size = literals.size();
@@ -63,10 +69,6 @@ public class SinzParallel extends Encoding {
     solver.add(ctx.mkOr(aIn, ctx.mkNot(carryIn), sum));
     solver.add(ctx.mkOr(ctx.mkNot(aIn), carryIn, sum));
     solver.add(ctx.mkOr(ctx.mkNot(aIn), ctx.mkNot(carryIn), carry));
-
-    // Evtl Verbesserung der Performanz durch häufigere Unit-Propagation. Nochmal mit richtiger
-    // Benchmark testen.
-    // solver.add(ctx.mkOr(ctx.mkNot(aIn), carryIn, sum));
   }
 
   // Adder aus dem Paper
@@ -79,10 +81,6 @@ public class SinzParallel extends Encoding {
     solver.add(ctx.mkOr(ctx.mkNot(aIn), ctx.mkNot(bIn), carry));
     solver.add(ctx.mkOr(ctx.mkNot(aIn), ctx.mkNot(carryIn), carry));
     solver.add(ctx.mkOr(ctx.mkNot(bIn), ctx.mkNot(carryIn), carry));
-
-    // Evtl Verbesserung der Performanz durch häufigere Unit-Propagation. Nochmal mit richtiger
-    // Benchmark testen.
-    // solver.add(ctx.mkOr(ctx.mkNot(aIn), carry, sum));
 
   }
 
@@ -139,7 +137,5 @@ public class SinzParallel extends Encoding {
     ArrayList<BoolExpr> outputs = makeCounter(ctx, solver, counter, 1, expressions);
     makeComparator(ctx, solver, r, outputs);
   }
-
-  /* Sinz parallel Ende ------------------------------------------------------------------ */
 
 }

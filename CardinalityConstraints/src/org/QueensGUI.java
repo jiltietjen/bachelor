@@ -12,6 +12,12 @@ import javafx.stage.Stage;
 
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * GUI für das Damen-Problem. Für das Benchmark nicht benutzt.
+ * 
+ * @author Tietjen
+ * 
+ */
 public class QueensGUI extends Application {
 
   private static final int QUEENS = 4;

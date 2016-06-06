@@ -4,7 +4,12 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
-// Wrapper für true und false für den Algo
+/**
+ * Ist der Wrapper für den ALGO der BDDS.
+ * 
+ * @author Tietjen
+ * 
+ */
 public class Constant extends Signal {
 
   private Boolean value;

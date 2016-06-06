@@ -5,7 +5,12 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
-// neuer Datentyp für den Algorithmus
+/**
+ * neuer Datentyp für den ALGO der BDDs.
+ * 
+ * @author Tietjen
+ * 
+ */
 public class ITEGate extends Signal {
   private Literal input1;
   private Signal input2;
@@ -55,13 +60,13 @@ public class ITEGate extends Signal {
     BoolExpr in1Var = input1.toZ3(ctx);
     BoolExpr in2Var = ctx.mkBoolConst("b" + input2.getTseitinVar() + "_Niklasse_" + count);
 
-    solver.add(ctx.mkOr(ctx.mkNot(tVar), in1Var, in3Var)); // drin
-    solver.add(ctx.mkOr(ctx.mkNot(tVar), ctx.mkNot(in1Var), in2Var)); // drin
+    solver.add(ctx.mkOr(ctx.mkNot(tVar), in1Var, in3Var));
+    solver.add(ctx.mkOr(ctx.mkNot(tVar), ctx.mkNot(in1Var), in2Var));
     // solver.add(ctx.mkOr(ctx.mkNot(tVar), in2Var, in3Var)); // verschlechtert die Performanz
     // solver.add(ctx.mkOr(tVar, ctx.mkNot(in2Var), ctx.mkNot(in3Var))); verschlechtert die
     // Performanz
-    solver.add(ctx.mkOr(tVar, ctx.mkNot(in1Var), ctx.mkNot(in2Var))); // drin
-    solver.add(ctx.mkOr(tVar, in1Var, ctx.mkNot(in3Var))); // drin
+    solver.add(ctx.mkOr(tVar, ctx.mkNot(in1Var), ctx.mkNot(in2Var)));
+    solver.add(ctx.mkOr(tVar, in1Var, ctx.mkNot(in3Var)));
     input2.toZ3(ctx, solver, count);
     input3.toZ3(ctx, solver, count);
   }

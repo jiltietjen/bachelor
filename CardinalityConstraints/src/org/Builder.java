@@ -11,6 +11,13 @@ import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Dient als Schnittstelle zwischen den Kodierungen und den Test-Problemen. Definiert die einzelnen
+ * Constraints und erstellt das Encoding.
+ * 
+ * @author Tietjen
+ * 
+ */
 public class Builder {
 
   protected static final Object creation_lock = new Object();
@@ -52,10 +59,6 @@ public class Builder {
     params.put("timeout", Integer.toString(TestBench.TIMEOUT));
     Context ctx = new Context(params);
     Solver solver = ctx.mkSolver("QF_LIA");
-    // Params p = ctx.mkParams();
-    // p.add("T:TIMEOUT", 2000);
-    // System.out.println(p);
-    // solver.setParameters(p);
     for (int i = 0; i < leqConstraints.size(); i++) {
       if (leqConstraints.get(i).getVariables().size() > leqConstraints.get(i).getLimitR()) {
         encoding.encode(leqConstraints.get(i).getVariables(), leqConstraints.get(i).getLimitR(), i,
@@ -67,7 +70,6 @@ public class Builder {
     TestBench.file("preprocessing done. Starting the solver.");
     TestBench.measureTime();
     TestBench.file("Number of clauses: " + solver.getNumAssertions());
-    // long time = System.currentTimeMillis();
     Status stat = solver.check();
 
     solver.dispose();

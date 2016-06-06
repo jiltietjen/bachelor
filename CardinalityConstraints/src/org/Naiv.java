@@ -9,6 +9,12 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Naive Kodierung
+ * 
+ * @author Tietjen
+ * 
+ */
 public class Naiv extends Encoding {
 
 

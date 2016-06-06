@@ -7,11 +7,17 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Kodierung BDDs
+ * 
+ * @author Tietjen
+ * 
+ */
 public class NiklasseBDDs extends Encoding {
 
   // Constraints in BDD darstellen. Aus BDD Klauseln erstellen. BDDs ist ein Schaltkreis von
   // if-then-else-Gattern, die zu
-  // Klauseln durch Tseitin-Transformation geformt werden mit Extra-Variablen.
+  // Klauseln durch Tseitin-Transformation formen mit Extra-Variablen.
 
   private int pack(int size, int sum) {
     return size | (sum << 16);

@@ -10,6 +10,12 @@ import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import com.microsoft.z3.Z3Exception;
 
+/**
+ * Tesproblem - zufällige synthetische Testfälle
+ * 
+ * @author Tietjen
+ * 
+ */
 public class SynthetischeTestfaelle {
 
   protected static final Object creation_lock = new Object();
@@ -29,9 +35,6 @@ public class SynthetischeTestfaelle {
     params.put("timeout", Integer.toString(TestBench.TIMEOUT));
     Context ctx = new Context(params);
     Solver solver = ctx.mkSolver("QF_LIA");
-    // Params p = ctx.mkParams();
-    // p.add("soft_timeout", 1);
-    // solver.setParameters(p);
     ArrayList<Literal> lits = new ArrayList<>();
     ArrayList<Constraint> filledVariables = new ArrayList<>();
 
@@ -60,7 +63,6 @@ public class SynthetischeTestfaelle {
           solver, ctx);
     }
 
-    // System.out.println(solver);
     TestBench.file("preprocessing done. Starting the solver.");
     TestBench.measureTime();
     TestBench.file("Number of clauses: " + solver.getNumAssertions());
@@ -79,7 +81,6 @@ public class SynthetischeTestfaelle {
     // TestBench.file("SAT");
     // TestBench.measureTime();
     // }
-    // TODO memory aufräumen
 
   }
 }
